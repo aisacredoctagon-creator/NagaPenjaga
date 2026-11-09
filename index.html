@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#14291c">
+<title>Naga Penjaga Telur</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#0e2216;color:#f5f1e0;font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+#stage{position:fixed;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center}
+canvas{display:block;touch-action:none;background:#173f23}
+.overlay{position:fixed;left:0;top:0;right:0;bottom:0;display:flex;padding:12px;background:rgba(6,18,10,.86);overflow:auto;-webkit-overflow-scrolling:touch;z-index:5}
+.overlay.hidden{display:none}
+.panel{margin:auto;width:100%;max-width:480px;background:#16311f;border:2px solid #2f5d3c;border-radius:20px;padding:18px 16px 20px;box-shadow:0 10px 40px rgba(0,0,0,.45)}
+h1{margin:0 0 2px;font-size:26px;line-height:1.2}
+h2{margin:0 0 6px;font-size:26px;line-height:1.25}
+h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:#a9d8b4}
+.sub{margin:0;color:#c9dccb;font-size:15px;line-height:1.4}
+.seg button,.chip{font:inherit;color:inherit;cursor:pointer;border:2px solid #2f5d3c;background:#1d3d29;border-radius:14px}
+.sel{border-color:#ffd54a !important;background:#34532f !important}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg button{padding:12px 8px;font-size:15px;min-height:46px}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chip{padding:12px 8px;font-size:17px;font-weight:700;min-height:48px}
+.btn{font:inherit;font-weight:700;font-size:16px;min-height:48px;padding:10px 16px;border-radius:14px;border:2px solid #2f5d3c;background:#1d3d29;color:#f5f1e0;cursor:pointer}
+.btn.primary{background:#ffd54a;border-color:#ffd54a;color:#3a2400}
+.big{width:100%;margin-top:18px;font-size:18px}
+.row{display:flex;gap:8px;margin-top:16px}
+.row .btn{flex:1}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 0;font-size:14px}
+.stats div{background:#1d3d29;border-radius:10px;padding:8px 10px}
+.stats b{display:block;font-size:20px;color:#ffd54a}
+.note{font-size:12.5px;color:#9fbea8;margin-top:12px;line-height:1.45}
+.story-emoji{font-size:84px;text-align:center;line-height:1.15;margin-top:4px;min-height:96px}
+.story-text{font-size:22px;text-align:center;line-height:1.35;margin:8px 4px 4px;font-weight:700;min-height:90px}
+.dots{display:flex;gap:8px;justify-content:center;margin:10px 0 4px}
+.dot{width:10px;height:10px;border-radius:50%;background:#2f5d3c}
+.dot.on{background:#ffd54a}
+.link{display:block;margin:6px auto 0;background:none;border:0;color:#9fbea8;font:inherit;text-decoration:underline;padding:12px;cursor:pointer;min-height:44px}
+.rv{background:#1d3d29;border-radius:10px;padding:8px 10px;margin-top:8px;font-size:15px;line-height:1.4;border-left:5px solid #ff8a80}
+.rv.ok{border-left-color:#9be37a}
+.rv small{display:block;color:#a9d8b4;font-size:12.5px}
+.rv b{font-size:17px}
+#rvList{max-height:52vh;overflow:auto;margin-top:6px}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+<div id="stage"><canvas id="c"></canvas></div>
+
+<!-- MENU -->
+<div id="menu" class="overlay">
+  <div class="panel">
+    <h1>🐲 Naga Penjaga Telur</h1>
+    <p class="sub">Cocokkan dua bola supaya hasilnya sama dengan angka di atas. 3 stage, 1 penyihir jahat!</p>
+
+    <h3>1. Tingkat</h3>
+    <div class="seg" id="levels">
+      <button type="button" class="sel" data-v="mudah">Mudah</button>
+      <button type="button" data-v="menantang">Menantang</button>
+    </div>
+
+    <h3>2. Waktu (per stage 5 menit)</h3>
+    <div class="seg" id="times">
+      <button type="button" class="sel" data-v="1">Dengan waktu</button>
+      <button type="button" data-v="0">Tanpa waktu</button>
+    </div>
+
+    <h3>3. Hitungan (boleh lebih dari satu)</h3>
+    <div class="chips" id="ops">
+      <button type="button" class="chip sel" data-v="+">+ Tambah</button>
+      <button type="button" class="chip sel" data-v="-">− Kurang</button>
+      <button type="button" class="chip" data-v="*">× Kali</button>
+      <button type="button" class="chip" data-v="/">÷ Bagi</button>
+      <button type="button" class="chip" data-v="int">± Bilangan bulat</button>
+      <button type="button" class="chip" data-v="dec">0,5 Desimal</button>
+      <button type="button" class="chip" data-v="frac">½ Pecahan</button>
+    </div>
+
+    <button type="button" class="btn primary big" id="start">▶ Mulai Petualangan</button>
+    <p class="note">Ketuk / klik bola yang dituju: peluru menembus bola lain. Ketuk naga untuk menukar peluru. Kamu menjaga 3 telur: jawaban salah atau bola yang sampai di sarang membuat satu telur dicuri penyihir. Jawaban salah juga membuat jalur sedikit lebih cepat.</p>
+  </div>
+</div>
+
+<!-- CERITA -->
+<div id="story" class="overlay hidden">
+  <div class="panel">
+    <div class="story-emoji" id="storyEmoji"></div>
+    <div class="story-text" id="storyText"></div>
+    <div class="dots" id="storyDots"></div>
+    <button type="button" class="btn primary big" id="storyNext" style="margin-top:8px">Lanjut ▶</button>
+    <button type="button" class="link" id="storySkip">Lewati cerita</button>
+  </div>
+</div>
+
+<!-- SELESAI / KALAH / MENANG -->
+<div id="end" class="overlay hidden">
+  <div class="panel">
+    <h2 id="endTitle"></h2>
+    <p class="sub" id="endMsg"></p>
+    <div class="stats" id="endStats"></div>
+    <div class="row">
+      <button type="button" class="btn primary" id="btnA"></button>
+      <button type="button" class="btn" id="btnB">Menu</button>
+    </div>
+    <div class="row" style="margin-top:8px"><button type="button" class="btn" id="btnR">📝 Lihat jawabanmu</button></div>
+  </div>
+</div>
+
+<!-- TINJAUAN JAWABAN -->
+<div id="review" class="overlay hidden">
+  <div class="panel">
+    <h2 id="rvTitle">Tinjauan jawaban</h2>
+    <p class="sub" id="rvMsg"></p>
+    <div id="rvList"></div>
+    <div class="row">
+      <button type="button" class="btn" id="rvAll">Lihat semua</button>
+      <button type="button" class="btn primary" id="rvBack">◀ Kembali</button>
+    </div>
+  </div>
+</div>
+
+<!-- PUTAR HP (layar pendek dan mendatar) -->
+<div id="rotate" class="overlay hidden" style="z-index:20">
+  <div class="panel" style="text-align:center">
+    <div class="story-emoji" style="font-size:56px;min-height:0">📱↻</div>
+    <h2>Putar HP ke posisi tegak</h2>
+    <p class="sub">Game ini dimainkan dengan HP berdiri. Permainan lanjut otomatis.</p>
+  </div>
+</div>
+
+<!-- KONFIRMASI KELUAR -->
+<div id="quit" class="overlay hidden">
+  <div class="panel">
+    <h2>Keluar ke menu?</h2>
+    <p class="sub">Progres permainan ini akan hilang.</p>
+    <div class="row">
+      <button type="button" class="btn primary" id="quitNo">▶ Lanjut main</button>
+      <button type="button" class="btn" id="quitYes">Keluar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+'use strict';
+
+/* =====================================================================
+   BAGIAN 1 — PENGATURAN (angka-angka yang boleh Anda ubah)
+   ===================================================================== */
+var W = 600, H = 1000;          // ukuran dunia game; tinggi H menyesuaikan bentuk layar
+var TIME_LIMIT = 300;           // detik per stage, jika memilih "Dengan waktu"
+var CFG = {
+  R: 26, D: 54, shotR: 26, groove: 68, s0: 420,   // ukuran bola, jarak antar bola, lebar jalur
+  N: { mudah: 22, menantang: 26 },                // jumlah bola dasar per stage
+  v: { mudah: 8,  menantang: 9  }                 // laju jalur dasar (piksel/detik)
+};
+var KEYS = {                     // pilihan angka di panel (hasil yang dicari)
+  '+': { mudah: [7, 8, 9, 10, 10, 11, 12], menantang: [14, 16, 18, 20, 22, 25] },
+  '-': { mudah: [1, 2, 3, 4, 5],           menantang: [3, 4, 5, 6, 7, 8, 9] },
+  '*': { mudah: [6, 8, 12, 18, 24],        menantang: [24, 30, 36, 48, 60, 72] },
+  '/': { mudah: [2, 3, 4],                 menantang: [2, 3, 4, 5, 6] }
+};
+var OPDOM = { '+': 'n', '-': 'n', '*': 'n', '/': 'n', int: 'i', dec: 'd', frac: 'f' };   // jenis bilangan tiap pilihan
+var KEYS_NEW = {                 // angka di panel untuk jenis baru (pecahan: satuan 1/penyebut, lihat FRAC_D)
+  int: { mudah: [1, 2, 3, -1, -2, -3], menantang: [1, 2, 3, 4, 5, -1, -2, -3, -4, -5] },   // bilangan bulat: dijumlahkan, boleh negatif
+  dec: { mudah: [6, 7, 8, 9, 10], menantang: [8, 9, 10, 11, 12, 13] }                     // desimal: dalam satuan 0,1 (10 = 1,0)
+};
+var SHIELD_AT = 5;               // jawaban benar berturut-turut untuk mendapat perisai
+var FRAC_D = { mudah: [3, 4, 5], menantang: [4, 5, 6] };   // penyebut pecahan di stage 1, 2, 3 (penyebut selalu sama)
+var INT_MAX = { mudah: 5, menantang: 9 };                  // bola bilangan bulat: dari -INT_MAX sampai INT_MAX
+var DEC_MAX = { mudah: 5, menantang: 9 };                  // bola desimal terbesar: 0,5 (Mudah) / 0,9 (Menantang)
+var MIX_SLOW = [1, 0.92, 0.82, 0.78];  // jalur diperlambat bila jenis bilangan dicampur (1, 2, 3, 4 jenis)
+var KEYS_PER_ROUND = 3;         // angka di panel berganti setiap 3 pasangan
+var MISTAKE_SPEEDUP = 0.07;     // tiap kesalahan: jalur +7% lebih cepat
+var MAX_SPEEDUP = 1.8;
+var BOSS_EVERY = 30;            // detik: penyihir (stage 3) merapal mantra
+var EGGS = 3;                   // telur (nyawa) di sarang tiap stage
+var PROTECT_T = 2;              // detik perlindungan setelah telur hilang (tidak ada telur lain yang hilang)
+var NEST_PUSH = 216;            // bola sampai sarang: jalur mundur sejauh ini (216 = 4 jarak bola)
+var NEST_SLOW_T = 4;            // lalu jalur melambat selama sekian detik ...
+var NEST_SLOW = 0.5;            // ... sampai separuh laju
+var SWAP_EVERY = { mudah: [14, 20], menantang: [8, 14] };   // jeda acak antar tukar posisi bola (detik)
+var SWAP_WARN = 1.5;            // lama tanda sebelum dua bola bertukar (detik)
+var EGG_BONUS = 500;            // telur naga saat telur sudah 3/3: tambah skor sebesar ini
+var EGG_AT = 0.5;               // bola telur naga muncul saat sekian bagian bola awal sudah habis (0,5 = pertengahan stage)
+var STEAL_T = 1.5, GAIN_T = 0.9; // lama animasi telur dicuri / telur bertambah (detik)
+var BOSS_ADDS = 1;              // jumlah bola tambahan tiap mantra
+
+/* Tiga stage: jalur (titik-titik belokan), tingkat kesulitan, dan cerita pendek */
+var STAGES = [                   // tiap stage punya 3 jalur; satu dipilih acak saat stage dimulai
+  { name: 'Hutan Hijau', story: 'Lindungi telur pertama!', nMul: 1.0, vMul: 1.0, rad: 70, routes: [
+    { dragon: { x: 300, bottom: true }, path: [[-60, 180], [520, 180], [520, 340], [80, 340], [80, 500], [520, 500], [520, 650], [300, 650]] },
+    { dragon: { x: 300, bottom: true }, path: [[660, 180], [80, 180], [80, 330], [520, 330], [520, 480], [80, 480], [80, 690], [230, 690]] },
+    { dragon: { x: 300, y: 560, free: true }, path: [[-60, 200], [520, 200], [520, 720], [80, 720], [80, 410], [340, 410]] } ] },
+  { name: 'Gunung Bersalju', story: 'Lindungi telur kedua!', nMul: 1.1, vMul: 1.08, rad: 70, routes: [
+    { dragon: { x: 300, bottom: true }, path: [[660, 170], [60, 240], [60, 370], [540, 430], [540, 560], [60, 620], [60, 690], [300, 690]] },
+    { dragon: { x: 300, y: 520, free: true }, path: [[660, 175], [70, 235], [70, 330], [540, 390], [540, 700], [110, 700], [110, 560]] },
+    { dragon: { x: 300, bottom: true }, path: [[-60, 175], [520, 230], [520, 340], [70, 395], [70, 500], [530, 555], [530, 700], [330, 700]] } ] },
+  { name: 'Gunung Api', story: 'Kalahkan Penyihir Jahat!', nMul: 1.1, vMul: 1.05, rad: 65, boss: true, routes: [
+    { dragon: { x: 300, bottom: true }, boss: { x: 50, y: 120 }, path: [[-60, 170], [540, 170], [540, 300], [60, 300], [60, 430], [540, 430], [540, 560], [60, 560], [60, 690], [300, 690]] },
+    { dragon: { x: 300, y: 490, free: true }, boss: { x: 50, y: 120 }, path: [[-60, 190], [520, 190], [520, 740], [80, 740], [80, 340], [440, 340], [440, 640], [240, 640]] },
+    { dragon: { x: 300, bottom: true }, boss: { x: 550, y: 135 }, path: [[620, 170], [60, 170], [60, 300], [540, 300], [540, 430], [60, 430], [60, 560], [540, 560], [540, 690], [150, 690]] } ] }
+];
+/* Warna dan hiasan tiap latar */
+var THEMES = [
+  { top: '#2f6b3a', mid: '#235a31', bot: '#173f23', blob: '0,0,0', spark: '255,255,255',
+    g1: '#25180d', g2: '#6b4e2e', dash: 'rgba(255,255,255,.10)', nest1: '#25180d', nest2: '#8a6a40', deco: ['🌳', '🌲', '🍄', '🌿'] },
+  { top: '#7db4dc', mid: '#5b94c4', bot: '#3f729f', blob: '255,255,255', spark: '255,255,255',
+    g1: '#1d3b5a', g2: '#d6e8f6', dash: 'rgba(70,110,160,.35)', nest1: '#1d3b5a', nest2: '#f2f9ff', deco: ['⛄', '🌲', '🏔️', '🐧'] },
+  { top: '#3a1238', mid: '#4a1530', bot: '#2a0c1c', blob: '255,90,20', spark: '255,180,80',
+    g1: '#12080f', g2: '#3b3340', dash: 'rgba(255,140,60,.28)', nest1: '#12080f', nest2: '#5a2f2f', deco: ['🌋', '🔥', '🦇', '🔮'] }
+];
+var STORY = [
+  { e: '🐲🥚', t: 'Naga menjaga telur-telurnya.' },
+  { e: '🧙⚡', t: 'Penyihir Jahat ingin mencuri telur untuk menguasai dunia!' },
+  { e: '🔢💥', t: 'Bantu naga! Cocokkan dua bola untuk meledakkan bola sihir.' }
+];
+
+/* =====================================================================
+   BAGIAN 2 — ALAT BANTU
+   ===================================================================== */
+var FONT = '-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+var EMOJI = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+var SYM = { '+': '+', '-': '−', '*': '×', '/': '÷', int: '+', dec: '+', frac: '+' };
+var $ = function (id) { return document.getElementById(id); };
+var ri = function (a, b) { return a + Math.floor(Math.random() * (b - a + 1)); };
+var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
+function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+var canvas = $('c'), ctx = canvas.getContext('2d');
+
+/* =====================================================================
+   BAGIAN 3 — JALUR (dibuat dari titik belokan, sudutnya dibulatkan)
+   ===================================================================== */
+var STEP = 3, PX = [], PY = [], PL = 0, DIR0 = { x: 1, y: 0 };
+function buildPath(base, dy, rad) {
+  var wps = base.map(function (p) { return [p[0], p[1] + dy]; });
+  var poly = [wps[0]], i, k;
+  for (i = 1; i < wps.length - 1; i++) {
+    var p0 = wps[i - 1], p1 = wps[i], p2 = wps[i + 1];
+    var l1 = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]), l2 = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+    var r = Math.min(rad, l1 / 2, l2 / 2);
+    var ax = p1[0] - (p1[0] - p0[0]) / l1 * r, ay = p1[1] - (p1[1] - p0[1]) / l1 * r;
+    var bx = p1[0] + (p2[0] - p1[0]) / l2 * r, by = p1[1] + (p2[1] - p1[1]) / l2 * r;
+    poly.push([ax, ay]);
+    for (k = 1; k <= 16; k++) {
+      var t = k / 16, u = 1 - t;
+      poly.push([u * u * ax + 2 * u * t * p1[0] + t * t * bx, u * u * ay + 2 * u * t * p1[1] + t * t * by]);
+    }
+  }
+  poly.push(wps[wps.length - 1]);
+  var cum = [0];
+  for (i = 1; i < poly.length; i++) cum.push(cum[i - 1] + Math.hypot(poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1]));
+  PL = cum[cum.length - 1];
+  var m = Math.floor(PL / STEP), j = 0;
+  PX = []; PY = [];
+  for (i = 0; i <= m; i++) {
+    var s = i * STEP;
+    while (j < cum.length - 2 && cum[j + 1] < s) j++;
+    var seg = (cum[j + 1] - cum[j]) || 1, tt = (s - cum[j]) / seg;
+    PX.push(poly[j][0] + (poly[j + 1][0] - poly[j][0]) * tt);
+    PY.push(poly[j][1] + (poly[j + 1][1] - poly[j][1]) * tt);
+  }
+  var last = poly[poly.length - 1];
+  PX.push(last[0]); PY.push(last[1]);
+  var dx = wps[1][0] - wps[0][0], dy2 = wps[1][1] - wps[0][1], dl = Math.hypot(dx, dy2);
+  DIR0 = { x: dx / dl, y: dy2 / dl };
+}
+function posAt(s) {
+  if (s <= 0) return { x: PX[0] + DIR0.x * s, y: PY[0] + DIR0.y * s };
+  if (s >= PL) return { x: PX[PX.length - 1], y: PY[PY.length - 1] };
+  var f = s / STEP, i = Math.floor(f), t = f - i;
+  return { x: PX[i] + (PX[i + 1] - PX[i]) * t, y: PY[i] + (PY[i + 1] - PY[i]) * t };
+}
+function tangentAt(s) {
+  var a = posAt(s - 4), b = posAt(s + 4);
+  var dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1;
+  return { x: dx / l, y: dy / l };
+}
+
+/* =====================================================================
+   BAGIAN 4 — KEADAAN GAME (semua data yang berubah saat bermain)
+   ===================================================================== */
+var DRAGON = { x: W / 2, y: 872, free: false };   // free = naga di tengah layar, boleh menembak ke segala arah
+var CUR = 1, PATH_DY = 0, builtH = -1, bg = null;
+var SEL = { level: 'mudah', timed: true, ops: { '+': true, '-': true, '*': false, '/': false, int: false, dec: false, frac: false } };
+var G = {
+  mode: 'menu',            // menu | story | banner | intro | play | end
+  stage: 1, level: 'mudah', timed: true, ops: ['+', '-'],
+  balls: [], shots: [], parts: [], pops: [], pairs: [],
+  tailS: 0, time: 0, cool: 0, aim: { x: 300, y: 300 },
+  score: 0, totalScore: 0, stars: [], combo: 0, bestCombo: 0, fired: 0, hits: 0, mistakes: 0, speedMul: 1, wrongStreak: 0,
+  key: null, keyMatches: 0, ammo: null, next: null, intro: null, introT: 0, introBurst: false, bannerT: 0,
+  vBase: 8, fd: 4, doms: ['n'], routePick: [], totalN: 0, bossT: 0, bossPulse: 0, M: 9, chk: 0, lost: false, endKind: '',
+  eggs: 3, swap: null, swapT: 10, eggPhase: 0, pairsDone: 0, protT: 0, slowT: 0, steals: [], gains: [], roar: 0, eggBonus: 0
+};
+
+/* =====================================================================
+   BAGIAN 5 — HITUNGAN (aturan pasangan, pilihan angka, umpan balik)
+   ===================================================================== */
+function maxNum(op) {
+  var hard = G.level === 'menantang';
+  return (op === '*' || op === '/') ? (hard ? 12 : 9) : (hard ? 15 : 9);
+}
+function fmt(v, dom) {                      // tulisan angka sesuai jenisnya
+  if (dom === 'i') return v < 0 ? '\u2212' + (-v) : String(v);
+  if (dom === 'd') { var a = Math.abs(v); return (v < 0 ? '\u2212' : '') + Math.floor(a / 10) + ',' + (a % 10); }
+  if (dom === 'f') return (v > 0 && v % G.fd === 0) ? String(v / G.fd) : v + '/' + G.fd;
+  return String(v);
+}
+function keysFor(op) {                      // pilihan angka panel untuk pilihan hitungan ini
+  if (op === 'frac') { var D = G.fd; return [D - 1, D, D + 1]; }
+  return KEYS_NEW[op] ? KEYS_NEW[op][G.level] : KEYS[op][G.level];
+}
+function nClear(v) {                        // apakah bola angka biasa ini punya pasangan di salah satu angka panel? (hanya ×: 5 dan 7 tidak punya)
+  return G.ops.some(function (op) {
+    return OPDOM[op] === 'n' && keysFor(op).some(function (k) { return partners(v, op, k).length > 0; });
+  });
+}
+function domList(dom) {                     // semua angka bola yang mungkin untuk jenis ini
+  var r = [], i;
+  if (dom === 'i') { for (i = -INT_MAX[G.level]; i <= INT_MAX[G.level]; i++) if (i) r.push(i); }
+  else if (dom === 'd') { for (i = 1; i <= DEC_MAX[G.level]; i++) r.push(i); }
+  else if (dom === 'f') { for (i = 1; i < G.fd; i++) r.push(i); }
+  else {
+    for (i = 1; i <= G.M; i++) if (nClear(i)) r.push(i);      // buang angka yang tidak mungkin dipasangkan, supaya tidak ada bola buntu
+    if (!r.length) for (i = 1; i <= G.M; i++) r.push(i);
+  }
+  return r;
+}
+function randVal(dom) { return pick(domList(dom)); }
+function mt(x, y) {                         // dua bola/peluru cocok? (harus sejenis dengan panel)
+  return !!G.key && x.dom === y.dom && x.dom === OPDOM[G.key.op] && matches(x.val, y.val, G.key.op, G.key.k);
+}
+function matches(a, b, op, key) {          // apakah dua bola cocok dengan angka di panel?
+  switch (op) {
+    case 'int': case 'dec': case 'frac': return a + b === key;
+    case '+': return a + b === key;
+    case '-': return Math.abs(a - b) === key;
+    case '*': return a * b === key;
+    case '/': { var hi = Math.max(a, b), lo = Math.min(a, b); return lo > 0 && hi % lo === 0 && hi / lo === key; }
+  }
+  return false;
+}
+function partners(B, op, key) {            // angka pasangan yang cocok untuk bola bernilai B
+  var res = [];
+  if (op === '+') { var x = key - B; if (x >= 1) res.push(x); }
+  else if (op === '-') { res.push(B + key); if (B - key >= 1) res.push(B - key); }
+  else if (op === '*') { if (key % B === 0 && key / B <= maxNum('*')) res.push(key / B); }
+  else if (op === '/') { res.push(B * key); if (B % key === 0 && B / key >= 1) res.push(B / key); }
+  else if (op === 'int') { var xi = key - B; if (xi !== 0 && Math.abs(xi) <= INT_MAX[G.level]) res.push(xi); }
+  else if (op === 'dec') { var xd = key - B; if (xd >= 1 && xd <= DEC_MAX[G.level]) res.push(xd); }
+  else if (op === 'frac') { var xf = key - B; if (xf >= 1 && xf < G.fd) res.push(xf); }
+  return res;
+}
+function pairEq(a, b, op, dom) {          // tulisan persamaan untuk umpan balik
+  var hi = Math.max(a, b), lo = Math.min(a, b);
+  if (dom && dom !== 'n') return fmt(a, dom) + ' + ' + (b < 0 ? '(' + fmt(b, dom) + ')' : fmt(b, dom)) + ' = ' + fmt(a + b, dom);
+  if (OPDOM[op] !== 'n') op = '+';
+  if (op === '+') return a + ' + ' + b + ' = ' + (a + b);
+  if (op === '-') return hi + ' − ' + lo + ' = ' + (hi - lo);
+  if (op === '*') return a + ' × ' + b + ' = ' + (a * b);
+  return (lo > 0 && hi % lo === 0) ? hi + ' ÷ ' + lo + ' = ' + (hi / lo) : hi + ' ÷ ' + lo + ' tidak habis dibagi';
+}
+
+/* =====================================================================
+   BAGIAN 6 — PELURU DAN ANGKA PANEL
+   ===================================================================== */
+function reachable(b) {                    // peluru menembus bola lain, jadi semua bola terlihat bisa dijawab
+  return Math.hypot(b.x + b.ox - DRAGON.x, b.y + b.oy - DRAGON.y) > 95;
+}
+function targets() {                       // bola yang terlihat dan bisa ditembak
+  var vis = G.balls.filter(function (b) { return b.vis > 110; });
+  var r = vis.filter(reachable);
+  return r.length ? r : vis;
+}
+function useful(tok) {                     // apakah peluru ini bisa dipakai pada salah satu bola?
+  var t = targets();
+  if (!t.length) return true;
+  return t.some(function (b) { return mt(tok, b); });
+}
+function pickKey() {
+  var vis = targets(), best = null, bestC = 0, ops = shuffle(G.ops.slice());
+  for (var oi = 0; oi < ops.length; oi++) {
+    var op = ops[oi], list = shuffle(keysFor(op).slice());
+    if (G.key && G.key.op === op && list.length > 1) list = list.filter(function (k) { return k !== G.key.k; });
+    for (var i = 0; i < list.length; i++) {
+      var c = 0;
+      for (var j = 0; j < vis.length; j++) if (vis[j].dom === OPDOM[op] && partners(vis[j].val, op, list[i]).length) c++;
+      if (c >= 2) return { op: op, k: list[i] };
+      if (c > bestC) { bestC = c; best = { op: op, k: list[i] }; }
+    }
+  }
+  if (best) return best;
+  return { op: ops[0], k: pick(keysFor(ops[0])) };
+}
+function genAmmo() {
+  var vis = targets();
+  var ok = vis.filter(function (b) { return b.dom === OPDOM[G.key.op] && partners(b.val, G.key.op, G.key.k).length; });
+  if (vis.length && !ok.length) {          // tidak ada pasangan yang mungkin: ganti angka panel
+    G.key = pickKey(); G.keyMatches = 0; G.staleAmmo = true;   // peluru yang sedang dipegang dibuat untuk soal lama: harus diganti
+    popup(W / 2, 150, 'Soal baru!', '#fff');
+    ok = vis.filter(function (b) { return b.dom === OPDOM[G.key.op] && partners(b.val, G.key.op, G.key.k).length; });
+  }
+  if (ok.length && Math.random() < 0.7) {
+    var b = pick(ok);
+    return { t: 'n', dom: b.dom, val: pick(partners(b.val, G.key.op, G.key.k)) };
+  }
+  var dm = OPDOM[G.key.op]; return { t: 'n', dom: dm, val: randVal(dm) };
+}
+function reloadAmmo() {                    // buat ulang peluru dan penukar; ulangi bila angka panel berganti saat membuatnya
+  for (var i = 0; i < 4; i++) { G.staleAmmo = false; G.ammo = genAmmo(); G.next = genAmmo(); if (!G.staleAmmo) break; }
+  G.staleAmmo = false;
+}
+function sureToken() {                     // peluru yang PASTI punya pasangan (cadangan bila undian acak gagal)
+  var vis = targets();
+  var ok = vis.filter(function (b) { return b.dom === OPDOM[G.key.op] && partners(b.val, G.key.op, G.key.k).length; });
+  if (!ok.length) return null;
+  var b = pick(ok);
+  return { t: 'n', dom: b.dom, val: pick(partners(b.val, G.key.op, G.key.k)) };
+}
+function ensureUseful() {                  // aturan: minimal salah satu dari peluru dan bola penukar selalu punya pasangan
+  for (var pass = 0; pass < 3; pass++) {
+    if (G.staleAmmo) reloadAmmo();         // angka panel berganti sendiri: peluru lama (jenis lain) diganti
+    if (useful(G.ammo) || useful(G.next)) return;
+    var found = false;
+    for (var i = 0; i < 8 && !found; i++) { var a = genAmmo(); if (useful(a)) { G.next = a; found = true; } }
+    if (!found) { var t = sureToken(); if (t) G.next = t; }
+    if (!G.staleAmmo) return;              // bila angka panel berganti lagi di tengah pencarian: ulangi, supaya tidak ada peluru basi atau buntu
+  }
+}
+
+/* =====================================================================
+   BAGIAN 7 — ALUR STAGE (mulai, spanduk, peragaan, selesai)
+   ===================================================================== */
+function curRoute(i) {                     // jalur yang sedang dipakai di stage i
+  var r = G.routePick[i]; return STAGES[i - 1].routes[r === undefined ? 0 : r];
+}
+function setStage(i) {                     // pasang jalur, naga, dan latar untuk stage i
+  CUR = i;
+  var st = STAGES[i - 1], rt = curRoute(i);
+  buildPath(rt.path, PATH_DY, st.rad);
+  DRAGON.x = rt.dragon.x; DRAGON.free = !!rt.dragon.free;
+  DRAGON.y = rt.dragon.bottom ? H - 128 : rt.dragon.y + PATH_DY;
+  buildBg();
+}
+function makeBall() {
+  var dom = pick(G.doms);
+  return { dom: dom, val: randVal(dom), vis: 0, x: 0, y: 0, ox: 0, oy: 0 };
+}
+function newGame() { G.totalScore = 0; G.stars = []; G.routePick = []; startStage(1); }
+function startStage(i) {
+  G.stage = i;
+  if (G.routePick[i] === undefined) G.routePick[i] = Math.floor(Math.random() * 3);   // acak sekali per permainan; ulang stage = jalur sama
+  setStage(i);
+  var st = STAGES[i - 1];
+  G.level = SEL.level; G.timed = SEL.timed;
+  G.fd = FRAC_D[G.level][i - 1];
+  G.ops = Object.keys(SEL.ops).filter(function (k) { return SEL.ops[k]; });
+  if (!G.ops.length) G.ops = ['+'];
+  var nOps = G.ops.filter(function (k) { return OPDOM[k] === 'n'; });
+  G.M = nOps.length ? Math.max.apply(null, nOps.map(maxNum)) : 9;
+  G.doms = []; G.ops.forEach(function (k) { if (G.doms.indexOf(OPDOM[k]) < 0) G.doms.push(OPDOM[k]); });
+  G.shots = []; G.parts = []; G.pops = []; G.pairs = [];
+  G.time = 0; G.cool = 0; G.score = 0; G.combo = 0; G.bestCombo = 0;
+  G.fired = 0; G.hits = 0; G.mistakes = 0; G.speedMul = 1; G.keyMatches = 0; G.wrongStreak = 0;
+  G.lost = false; G.chk = 0; G.bossT = 0; G.bossPulse = 0;
+  G.swap = null; G.swapT = swapDelay();
+  G.shield = false; G.okStreak = 0; G.log = [];
+  G.eggs = EGGS; G.eggPhase = 0; G.pairsDone = 0; G.protT = 0; G.slowT = 0; G.steals = []; G.gains = []; G.roar = 0; G.eggBonus = 0;
+  G.vBase = CFG.v[G.level] * st.vMul * MIX_SLOW[Math.min(3, G.doms.length - 1)];
+  var N = Math.round(CFG.N[G.level] * st.nMul);
+  G.totalN = N; G.balls = [];
+  G.tailS = CFG.s0 - (N - 1) * CFG.D;
+  for (var k = 0; k < N; k++) {
+    var b = makeBall();
+    b.vis = G.tailS + (N - 1 - k) * CFG.D;
+    if (b.vis > -CFG.D) { var p = posAt(b.vis); b.x = p.x; b.y = p.y; }
+    G.balls.push(b);
+  }
+  G.key = null; G.key = pickKey(); reloadAmmo();
+  G.mode = 'banner'; G.bannerT = 0;
+}
+function endBanner() {
+  if (G.mode !== 'banner') return;
+  if (G.stage === 1) { G.intro = makeDemo(); G.introT = 0; G.introBurst = false; G.mode = 'intro'; }
+  else { G.mode = 'play'; G.cool = 0.35; }
+}
+function makeDemo() {                      // contoh dua bola untuk peragaan di stage 1
+  var op = G.key.op, k = G.key.k, dom = OPDOM[op];
+  var as = shuffle(dom === 'n' ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] : domList(dom));
+  for (var i = 0; i < as.length; i++) {
+    var ps = partners(as[i], op, k).filter(function (x) { return dom !== 'n' || x <= 20; });
+    if (ps.length) return { a: as[i], b: ps[0], op: op, k: k, dom: dom };
+  }
+  return { a: 3, b: 7, op: '+', k: 10, dom: 'n' };
+}
+function endIntro() { if (G.mode === 'intro') { G.mode = 'play'; G.cool = 0.35; } }
+function updateBanner(dt) { G.bannerT += dt; updateFx(dt); if (G.bannerT > 2.2) endBanner(); }
+function updateIntro(dt) {
+  G.introT += dt; updateFx(dt);
+  if (!G.introBurst && G.introT >= 3.0) {
+    G.introBurst = true; var cy = Math.round(H * 0.47);
+    burst(W / 2 - 34, cy, '#ffd54a', 14); burst(W / 2 + 34, cy, '#ffd54a', 14);
+  }
+  if (G.introT > 4.4) endIntro();
+}
+function fmtTime(s) { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+function starsText(n) { return n >= 3 ? '⭐⭐⭐' : n === 2 ? '⭐⭐' : '⭐'; }
+function endStage(win, why) {
+  if (G.mode !== 'play') return;
+  G.mode = 'end'; G.lost = !win;
+  var acc = G.fired ? G.hits / G.fired : 0, accP = Math.round(acc * 100);
+  var stats = [['Skor stage', G.score], ['Ketepatan', accP + '%'], ['Kesalahan', G.mistakes], ['Rentetan terbaik', G.bestCombo], ['Waktu main', fmtTime(G.time)]];
+  var title, msg, a, bShow = true;
+  if (win) {
+    var stars = (G.eggs >= 2 && acc >= 0.8) ? 3 : (G.eggs >= 2 || acc >= 0.6) ? 2 : 1;
+    stats.splice(1, 0, ['Telur selamat', G.eggs + ' / ' + EGGS]);
+    if (G.eggBonus) stats.push(['Bonus telur naga', '+' + G.eggBonus]);
+    G.stars[G.stage - 1] = stars; G.totalScore += G.score;
+    if (G.stage < 3) {
+      G.endKind = 'clear'; title = starsText(stars) + ' Stage ' + G.stage + ' selesai!';
+      msg = G.eggs === EGGS ? 'Ketiga telur selamat!' : G.eggs + ' dari ' + EGGS + ' telur selamat!';
+      a = 'Lanjut ke Stage ' + (G.stage + 1) + ' ▶'; stats.push(['Skor total', G.totalScore]);
+    } else {
+      G.endKind = 'final'; title = '🎉 Semua telur selamat!';
+      msg = 'Penyihir Jahat kalah. Dunia aman berkat kamu!';
+      var sum = 0; for (var i = 0; i < 3; i++) sum += G.stars[i] || 0;
+      stats = [['Skor total', G.totalScore], ['Bintang', sum + ' / 9'], ['Stage 1', starsText(G.stars[0] || 1)], ['Stage 2', starsText(G.stars[1] || 1)], ['Stage 3', starsText(G.stars[2] || 1)]];
+      a = 'Main lagi'; bShow = false;
+    }
+  } else {
+    G.endKind = 'lose'; title = why === 'time' ? '⏰ Waktu habis!' : '🧙 Telur dicuri penyihir!';
+    msg = why === 'time' ? 'Masih ada bola di jalur. Coba lagi, pasti bisa!' : 'Semua telur dicuri penyihir. Coba lagi, pasti bisa!';
+    a = 'Coba lagi';
+  }
+  $('endTitle').textContent = title; $('endMsg').textContent = msg;
+  $('btnA').textContent = a; $('btnB').classList.toggle('hidden', !bShow); $('btnR').classList.toggle('hidden', !G.log.length);
+  $('endStats').innerHTML = stats.map(function (s) { return '<div>' + s[0] + '<b>' + s[1] + '</b></div>'; }).join('');
+  setTimeout(function () { if (G.mode === 'end') $('end').classList.remove('hidden'); }, why === 'egg' ? 1800 : 800);
+}
+
+/* =====================================================================
+   BAGIAN 8 — EFEK (ledakan, tulisan melayang)
+   ===================================================================== */
+function burst(x, y, color, n) {
+  for (var i = 0; i < n; i++) {
+    var a = Math.random() * Math.PI * 2, sp = 60 + Math.random() * 200;
+    G.parts.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, r: 3 + Math.random() * 5, c: color });
+  }
+}
+function popup(x, y, text, color, o) {
+  o = o || {};
+  G.pops.push({ x: x, y: y, t: text, life: 1, c: color || '#fff', size: o.size || 24, rate: o.rate || 1.0, rise: o.rise === undefined ? 36 : o.rise });
+}
+function addScore(n, x, y) {
+  G.combo++; if (G.combo > G.bestCombo) G.bestCombo = G.combo;
+  var gain = Math.round(10 * n * (1 + (G.combo - 1) * 0.5));
+  G.score += gain;
+  popup(x, y - 30, '+' + gain + (G.combo > 1 ? '  x' + G.combo : ''), '#ffe58a');
+}
+function mistake(x, y, label) {
+  G.mistakes++; G.combo = 0; G.wrongStreak++;
+  G.speedMul = Math.min(MAX_SPEEDUP, 1 + MISTAKE_SPEEDUP * G.mistakes);
+  G.okStreak = 0;
+  popup(x, y - 30, 'Belum pas', '#ff8a80', { size: 20 });
+  if (label) popup(x, Math.max(170, y - 85), label, '#ffb199', { size: 30, rate: 0.5, rise: 14 });
+  if (G.shield && G.protT <= 0 && G.eggs > 0) {      // perisai menahan satu kesalahan, lalu pecah
+    G.shield = false; var np = nestPos(); burst(np.x, np.y, '#ffd54a', 18);
+    popup(np.x, Math.max(170, np.y - 120), 'Perisai pecah! Telur aman', '#ffe58a', { size: 24, rate: 0.7 });
+  } else loseEgg();
+}
+function swapDelay() { var r = SWAP_EVERY[G.level] || SWAP_EVERY.mudah; return r[0] + Math.random() * (r[1] - r[0]); }
+function startSwap() {                      // pilih dua bola yang akan bertukar posisi (diberi tanda dulu)
+  var c = G.balls.filter(function (b, i) {
+    return i > 0 && !b.egg && b.vis > 110 && b.x > 0 && b.x < W && b.y > 0 && b.y < H &&
+      G.shots.every(function (sh) { return sh.tg !== b; });
+  });
+  if (c.length < 2) { G.swapT = 3; return; }
+  var a = pick(c), diff = function (b) { return b !== a && (b.val !== a.val || b.dom !== a.dom); };
+  var d = c.filter(function (b) { return diff(b) && Math.abs(G.balls.indexOf(b) - G.balls.indexOf(a)) > 1; });
+  if (!d.length) d = c.filter(diff);
+  if (!d.length) { G.swapT = 3; return; }
+  G.swap = { a: a, b: pick(d), t: 0 };
+}
+function doSwap() {                         // dua bola bertukar tempat
+  var s = G.swap; G.swap = null; G.swapT = swapDelay();
+  var ia = G.balls.indexOf(s.a), ib = G.balls.indexOf(s.b);
+  if (ia <= 0 || ib <= 0) return;           // salah satu hilang / sudah jadi bola terdepan: batal
+  if (G.shots.some(function (sh) { return sh.tg === s.a || sh.tg === s.b; })) { G.swapT = 3; return; }   // sedang dituju peluru: tunda
+  G.balls[ia] = s.b; G.balls[ib] = s.a;
+  burst(s.a.x + s.a.ox, s.a.y + s.a.oy, '#d9b3ff', 10); burst(s.b.x + s.b.ox, s.b.y + s.b.oy, '#d9b3ff', 10);
+}
+function nestPos() { return { x: PX[PX.length - 1], y: PY[PY.length - 1] }; }
+function loseEgg() {                        // satu telur dicuri penyihir (tidak terjadi saat masa perlindungan)
+  if (G.protT > 0 || G.eggs <= 0) return;
+  G.eggs--; G.protT = PROTECT_T;
+  G.gains = G.gains.filter(function (g) { return g.slot !== G.eggs; });
+  G.steals.push({ slot: G.eggs, t: 0 });
+  var np = nestPos();
+  popup(np.x, Math.max(170, np.y - 120), 'Telur dicuri!', '#ff8a80', { size: 26, rate: 0.7 });
+  if (G.eggs === 1) G.roar = 1.4;           // telur terakhir: naga mengaum
+  if (G.eggs <= 0) endStage(false, 'egg');
+}
+function nestHit() {                        // bola depan sampai sarang: bola hilang, telur dicuri, jalur mundur dan melambat
+  var np = nestPos(), b0 = G.balls.shift();
+  burst(np.x, np.y, '#b36bff', 22);
+  G.tailS -= NEST_PUSH; G.slowT = NEST_SLOW_T;
+  if (b0 && b0.egg) popup(np.x, Math.max(170, np.y - 160), 'Telur naga lepas', '#ffcf9e', { size: 22, rate: 0.7 });
+  loseEgg();
+}
+function collectEgg(x, y) {                 // bola telur naga dijawab benar: telur bertambah, atau +500 jika sudah penuh
+  if (G.eggs < EGGS) {
+    var slot = G.eggs; G.eggs++;
+    G.gains.push({ x: x, y: y, t: 0, slot: slot });
+    popup(x, y + 62, '+1 telur!', '#ffe58a', { size: 30, rate: 0.6, rise: 20 });
+  } else {
+    G.eggBonus += EGG_BONUS; G.score += EGG_BONUS;
+    G.gains.push({ x: x, y: y, t: 0, slot: -1 });
+    popup(x, y + 62, '+' + EGG_BONUS + ' bonus!', '#ffe58a', { size: 32, rate: 0.6, rise: 20 });
+  }
+}
+function trySpawnEgg() {                    // titipkan telur naga di satu bola yang pasangannya bisa dijawab sekarang
+  var c = G.balls.filter(function (b) {
+    return !b.egg && b.vis > 150 && b.vis < PL - 350 && b.dom === OPDOM[G.key.op] && partners(b.val, G.key.op, G.key.k).length > 0 &&
+      b.x > 0 && b.x < W && b.y > 0 && b.y < H;
+  });
+  if (!c.length) return;
+  pick(c).egg = true; G.eggPhase = 1;
+  popup(W / 2, 150, 'Telur naga muncul!', '#ffe58a', { size: 30, rate: 0.6 });
+}
+
+/* =====================================================================
+   BAGIAN 9 — LOGIKA PERMAINAN (pasangan, tabrakan, rantai, bos)
+   ===================================================================== */
+function removePair(a, b) {                 // hapus 2 bola bersebelahan yang cocok
+  var ia = G.balls.indexOf(a), ib = G.balls.indexOf(b);
+  if (ia < 0 || ib < 0) return;
+  var lo = Math.min(ia, ib);
+  [a, b].forEach(function (q) { burst(q.x + q.ox, q.y + q.oy, '#ffd54a', 10); });
+  var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+  addScore(2, mx, my);
+  G.wrongStreak = 0; G.pairsDone++;
+  if (a.egg || b.egg) { collectEgg(mx + (a.ox + b.ox) / 2, my + (a.oy + b.oy) / 2); G.eggPhase = 2; }
+  popup(mx, Math.max(170, my - 85), pairEq(a.val, b.val, G.key.op, a.dom) + ' ✓', '#9be37a', { size: 30, rate: 0.5, rise: 14 });
+  G.balls.splice(lo, 2);
+  var f = G.balls[lo - 1], k = G.balls[lo];
+  if (f && k) G.pairs.push({ f: f, k: k, t: 0 });
+  G.keyMatches++;
+  if (G.keyMatches >= KEYS_PER_ROUND && G.balls.length) {
+    G.keyMatches = 0; G.key = pickKey(); reloadAmmo();
+    popup(W / 2, 150, 'Soal baru!', '#fff');
+  }
+}
+function logShot(ball, nb, partner) {      // catat tiap jawaban untuk layar tinjauan
+  var op = G.key.op, dm = OPDOM[op], sym = SYM[op], kt = fmt(G.key.k, dm);
+  var e = { soal: '◯ ' + sym + ' ◯ = ' + kt, ok: !!partner };
+  if (partner) e.eq = pairEq(nb.val, partner.val, op, nb.dom);
+  else if (nb.dom !== ball.dom) { e.eq = fmt(nb.val, nb.dom) + ' dan ' + fmt(ball.val, ball.dom); e.why = 'Beda jenis bilangan'; }
+  else e.eq = pairEq(nb.val, ball.val, op, nb.dom);
+  if (!partner) {
+    var ps = ball.dom === dm ? partners(ball.val, op, G.key.k) : [];
+    e.fix = ps.length ? 'Bola ' + fmt(ball.val, ball.dom) + ' berpasangan dengan: ' + ps.map(function (v) { return fmt(v, dm); }).join(' atau ') : 'Hasilnya harus ' + kt;
+  }
+  G.log.push(e); if (G.log.length > 200) G.log.shift();
+}
+function resolveHit(s, ball) {
+  G.lastHit = ball;                         // (dipakai uji otomatis: bola yang terkena peluru)
+  var idx = G.balls.indexOf(ball);
+  var tp = tangentAt(ball.vis);
+  var rel = (s.x - (ball.x + ball.ox)) * tp.x + (s.y - (ball.y + ball.oy)) * tp.y;
+  var at = rel > 0 ? idx : idx + 1;
+  var nb = { val: s.tok.val, dom: s.tok.dom || 'n', vis: 0, x: 0, y: 0, ox: 0, oy: 0 };
+  G.balls.splice(at, 0, nb);
+  var tgt = G.tailS + (G.balls.length - 1 - at) * CFG.D;
+  nb.vis = tgt;
+  var p = posAt(tgt); nb.x = p.x; nb.y = p.y; nb.ox = s.x - p.x; nb.oy = s.y - p.y;
+  var hitN = rel > 0 ? G.balls[at + 1] : G.balls[at - 1];
+  var othN = rel > 0 ? G.balls[at - 1] : G.balls[at + 1];
+  var partner = null;
+  if (hitN && mt(nb, hitN)) partner = hitN;
+  else if (othN && mt(nb, othN)) partner = othN;
+  logShot(ball, nb, partner);
+  if (partner) {
+    G.hits++;
+    if (!G.shield && ++G.okStreak >= SHIELD_AT) {
+      G.shield = true; G.okStreak = 0; var sp = nestPos();
+      popup(sp.x, Math.max(170, sp.y - 120), '🛡 Perisai siap!', '#ffe58a', { size: 26, rate: 0.7 });
+    }
+    removePair(nb, partner);
+  }
+  else mistake(s.x, s.y, nb.dom === ball.dom ? pairEq(nb.val, ball.val, G.key.op, nb.dom) : 'Beda jenis bilangan');
+}
+function findHit(s) {
+  var best = null, bd = 1e9, th = CFG.R + CFG.shotR - 8;
+  for (var i = 0; i < G.balls.length; i++) {
+    var b = G.balls[i];
+    if (b.vis < 0) continue;
+    var d = Math.hypot(s.x - (b.x + b.ox), s.y - (b.y + b.oy));
+    if (d < th && d < bd) { bd = d; best = b; }
+  }
+  return best;
+}
+function updateShots(dt) {
+  for (var i = G.shots.length - 1; i >= 0; i--) {
+    var s = G.shots[i], remaining = 1100 * dt, hit = null;
+    if (s.tg && G.balls.indexOf(s.tg) < 0) s.tg = null;   // bola sasaran sudah hilang: jadi tembakan lurus biasa
+    while (remaining > 0 && !hit) {
+      var step = Math.min(remaining, 8);
+      if (s.tg) {                           // peluru menembus: mengejar bola sasaran, mengabaikan bola lain
+        var tx = s.tg.x + s.tg.ox, ty = s.tg.y + s.tg.oy, dd = Math.hypot(tx - s.x, ty - s.y);
+        if (dd <= CFG.R + CFG.shotR - 8) { hit = s.tg; break; }
+        s.dx = (tx - s.x) / dd; s.dy = (ty - s.y) / dd;
+        s.x += s.dx * step; s.y += s.dy * step; remaining -= step;
+      } else {
+        s.x += s.dx * step; s.y += s.dy * step; remaining -= step;
+        hit = findHit(s);
+      }
+    }
+    if (hit) { G.shots.splice(i, 1); resolveHit(s, hit); continue; }
+    if (s.x < -80 || s.x > W + 80 || s.y < -80 || s.y > H + 80) G.shots.splice(i, 1);
+  }
+}
+function updatePairs(dt) {                 // reaksi berantai
+  for (var i = G.pairs.length - 1; i >= 0; i--) {
+    var p = G.pairs[i]; p.t += dt;
+    var ia = G.balls.indexOf(p.f), ib = G.balls.indexOf(p.k);
+    if (ia < 0 || ib !== ia + 1 || p.t > 2.5) { G.pairs.splice(i, 1); continue; }
+    if (p.f.vis - p.k.vis <= CFG.D + 4) {
+      G.pairs.splice(i, 1);
+      if (G.key && mt(p.f, p.k)) removePair(p.f, p.k);
+    }
+  }
+}
+function updateChain(dt) {
+  var n = G.balls.length; if (!n) return;
+  var v = G.vBase * G.speedMul;
+  if (G.balls[0].vis < 150) v *= 5;        // bola habis di depan: percepat bola berikutnya
+  if (G.slowT > 0) v *= NEST_SLOW;         // setelah telur dicuri: jalur melambat sebentar
+  G.tailS += v * dt;
+  var k = 1 - Math.exp(-dt * 16), dk = Math.exp(-dt * 12);
+  for (var i = 0; i < n; i++) {
+    var b = G.balls[i], tgt = G.tailS + (n - 1 - i) * CFG.D;
+    b.vis = (tgt < -2 * CFG.D) ? tgt : b.vis + (tgt - b.vis) * k;
+    if (b.vis > -CFG.D) { var p = posAt(b.vis); b.x = p.x; b.y = p.y; }
+    b.ox *= dk; b.oy *= dk;
+  }
+}
+function updateFx(dt) {
+  var i;
+  for (i = G.parts.length - 1; i >= 0; i--) {
+    var p = G.parts[i]; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 300 * dt; p.life -= dt * 1.8;
+    if (p.life <= 0) G.parts.splice(i, 1);
+  }
+  for (i = G.pops.length - 1; i >= 0; i--) {
+    var q = G.pops[i]; q.y -= q.rise * dt; q.life -= dt * q.rate;
+    if (q.life <= 0) G.pops.splice(i, 1);
+  }
+  if (G.bossPulse > 0) G.bossPulse -= dt;
+  if (G.roar > 0) G.roar -= dt;
+  for (i = G.steals.length - 1; i >= 0; i--) { G.steals[i].t += dt; if (G.steals[i].t > STEAL_T) G.steals.splice(i, 1); }
+  for (i = G.gains.length - 1; i >= 0; i--) {
+    var gn = G.gains[i]; gn.t += dt;
+    if (gn.t > GAIN_T) {
+      var gp = nestPos(), gs = gn.slot >= 0 ? EGG_SLOT[gn.slot] : [0, 0];
+      burst(gp.x + gs[0], gp.y + gs[1], '#ffe58a', 14); G.gains.splice(i, 1);
+    }
+  }
+}
+function bossPos() { var b = curRoute(3).boss; return { x: b.x, y: b.y + PATH_DY }; }
+function bossCast() {                      // mantra penyihir: angka panel berganti, bola bertambah
+  var bp = bossPos();
+  G.bossPulse = 0.8;
+  burst(bp.x, bp.y, '#d9b3ff', 18);
+  for (var i = 0; i < BOSS_ADDS; i++) {
+    G.tailS -= CFG.D;
+    var b = makeBall(); b.vis = G.tailS; G.balls.push(b); G.totalN++;
+  }
+  G.key = pickKey(); G.keyMatches = 0; reloadAmmo();
+  popup(W / 2, 150, 'Mantra baru!', '#d9b3ff', { size: 30, rate: 0.6 });
+}
+function update(dt) {
+  G.time += dt; if (G.cool > 0) G.cool -= dt;
+  if (G.protT > 0) G.protT -= dt; if (G.slowT > 0) G.slowT -= dt;
+  updateChain(dt); updateShots(dt); updatePairs(dt); updateFx(dt);
+  if (G.mode !== 'play') return;
+  if (G.swap) {
+    if (G.balls.indexOf(G.swap.a) < 0 || G.balls.indexOf(G.swap.b) < 0) { G.swap = null; G.swapT = swapDelay(); }
+    else { G.swap.t += dt; if (G.swap.t >= SWAP_WARN) doSwap(); }
+  } else if (G.balls.length > 3) { G.swapT -= dt; if (G.swapT <= 0) startSwap(); }
+  G.chk += dt;
+  if (G.chk > 0.25 && G.ammo) {
+    G.chk = 0;
+    if (!G.eggPhase && G.key && G.pairsDone * 2 >= G.totalN * EGG_AT) trySpawnEgg();
+  }
+  if (STAGES[G.stage - 1].boss && G.balls.length) {
+    G.bossT += dt;
+    if (G.bossT >= BOSS_EVERY) { G.bossT = 0; bossCast(); }
+  }
+  if (G.balls.length && G.balls[0].vis >= PL - 30) { nestHit(); if (G.mode !== 'play') return; }
+  if (G.ammo) ensureUseful();              // dicek setiap frame (setelah semua perubahan bola), tanpa jeda
+  if (G.balls.length === 0) { endStage(true); return; }
+  if (G.timed && G.time >= TIME_LIMIT) endStage(false, 'time');
+}
+
+/* =====================================================================
+   BAGIAN 10 — MENEMBAK
+   ===================================================================== */
+function clampAng(a) {                      // naga di bawah hanya boleh menembak ke atas
+  if (DRAGON.free) return a;
+  if (a > Math.PI / 2 || a < -Math.PI + 0.2) return -Math.PI + 0.2;
+  if (a > -0.2) return -0.2;
+  return a;
+}
+function aimDir(tx, ty) { var a = clampAng(Math.atan2(ty - DRAGON.y, tx - DRAGON.x)); return { x: Math.cos(a), y: Math.sin(a) }; }
+function ballAt(x, y) {                     // bola yang terlihat di titik ketukan (untuk peluru menembus)
+  var best = null, bd = CFG.R + 18;
+  for (var i = 0; i < G.balls.length; i++) {
+    var b = G.balls[i]; if (b.vis < 30) continue;
+    var bx = b.x + b.ox, by = b.y + b.oy;
+    if (bx < -10 || bx > W + 10 || by < -10 || by > H + 10) continue;
+    var d = Math.hypot(x - bx, y - by);
+    if (d < bd) { bd = d; best = b; }
+  }
+  return best;
+}
+function fire(tx, ty) {
+  if (G.mode !== 'play' || G.cool > 0 || !G.ammo) return;
+  var tg = ballAt(tx, ty), d;               // mengetuk bola = peluru sihir menembus bola lain dan menempel di bola itu
+  if (tg) {
+    var ex = tg.x + tg.ox - DRAGON.x, ey = tg.y + tg.oy - DRAGON.y, el = Math.hypot(ex, ey) || 1;
+    d = { x: ex / el, y: ey / el };
+  } else d = aimDir(tx, ty);
+  G.shots.push({ x: DRAGON.x + d.x * 60, y: DRAGON.y + d.y * 60, dx: d.x, dy: d.y, tok: G.ammo, tg: tg });
+  G.fired++; G.ammo = G.next; G.next = genAmmo(); G.cool = 0.3;
+  if (G.staleAmmo) reloadAmmo();           // angka panel berganti saat menembak: kedua peluru dibuat ulang untuk soal baru
+}
+function swapAmmo() { if (G.mode !== 'play') return; var t = G.ammo; G.ammo = G.next; G.next = t; }
+
+/* =====================================================================
+   BAGIAN 11 — GAMBAR (latar, bola, panel, spanduk, bos)
+   ===================================================================== */
+function rr(x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+function buildBg() {
+  var T = THEMES[CUR - 1];
+  bg = document.createElement('canvas'); bg.width = W * 2; bg.height = H * 2;
+  var g = bg.getContext('2d'); g.scale(2, 2);
+  var grd = g.createLinearGradient(0, 0, 0, H);
+  grd.addColorStop(0, T.top); grd.addColorStop(0.6, T.mid); grd.addColorStop(1, T.bot);
+  g.fillStyle = grd; g.fillRect(0, 0, W, H);
+  var seed = 7 + CUR * 13; var rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  var i, x, y, r;
+  for (i = 0; i < 70; i++) { x = rnd() * W; y = rnd() * H; r = 10 + rnd() * 34; g.fillStyle = 'rgba(' + T.blob + ',' + (0.04 + rnd() * 0.07) + ')'; g.beginPath(); g.arc(x, y, r, 0, 6.2832); g.fill(); }
+  for (i = 0; i < 40; i++) { x = rnd() * W; y = rnd() * H; r = 2 + rnd() * 3; g.fillStyle = 'rgba(' + T.spark + ',' + (0.10 + rnd() * 0.15) + ')'; g.beginPath(); g.arc(x, y, r, 0, 6.2832); g.fill(); }
+  var gw = CFG.groove;
+  g.lineCap = 'round'; g.lineJoin = 'round';
+  var stroke = function (w, c) { g.strokeStyle = c; g.lineWidth = w; g.beginPath(); g.moveTo(PX[0], PY[0]); for (var k = 1; k < PX.length; k++) g.lineTo(PX[k], PY[k]); g.stroke(); };
+  stroke(gw + 14, T.g1); stroke(gw, T.g2);
+  g.setLineDash([10, 18]); stroke(2, T.dash); g.setLineDash([]);
+  var ex = PX[PX.length - 1], ey = PY[PY.length - 1];
+  g.fillStyle = T.nest1; g.beginPath(); g.arc(ex, ey, 62, 0, 6.2832); g.fill();
+  g.fillStyle = T.nest2; g.beginPath(); g.arc(ex, ey, 50, 0, 6.2832); g.fill();
+  g.font = '46px ' + EMOJI; g.textAlign = 'center'; g.textBaseline = 'middle';
+  var spots = [[46, H - 250], [554, H - 240], [44, H - 140], [556, H - 150]];
+  for (i = 0; i < spots.length; i++) g.fillText(T.deco[i], spots[i][0], spots[i][1]);
+}
+function drawFrac(text, x, y, fs, tc) {      // pecahan bersusun: pembilang, garis, penyebut
+  var p = text.split('/'), w = Math.max(p[0].length, p[1].length) * fs * 0.6 + 6;
+  ctx.fillStyle = tc; ctx.font = 'bold ' + fs + 'px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(p[0], x, y - fs * 0.55); ctx.fillText(p[1], x, y + fs * 0.62);
+  ctx.fillRect(x - w / 2, y - fs * 0.02, w, Math.max(2, fs * 0.1));
+}
+function drawNumBall(x, y, r, text, c1, c2, tc) {
+  var g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.1, x, y, r);
+  g.addColorStop(0, c1); g.addColorStop(1, c2);
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fillStyle = g; ctx.fill();
+  ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,.35)'; ctx.stroke();
+  if (text.indexOf('/') > 0) { drawFrac(text, x, y, Math.round(r * 0.7), tc); return; }
+  var len = text.length, fs = Math.round(r * (len >= 3 ? 0.66 : len === 2 ? 0.82 : 0.95));
+  ctx.fillStyle = tc; ctx.font = 'bold ' + fs + 'px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(text, x, y + 1);
+}
+var DOMCOL = {                              // warna bola menurut jenis bilangan: [terang, gelap, huruf]
+  n: ['#9ff0e2', '#2fa99b', '#06312d'], i: ['#a9c8ff', '#3d73d6', '#071a3d'],
+  d: ['#ffb3d1', '#d6457f', '#3d0a1f'], f: ['#d3b3ff', '#8a4fd6', '#26073d']
+};
+function drawToken(tok, x, y, r) { drawNumBall(x, y, r, fmt(tok.val, tok.dom), '#ffe58a', '#f0a21a', '#4a2b00'); }
+var EGG_SLOT = [[-34, 15], [34, 15], [0, -24]];   // posisi 3 telur di sarang
+function eggHidden(i) { for (var k = 0; k < G.gains.length; k++) if (G.gains[k].slot === i) return true; return false; }
+function drawNest(ex, ey, near) {            // 3 telur di sarang (+ perisai saat masa perlindungan)
+  var i, sh = near ? Math.sin(G.time * 40) * 3 : 0;
+  if (G.mode === 'play' && G.protT > 0) {
+    ctx.beginPath(); ctx.arc(ex, ey, 76 + 3 * Math.sin(G.time * 10), 0, 6.2832);
+    ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(170,235,255,' + (0.9 * Math.min(1, G.protT)) + ')'; ctx.stroke();
+  }
+  if (G.mode === 'play' && G.shield) {      // gelembung emas = perisai (beda dari cincin biru masa perlindungan)
+    ctx.beginPath(); ctx.arc(ex, ey, 58, 0, 6.2832);
+    ctx.fillStyle = 'rgba(255,213,74,.18)'; ctx.fill();
+    ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(255,213,74,' + (0.75 + 0.2 * Math.sin(G.time * 6)) + ')'; ctx.stroke();
+  }
+  /* penyihir hanya menggantikan telur bila telur benar-benar habis (bukan saat waktu habis) */
+  if (G.lost && G.mode === 'end' && G.eggs <= 0 && !G.steals.length) { ctx.font = '84px ' + EMOJI; ctx.fillText('🧙', ex, ey); return; }
+  ctx.font = '42px ' + EMOJI;
+  for (i = 0; i < EGGS; i++) if (i < G.eggs && !eggHidden(i)) ctx.fillText('🥚', ex + EGG_SLOT[i][0] + sh, ey + EGG_SLOT[i][1]);
+}
+function drawSteals() {                      // penyihir menghisap telur dengan energi jahat
+  var np = nestPos(), i, k;
+  for (i = 0; i < G.steals.length; i++) {
+    var s = G.steals[i], T = s.t / STEAL_T, sl = EGG_SLOT[s.slot];
+    var sx = np.x + sl[0], sy = np.y + sl[1];
+    var wx = np.x + (np.x < W / 2 ? 105 : -105), wy = Math.max(190, np.y - 100);
+    var p = Math.max(0, Math.min(1, (T - 0.25) / 0.55)); p = p * p * (3 - 2 * p);
+    var wa = Math.max(0, Math.min(1, T / 0.15, (1 - T) / 0.2));
+    ctx.save();
+    ctx.globalAlpha = wa; ctx.font = '76px ' + EMOJI; ctx.fillText('🧙', wx, wy);
+    var vr = 60 * Math.min(1, T / 0.3) * Math.max(0, 1 - Math.max(0, T - 0.8) / 0.2);   // pusaran gelap di sarang
+    if (vr > 0) {
+      var gr = ctx.createRadialGradient(sx, sy, 2, sx, sy, vr);
+      gr.addColorStop(0, 'rgba(40,0,70,.85)'); gr.addColorStop(1, 'rgba(120,40,200,0)');
+      ctx.globalAlpha = 0.9; ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(sx, sy, vr, 0, 6.2832); ctx.fill();
+    }
+    for (k = 0; k < 12; k++) {                // butir energi ungu menyedot ke arah penyihir
+      var u = ((k / 12) + T * 1.4) % 1, a = T * 16 + k * 0.9, r = 24 * Math.sin(u * 3.1416);
+      ctx.globalAlpha = wa * (0.35 + 0.65 * Math.sin(u * 3.1416));
+      ctx.fillStyle = k % 2 ? '#b36bff' : '#5a1f9e';
+      ctx.beginPath(); ctx.arc(sx + (wx - sx) * u + Math.cos(a) * r, sy + (wy - sy) * u + Math.sin(a) * r, 5 - 2 * u, 0, 6.2832); ctx.fill();
+    }
+    var ex = sx + (wx - sx) * p + Math.cos(T * 18) * 22 * Math.sin(p * 3.1416);
+    var ey = sy + (wy - sy) * p + Math.sin(T * 18) * 22 * Math.sin(p * 3.1416);
+    if (T < 0.25) ex += Math.sin(T * 120) * 3;      // telur bergetar sebelum terhisap
+    if (p < 1) { ctx.globalAlpha = 1 - 0.6 * p; ctx.font = Math.round(42 * (1 - 0.65 * p)) + 'px ' + EMOJI; ctx.fillText('🥚', ex, ey); }
+    else {
+      var fl = Math.max(0, 1 - (T - 0.8) / 0.2); ctx.globalAlpha = fl * 0.8; ctx.fillStyle = '#e0c2ff';
+      ctx.beginPath(); ctx.arc(wx, wy, 34 * (2 - fl), 0, 6.2832); ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+function drawGains() {                       // telur naga terbang ke sarang
+  var np = nestPos(), i;
+  for (i = 0; i < G.gains.length; i++) {
+    var g = G.gains[i], T = Math.min(1, g.t / GAIN_T), e = T * T * (3 - 2 * T), sl = g.slot >= 0 ? EGG_SLOT[g.slot] : [0, 0];
+    var tx = np.x + sl[0], ty = np.y + sl[1];
+    var x = g.x + (tx - g.x) * e, y = g.y + (ty - g.y) * e - 70 * Math.sin(e * 3.1416);
+    ctx.save();
+    ctx.globalAlpha = 0.35 * (1 - T); ctx.fillStyle = '#ffe58a'; ctx.beginPath(); ctx.arc(x, y, 34 + 14 * T, 0, 6.2832); ctx.fill();
+    ctx.globalAlpha = 1; ctx.font = Math.round(34 + 8 * e) + 'px ' + EMOJI; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('🥚', x, y);
+    ctx.restore();
+  }
+}
+function drawEggMark(x, y) {                // tanda telur naga: cincin emas + lencana hadiah
+  var pulse = 2 * Math.sin(G.time * 6), full = G.eggs >= EGGS, label = full ? '+' + EGG_BONUS : '+1';
+  ctx.beginPath(); ctx.arc(x, y, CFG.R + 5 + pulse, 0, 6.2832); ctx.lineWidth = 5; ctx.strokeStyle = '#ffd54a'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(x, y, CFG.R + 11 + pulse, 0, 6.2832); ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,229,138,.6)'; ctx.stroke();
+  var bw = full ? 72 : 54, by = y - CFG.R - 22;
+  rr(x - bw / 2, by - 12, bw, 24, 12); ctx.fillStyle = '#fff4c2'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#b8801a'; ctx.stroke();
+  ctx.fillStyle = '#4a2b00'; ctx.font = 'bold 16px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('🥚' + label, x, by + 1);
+}
+function drawSwapMark() {                    // tanda dua bola akan bertukar: cincin mengecil + garis putus + panah ⇄
+  var s = G.swap, ax = s.a.x + s.a.ox, ay = s.a.y + s.a.oy, bx = s.b.x + s.b.ox, by = s.b.y + s.b.oy;
+  var u = Math.min(1, s.t / SWAP_WARN), blink = Math.sin(G.time * 16) > 0;
+  ctx.save();
+  ctx.setLineDash([8, 8]); ctx.lineDashOffset = -G.time * 40; ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(225,200,255,.95)'; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke(); ctx.setLineDash([]);
+  [[ax, ay], [bx, by]].forEach(function (q) {
+    ctx.beginPath(); ctx.arc(q[0], q[1], CFG.R + 24 - 18 * u, 0, 6.2832); ctx.lineWidth = 5; ctx.strokeStyle = blink ? '#ffffff' : '#c58bff'; ctx.stroke();
+    ctx.beginPath(); ctx.arc(q[0], q[1], CFG.R + 5, 0, 6.2832); ctx.fillStyle = 'rgba(197,139,255,' + (0.18 + 0.2 * u) + ')'; ctx.fill();
+  });
+  var mx = (ax + bx) / 2, my = (ay + by) / 2;
+  ctx.font = 'bold 34px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.lineWidth = 7; ctx.strokeStyle = 'rgba(40,0,70,.85)'; ctx.strokeText('⇄', mx, my); ctx.fillStyle = '#fff'; ctx.fillText('⇄', mx, my);
+  ctx.restore();
+}
+function fsz(n) { return Math.max(n, 11 / SCALE); }   // teks kecil di HP ikut membesar (minimal ±11 piksel layar; di layar besar tidak berubah)
+function fitFont(text, px, maxW) {          // kecilkan ukuran bila teks terlalu lebar
+  ctx.font = px + 'px ' + FONT; var w = ctx.measureText(text).width;
+  return w > maxW ? Math.max(8, Math.floor(px * maxW / w)) : px;
+}
+var CLOSE = { x: 556, y: 40 };
+function drawHUD() {
+  var cx = W / 2, st = STAGES[G.stage - 1];
+  CLOSE.x = W - 44;
+  if (st.boss) {                            // stage 3: ikon penyihir besar bisa menumpuk dengan HUD, jadi teks HUD diberi latar gelap tembus pandang
+    var bu = fsz(15) / 15, pb = (G.mode === 'play' ? 38 + 70 * bu + 14 : 38 + 46 * bu + 10), lb = 110 + (fsz(13) - 13) * 0.6 + 12;
+    ctx.fillStyle = 'rgba(14,4,28,.55)';
+    rr(6, 12, 156, pb - 12, 12); ctx.fill();
+    rr(W - 146, 72, 140, lb - 72, 12); ctx.fill();
+  }
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 22px ' + FONT;
+  ctx.fillText('Skor ' + (G.totalScore + ((G.mode === 'end' && !G.lost) ? 0 : G.score)), 20, 38);   // setelah menang, skor stage sudah masuk ke skor total
+  var u = fsz(15) / 15, ry2 = 38 + 24 * u, ry3 = 38 + 46 * u, ry4 = 38 + 70 * u;   // di layar kecil teks dan jarak barisnya ikut membesar
+  ctx.font = fsz(15) + 'px ' + FONT; ctx.fillStyle = '#ffffff'; ctx.globalAlpha = 0.85;
+  ctx.fillText('Sisa bola ' + G.balls.length, 20, ry2);
+  ctx.fillText('Stage ' + G.stage + ' / 3', 20, ry3);
+  ctx.globalAlpha = 1;
+  if (G.mode === 'play') {                  // kemajuan perisai: 5 titik, penuh = perisai siap
+    ctx.font = fsz(16) + 'px ' + EMOJI; ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle';
+    ctx.fillText('🛡', 20, ry4);
+    var dx0 = 20 + 30 * u, dsp = u > 1 ? 13.5 : 15;      // titik dirapatkan di layar kecil supaya "Siap!" tidak menabrak ikon penyihir di stage 3
+    for (var si = 0; si < SHIELD_AT; si++) {
+      ctx.beginPath(); ctx.arc(dx0 + si * dsp, ry4, 5, 0, 6.2832);
+      if (G.shield || si < G.okStreak) { ctx.fillStyle = G.shield ? '#ffd54a' : '#9be37a'; ctx.fill(); }
+      else { ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.stroke(); }
+    }
+    if (G.shield) { ctx.font = 'bold ' + Math.min(fsz(14), 15) + 'px ' + FONT; ctx.fillStyle = '#ffd54a'; ctx.fillText('Siap!', dx0 + SHIELD_AT * dsp, ry4); }
+    ctx.textBaseline = 'alphabetic';
+  }
+  ctx.textAlign = 'right'; ctx.fillStyle = '#fff';
+  ctx.font = 'bold ' + (G.timed ? 20 : fsz(15)) + 'px ' + FONT;
+  ctx.fillText(G.timed ? '⏱ ' + fmtTime(TIME_LIMIT - G.time) : '∞ Tanpa waktu', W - 20, 90);
+  ctx.font = fsz(13) + 'px ' + FONT; ctx.globalAlpha = 0.8;
+  ctx.fillText('Laju ×' + G.speedMul.toFixed(2), W - 20, 110 + (fsz(13) - 13) * 0.6); ctx.globalAlpha = 1;
+  var cr = Math.max(22, 17 / SCALE), cd = cr * 8 / 22;     // di layar kecil tombol ✕ ikut membesar
+  ctx.beginPath(); ctx.arc(CLOSE.x, CLOSE.y, cr, 0, 6.2832); ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fill();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(CLOSE.x - cd, CLOSE.y - cd); ctx.lineTo(CLOSE.x + cd, CLOSE.y + cd);
+  ctx.moveTo(CLOSE.x + cd, CLOSE.y - cd); ctx.lineTo(CLOSE.x - cd, CLOSE.y + cd); ctx.stroke();
+  if (G.key) {                              // panel persamaan bergambar: ◯ + ◯ = 10
+    ctx.textAlign = 'center';
+    rr(cx - 140, 12, 280, 96, 18); ctx.fillStyle = 'rgba(255,229,138,.96)'; ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = '#b8801a';
+    if (G.mode === 'intro') { ctx.lineWidth = 5 + 2 * Math.sin(G.introT * 8); ctx.strokeStyle = '#fff'; }
+    ctx.stroke();
+    var by = 60;
+    var hc = DOMCOL[OPDOM[G.key.op]];          // lubang panel berwarna sama dengan bola yang dicari
+    var hole = function (x) {
+      ctx.beginPath(); ctx.arc(x, by, 24, 0, 6.2832); ctx.fillStyle = hc[0]; ctx.globalAlpha = 0.8; ctx.fill(); ctx.globalAlpha = 1;
+      ctx.setLineDash([6, 6]); ctx.lineWidth = 4; ctx.strokeStyle = hc[1]; ctx.stroke(); ctx.setLineDash([]);
+    };
+    hole(cx - 98); hole(cx - 12);
+    ctx.fillStyle = '#4a2b00'; ctx.textBaseline = 'middle';
+    ctx.font = 'bold 36px ' + FONT;
+    ctx.fillText(SYM[G.key.op], cx - 55, by + 2);
+    ctx.fillText('=', cx + 38, by + 2);
+    var kt = fmt(G.key.k, OPDOM[G.key.op]);
+    if (kt.indexOf('/') > 0) drawFrac(kt, cx + 98, by + 2, 30, '#4a2b00');
+    else { ctx.font = 'bold ' + (kt.length >= 3 ? 40 : 48) + 'px ' + FONT; ctx.fillText(kt, cx + 98, by + 3); }
+    ctx.textBaseline = 'alphabetic';
+  }
+  if (st.boss) {                            // batang nyawa penyihir (stage 3)
+    var ratio = Math.max(0, Math.min(1, G.balls.length / Math.max(1, G.totalN)));
+    ctx.font = '20px ' + EMOJI; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('🧙', cx - 128, 128);
+    rr(cx - 108, 121, 216, 14, 7); ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fill();
+    if (ratio > 0) { rr(cx - 108, 121, Math.max(14, 216 * ratio), 14, 7); ctx.fillStyle = '#e0457b'; ctx.fill(); }
+    ctx.textBaseline = 'alphabetic';
+  }
+  if (G.mode === 'play') {
+    var hint = 'Ketuk bola untuk menembaknya · Ketuk naga untuk menukar peluru';
+    ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(255,255,255,.65)';
+    ctx.font = fitFont(hint, fsz(13), W - 24) + 'px ' + FONT;
+    ctx.fillText(hint, cx, H - 20);
+  }
+}
+function drawIntro() {
+  var T = G.introT, d = G.intro, cx = W / 2, cy = Math.round(H * 0.47), R = 34;
+  ctx.fillStyle = 'rgba(0,0,0,' + Math.min(0.55, T * 1.2) + ')'; ctx.fillRect(0, 0, W, H);
+  var e = Math.max(0, Math.min(1, (T - 0.8) / 1.3)); e = e * e * (3 - 2 * e);
+  var gap = 150 * (1 - e);
+  if (T < 3.0) {
+    ctx.globalAlpha = Math.min(1, T / 0.5);
+    var dc = DOMCOL[d.dom || 'n']; drawNumBall(cx - R - gap, cy, R, fmt(d.a, d.dom), dc[0], dc[1], dc[2]);
+    drawNumBall(cx + R + gap, cy, R, fmt(d.b, d.dom), dc[0], dc[1], dc[2]);
+    ctx.globalAlpha = 1;
+  }
+  if (T >= 2.1) {
+    var sc = 0.7 + 0.3 * Math.min(1, (T - 2.1) / 0.25), txt = pairEq(d.a, d.b, d.op, d.dom) + ' ✓';
+    ctx.save(); ctx.translate(cx, cy - 95); ctx.scale(sc, sc);
+    ctx.font = 'bold 44px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.lineWidth = 7; ctx.strokeStyle = 'rgba(0,0,0,.65)'; ctx.strokeText(txt, 0, 0);
+    ctx.fillStyle = '#9be37a'; ctx.fillText(txt, 0, 0);
+    ctx.restore();
+  }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = fsz(14) + 'px ' + FONT; ctx.fillText('Ketuk untuk melewati', cx, H - 20);
+}
+function drawBanner() {
+  var T = G.bannerT, st = STAGES[G.stage - 1], cx = W / 2, cy = Math.round(H * 0.42);
+  var a = Math.max(0, Math.min(1, T / 0.3, (2.2 - T) / 0.3));
+  ctx.fillStyle = 'rgba(0,0,0,' + (0.6 * a) + ')'; ctx.fillRect(0, 0, W, H);
+  ctx.globalAlpha = a; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = 'bold 28px ' + FONT; ctx.fillStyle = '#ffe58a'; ctx.fillText('Stage ' + G.stage + ' / 3', cx, cy - 70);
+  ctx.font = 'bold 56px ' + FONT; ctx.lineWidth = 8; ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.strokeText(st.name, cx, cy);
+  ctx.fillStyle = '#fff'; ctx.fillText(st.name, cx, cy);
+  ctx.font = '22px ' + FONT; ctx.fillStyle = '#e8f3ea'; ctx.fillText(st.story, cx, cy + 60);
+  ctx.font = '72px ' + EMOJI; ctx.fillText(st.boss ? '🧙' : '🥚', cx, cy + 140);
+  ctx.globalAlpha = 1;
+  ctx.textBaseline = 'alphabetic'; ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = fsz(14) + 'px ' + FONT;
+  ctx.fillText('Ketuk untuk lanjut', cx, H - 20);
+}
+function render() {
+  ctx.setTransform(canvas.width / W, 0, 0, canvas.height / H, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  if (bg) ctx.drawImage(bg, 0, 0, W, H); else { ctx.fillStyle = '#235a31'; ctx.fillRect(0, 0, W, H); }
+  if (G.mode === 'menu' || G.mode === 'story') return;
+  var i, ex = PX[PX.length - 1], ey = PY[PY.length - 1], st = STAGES[G.stage - 1];
+  var near = G.balls.length && G.balls[0].vis > PL - 420;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  if (G.stage === 3) {                      // telur emas: cahaya berdenyut
+    ctx.beginPath(); ctx.arc(ex, ey, 66 + 4 * Math.sin(G.time * 3 + G.bannerT * 3), 0, 6.2832);
+    ctx.fillStyle = 'rgba(255,215,64,.35)'; ctx.fill();
+  }
+  drawNest(ex, ey, near);
+  if (st.boss) {                            // penyihir bos di awal jalur
+    var bp = bossPos(), pulse = G.bossPulse > 0 ? 1 + 0.25 * Math.sin(G.bossPulse * 14) : 1;
+    ctx.font = Math.round(84 * pulse) + 'px ' + EMOJI;
+    ctx.fillText('🧙', bp.x, bp.y);
+  }
+  for (i = G.balls.length - 1; i >= 0; i--) {
+    var b = G.balls[i];
+    if (b.vis < -CFG.D) continue;
+    var dc = DOMCOL[b.dom || 'n'], shk = (G.swap && (b === G.swap.a || b === G.swap.b)) ? Math.sin(G.time * 70) * (1.5 + 2 * G.swap.t / SWAP_WARN) : 0;
+    drawNumBall(b.x + b.ox + shk, b.y + b.oy, CFG.R, fmt(b.val, b.dom), dc[0], dc[1], dc[2]);
+    if (b.egg) drawEggMark(b.x + b.ox, b.y + b.oy);
+  }
+  if (G.swap) drawSwapMark();
+  if (G.mode === 'play' && G.level === 'mudah' && G.wrongStreak >= 2 && G.ammo && G.key) {
+    var pr = 3 * Math.sin(G.time * 5);          // bantuan: bola yang cocok berkedip pelan
+    for (i = 0; i < G.balls.length; i++) {
+      var hb = G.balls[i];
+      if (hb.vis > 110 && mt(G.ammo, hb) && reachable(hb)) {
+        ctx.beginPath(); ctx.arc(hb.x + hb.ox, hb.y + hb.oy, CFG.R + 8 + pr, 0, 6.2832);
+        ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.stroke();
+      }
+    }
+  }
+  if (G.mode === 'play') {
+    var d = aimDir(G.aim.x, G.aim.y), hov = ballAt(G.aim.x, G.aim.y), reach = 380;
+    if (hov) {                              // bola yang diketuk: diberi cincin, peluru menembus ke bola ini
+      var hx = hov.x + hov.ox, hy = hov.y + hov.oy, hl = Math.hypot(hx - DRAGON.x, hy - DRAGON.y) || 1;
+      d = { x: (hx - DRAGON.x) / hl, y: (hy - DRAGON.y) / hl }; reach = Math.max(120, hl - CFG.R - 6);
+      ctx.beginPath(); ctx.arc(hx, hy, CFG.R + 6, 0, 6.2832); ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.stroke();
+    }
+    ctx.strokeStyle = hov ? 'rgba(255,255,255,.6)' : 'rgba(255,255,255,.35)'; ctx.lineWidth = 3; ctx.setLineDash([4, 12]); ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(DRAGON.x + d.x * 100, DRAGON.y + d.y * 100); ctx.lineTo(DRAGON.x + d.x * reach, DRAGON.y + d.y * reach); ctx.stroke(); ctx.setLineDash([]);
+  }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  var rs = G.roar > 0 ? 1 + 0.14 * Math.abs(Math.sin(G.roar * 14)) : 1;
+  ctx.font = Math.round(112 * rs) + 'px ' + EMOJI;
+  ctx.fillText('🐲', DRAGON.x + (G.roar > 0 ? Math.sin(G.roar * 70) * 3 : 0), DRAGON.y);
+  if (G.roar > 0) {
+    ctx.save(); ctx.globalAlpha = Math.min(1, G.roar * 1.5); ctx.font = 'bold 34px ' + FONT;
+    ctx.lineWidth = 7; ctx.strokeStyle = 'rgba(0,0,0,.7)'; ctx.strokeText('GRAAWR!', DRAGON.x, DRAGON.y - 135);
+    ctx.fillStyle = '#ffd54a'; ctx.fillText('GRAAWR!', DRAGON.x, DRAGON.y - 135); ctx.restore();
+  }
+  drawSteals(); drawGains();
+  if (G.mode === 'play' && G.ammo) {
+    var dd = aimDir(G.aim.x, G.aim.y);
+    drawToken(G.ammo, DRAGON.x + dd.x * 82, DRAGON.y + dd.y * 82, CFG.shotR);
+    drawToken(G.next, DRAGON.x + 100, DRAGON.y + 36, 19);
+    ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = fsz(12) + 'px ' + FONT; ctx.textBaseline = 'alphabetic';
+    ctx.fillText('berikut', DRAGON.x + 100, DRAGON.y + 72);
+  }
+  for (i = 0; i < G.shots.length; i++) drawToken(G.shots[i].tok, G.shots[i].x, G.shots[i].y, CFG.shotR);
+  for (i = 0; i < G.parts.length; i++) {
+    var p = G.parts[i]; ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.c;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (i = 0; i < G.pops.length; i++) {
+    var q = G.pops[i]; ctx.globalAlpha = Math.max(0, Math.min(1, q.life * 1.5));
+    ctx.font = 'bold ' + q.size + 'px ' + FONT; ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(0,0,0,.65)';
+    var qw = ctx.measureText(q.t).width, qx = Math.max(qw / 2 + 8, Math.min(W - qw / 2 - 8, q.x));
+    ctx.strokeText(q.t, qx, q.y); ctx.fillStyle = q.c; ctx.fillText(q.t, qx, q.y);
+  }
+  ctx.globalAlpha = 1;
+  if (G.mode === 'play' && G.eggs === 1) {   // telur terakhir: tepi layar berdenyut merah pelan
+    var ra = 0.30 + 0.14 * Math.sin(G.time * 3.2), rg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.34, W / 2, H / 2, Math.hypot(W, H) / 2);
+    rg.addColorStop(0, 'rgba(255,40,40,0)'); rg.addColorStop(1, 'rgba(255,40,40,' + ra + ')');
+    ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+  }
+  if (G.mode === 'intro') drawIntro();
+  else if (G.mode === 'banner') drawBanner();
+  drawHUD();
+}
+
+/* =====================================================================
+   BAGIAN 12 — LAYAR, SENTUHAN, MENU, CERITA
+   ===================================================================== */
+var ROT = false;                            // true = HP mendatar dan layar pendek: tampil "Putar HP", permainan berhenti
+var SCALE = 1;                             // piksel layar per satuan game (dipakai agar tombol kecil tetap mudah diketuk)
+var sizeFallback = false;                  // true bila jendela sempat berukuran 0 (tab/bingkai tersembunyi saat dimuat)
+function resize() {
+  var vw = window.innerWidth, vh = window.innerHeight;
+  sizeFallback = !(vw > 0 && vh > 0);
+  ROT = !sizeFallback && vw > vh && vh < 500;
+  $('rotate').classList.toggle('hidden', !ROT);
+  if (!(vw > 0)) vw = W;                    // ukuran 0 membuat tinggi NaN dan game mati: pakai ukuran cadangan sampai ukuran asli ada
+  if (!(vh > 0)) vh = 1000;
+  var newH = Math.round(Math.min(1300, Math.max(1000, W / (vw / vh))));
+  if (newH !== builtH) {
+    builtH = newH; H = newH;
+    PATH_DY = Math.max(0, Math.round((H - 1000) * 0.5));
+    setStage(CUR);
+  }
+  var s = Math.min(vw / W, vh / H);
+  SCALE = s;
+  var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  canvas.style.width = Math.floor(W * s) + 'px';
+  canvas.style.height = Math.floor(H * s) + 'px';
+  canvas.width = Math.max(1, Math.floor(W * s * dpr));
+  canvas.height = Math.max(1, Math.floor(H * s * dpr));
+}
+function toLogical(e) {
+  var r = canvas.getBoundingClientRect();
+  return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H };
+}
+function showMenu() {
+  G.mode = 'menu'; G.paused = false; $('quit').classList.add('hidden');
+  $('end').classList.add('hidden'); $('review').classList.add('hidden'); $('story').classList.add('hidden'); $('menu').classList.remove('hidden');
+  setStage(1);
+}
+canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+canvas.addEventListener('pointermove', function (e) { G.aim = toLogical(e); });
+canvas.addEventListener('pointerdown', function (e) {
+  e.preventDefault();
+  if (G.mode !== 'play' && G.mode !== 'intro' && G.mode !== 'banner') return;
+  if (G.paused || ROT) return;
+  var p = toLogical(e); G.aim = p;
+  if (Math.hypot(p.x - CLOSE.x, p.y - CLOSE.y) < Math.max(32, 24 / SCALE)) {   // area ketuk minimal ±48 piksel layar
+    G.paused = true; $('quit').classList.remove('hidden'); return;               // tanya dulu, permainan berhenti sementara
+  }
+  if (G.mode === 'banner') { endBanner(); return; }
+  if (G.mode === 'intro') { endIntro(); return; }
+  if (Math.hypot(p.x - DRAGON.x, p.y - DRAGON.y) < 62) { swapAmmo(); return; }
+  fire(p.x, p.y);
+});
+
+function wireSeg(id, cb) {
+  var el = $(id);
+  el.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    Array.prototype.forEach.call(el.children, function (c) { c.classList.remove('sel'); });
+    b.classList.add('sel'); cb(b.getAttribute('data-v'));
+  });
+}
+wireSeg('levels', function (v) { SEL.level = v; });
+wireSeg('times', function (v) { SEL.timed = v === '1'; });
+$('ops').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  var op = b.getAttribute('data-v');
+  var on = !SEL.ops[op];
+  SEL.ops[op] = on;
+  if (!Object.keys(SEL.ops).some(function (k) { return SEL.ops[k]; })) { SEL.ops[op] = true; return; }
+  b.classList.toggle('sel', on);
+});
+
+var storyIdx = 0;
+function renderStory() {
+  var s = STORY[storyIdx];
+  $('storyEmoji').textContent = s.e; $('storyText').textContent = s.t;
+  $('storyDots').innerHTML = STORY.map(function (_, i) { return '<span class="dot' + (i === storyIdx ? ' on' : '') + '"></span>'; }).join('');
+  $('storyNext').textContent = storyIdx < STORY.length - 1 ? 'Lanjut ▶' : 'Mulai! ▶';
+}
+var storyAt = 0;                            // waktu cerita mulai tampil: ketukan ganda pada "Mulai" tidak boleh melewati slide
+function storyBusy() { return performance.now() - storyAt < 450; }
+function beginGame() { $('story').classList.add('hidden'); newGame(); }
+$('start').addEventListener('click', function () {
+  $('menu').classList.add('hidden'); storyIdx = 0; renderStory(); G.mode = 'story'; $('story').classList.remove('hidden');
+  storyAt = performance.now();
+});
+$('storyNext').addEventListener('click', function () { if (storyBusy()) return; if (storyIdx < STORY.length - 1) { storyIdx++; renderStory(); } else beginGame(); });
+$('storySkip').addEventListener('click', function () { if (storyBusy()) return; beginGame(); });
+$('btnA').addEventListener('click', function () {
+  $('end').classList.add('hidden');
+  if (G.endKind === 'clear') startStage(G.stage + 1);
+  else if (G.endKind === 'lose') startStage(G.stage);
+  else showMenu();
+});
+$('btnB').addEventListener('click', showMenu);
+$('quitYes').addEventListener('click', showMenu);
+$('quitNo').addEventListener('click', function () { $('quit').classList.add('hidden'); G.paused = false; G.cool = Math.max(G.cool, 0.35); });
+var rvShowAll = false;
+function renderReview() {
+  var bad = G.log.filter(function (e) { return !e.ok; }), list = rvShowAll ? G.log : bad, box = $('rvList');
+  $('rvTitle').textContent = 'Jawabanmu di Stage ' + G.stage;
+  $('rvMsg').textContent = G.log.length - bad.length + ' benar, ' + bad.length + ' belum pas dari ' + G.log.length + ' tembakan.';
+  box.textContent = '';
+  if (!list.length) { var n = document.createElement('div'); n.className = 'rv ok'; n.textContent = 'Tidak ada kesalahan. Hebat!'; box.appendChild(n); }
+  list.forEach(function (e) {
+    var d = document.createElement('div'); d.className = 'rv' + (e.ok ? ' ok' : '');
+    var t = document.createElement('small'); t.textContent = 'Soal: ' + e.soal; d.appendChild(t);
+    var b = document.createElement('b'); b.textContent = (e.ok ? 'Pas: ' : 'Belum pas: ') + e.eq; d.appendChild(b);
+    var x = e.why || e.fix; if (x) { var f = document.createElement('small'); f.textContent = x + (e.why && e.fix ? '. ' + e.fix : ''); d.appendChild(f); }
+    box.appendChild(d);
+  });
+  $('rvAll').textContent = rvShowAll ? 'Hanya yang salah' : 'Lihat semua (' + G.log.length + ')';
+  $('rvAll').classList.toggle('hidden', G.log.length === bad.length);
+}
+$('btnR').addEventListener('click', function () { rvShowAll = false; renderReview(); $('end').classList.add('hidden'); $('review').classList.remove('hidden'); });
+$('rvAll').addEventListener('click', function () { rvShowAll = !rvShowAll; renderReview(); });
+$('rvBack').addEventListener('click', function () { $('review').classList.add('hidden'); $('end').classList.remove('hidden'); });
+
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', function () { setTimeout(resize, 150); });
+resize();
+
+var last = 0;
+function frame(ts) {
+  window.requestAnimationFrame(frame);
+  if (sizeFallback && window.innerWidth > 0 && window.innerHeight > 0) resize();   // ukuran asli sudah ada: pasang ulang
+  var dt =Math.min(0.05, ((ts - last) / 1000) || 0); last = ts;
+  if (G.paused || ROT) { /* menunggu jawaban "Keluar ke menu?" atau HP sedang mendatar: semuanya berhenti */ }
+  else if (G.mode === 'play') update(dt);
+  else if (G.mode === 'intro') updateIntro(dt);
+  else if (G.mode === 'banner') updateBanner(dt);
+  else if (G.mode === 'end') updateFx(dt);
+  render();
+}
+window.requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

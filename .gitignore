@@ -1,0 +1,17 @@
+# Berkas internal: hanya di komputer sendiri, tidak untuk repo publik
+Feedback*
+Aku mau*
+History Diskusi*
+prompt-claude-code-naga.md
+
+# Skrip uji otomatis (dijalankan lokal dari folder uji)
+uji/
+
+# Berkas sistem dan alat
+Thumbs.db
+.DS_Store
+desktop.ini
+.claude/
+node_modules/
+.env
+.env.*
