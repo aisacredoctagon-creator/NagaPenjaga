@@ -1,6 +1,6 @@
 # Konsep Game Naga Penjaga Telur
 
-Tanggal: 8 November 2026 (diperbarui 9 November 2026, versi 2.6 dengan layout lebar)
+Tanggal: 8 November 2026 (diperbarui 9 November 2026, versi 2.6 dengan layout lebar, layar sambutan, suara, dan menu Jeda)
 
 ## Ringkasan
 
@@ -87,6 +87,18 @@ Game punya dua layout dengan jalur yang digambar khusus untuk masing-masing, sup
 - **Layar pendek dan lebar** (tinggi sampai 780 piksel, termasuk HP mendatar): menu jadi dua kolom dan jarak dirapatkan; di tinggi sampai 400 piksel dirapatkan lagi. Menu, cerita, layar selesai, dan tinjauan muat tanpa digulir di HP mendatar setinggi 360–430 piksel.
 - **Pengaman:** satu konstanta `LAYOUT_LEBAR_AKTIF`. Bila diset salah, game kembali seperti sebelum layout lebar ada (selalu tegak, dan layar "Putar HP" muncul di HP mendatar yang pendek).
 
+## Layar sambutan, suara, dan menu Jeda
+
+**Urutan layar:** layar sambutan → menu kategori → cerita (3 slide) → stage 1. Layar sambutan tampil pertama setiap halaman dibuka dan tidak ada jalan kembali ke sana. Ketukan ganda cepat pada "Mulai Main" tidak langsung menekan tombol di menu (pengaman 350 milidetik).
+
+**Layar sambutan.** Judul besar "Naga Penjaga"; naga besar di tengah yang naik-turun pelan, telur di depannya, penyihir kecil miring dengan kilau ✨ di kanan atas, dan bola angka warna-warni melayang di tepi kiri dan kanan. Latar langit biru di atas dan rumput hijau di bawah, penuh layar; isi berada di kolom sekitar 480 piksel di tengah (di HP mendatar pendek: judul dan tombol di kiri, gambar di kanan). Satu tombol besar "Mulai Main" yang berdenyut pelan, tanpa tulisan "Ketuk untuk mulai" dan tanpa tombol suara. Tidak ada logo atau karakter pihak lain. Semua yang sering diubah ada di Bagian 1: `SPLASH` (judul, tulisan tombol, lebar kolom, jumlah dan ukuran bola, warna, kecepatan gerak naga, penyihir, bola, dan tombol) dan `SPLASH_ART` (gambar naga, telur, penyihir, kilau). Untuk mengganti emoji dengan gambar resmi, isi baris di `SPLASH_ART` dengan nama berkas gambar di folder yang sama (mis. `'naga.png'`); hanya di situ.
+
+**Musik dan efek suara.** Semua dibuat kode (Web Audio), tanpa berkas dan tanpa jaringan. Dua lagu: riang untuk layar sambutan, menu, dan cerita; lebih tenang dan bergerak untuk bermain (spanduk, peragaan, bermain, layar selesai). Peralihan antar lagu halus (0,7 detik). Efek suara: tembak, ledak (pasangan cocok; nada naik bila rentetan panjang), salah, telur dicuri, menang, dan kalah. Musik dikecilkan saat menu Jeda terbuka (30%) dan di layar selesai (50%), dan semua suara berhenti saat tab disembunyikan. Browser baru mengizinkan suara setelah ketukan pertama pemain; sebelum itu game senyap. Volume diatur di `AUDIO` di Bagian 1 (keseluruhan 0,5; musik 0,5; efek 0,8) dan sengaja pelan. Pengaman: `AUDIO_AKTIF = false` mematikan semua suara dan menyembunyikan tombol Musik dan Suara.
+
+**Tiga tombol pengaturan** (bahasa sederhana, tulisan Nyala / Mati, bawaan semuanya Nyala): 🎵 Musik, 🔊 Suara (efek suara), ✨ Efek gambar (percikan ledakan, denyut merah di tepi layar saat telur terakhir, naga bergetar saat mengaum, penyihir yang membesar saat merapal, denyut cahaya telur emas, gerak di layar sambutan; tulisan dan angka tetap ada). Efek gambar otomatis mati bila perangkat meminta gerak dikurangi. Pilihan tersimpan di browser (`localStorage`; bila diblokir, game tetap jalan dengan pilihan bawaan). Letak: di menu kategori, di pojok kanan atas di luar kotak pilihan (satu baris di layar tinggi, lajur tegak di kanan di layar pendek ≤ 430 piksel), langsung bisa diubah tanpa membuka kotak baru; di dalam game, di menu Jeda. Semua tombol minimal 44 piksel.
+
+**Menu Jeda.** Di dalam game, tombol ✕ di pojok kanan atas diganti tombol ⏸ di tempat yang sama (area ketuk sama, ±48 piksel). Menu Jeda menghentikan game dan berisi: ▶ Lanjut main; ↻ Mulai ulang (stage ini diulang dari awal: jalur sama, telur penuh, skor stage 0, skor total tetap); 🏠 Ke menu (langsung, tanpa pertanyaan kedua; di menu tertulis bahwa kemajuan permainan itu hilang); dan tiga tombol pengaturan di atas. Tidak ada tombol lain. Dialog lama "Keluar ke menu?" sudah diganti.
+
 ## Matematika di dalam permainan
 
 Setiap tembakan adalah satu soal: pemain memilih bola mana yang cocok dengan bola tembakannya. Tidak ada kuis terpisah. Sebelum bermain, pemain memilih hitungan lewat tombol + − × ÷, Bilangan bulat, Desimal, dan Pecahan (boleh lebih dari satu).
@@ -141,7 +153,7 @@ Prototipe awal membingungkan karena "angka kunci" tidak jelas. Empat perbaikan d
 
 Prinsip yang dipakai: sedikit teks, banyak isyarat gambar, dan contoh. Anak usia 6–8 tahun masih belajar membaca, jadi petunjuk utamanya harus berupa gambar. Saat jenis bilangan dicampur, bola dan lubang di panel diberi warna yang sama per jenis (asli hijau-biru, bulat biru, desimal merah muda, pecahan ungu), supaya anak tahu bola mana yang dicari.
 
-Perlindungan salah ketuk dan layar kecil: tombol ✕ di pojok kanan atas membuka pertanyaan "Keluar ke menu?" dan menjeda permainan; area ketuknya minimal sekitar 48 piksel. HP yang dipegang mendatar memakai layout lebar, dan menu serta layar lain dipadatkan di layar pendek supaya muat tanpa digulir. Bila layar diputar saat bermain, game berhenti dan meminta layar dikembalikan (lihat bagian Layout tegak dan lebar). Teks kecil di dalam game ikut membesar di layar kecil (minimal sekitar 11 piksel).
+Perlindungan salah ketuk dan layar kecil: tombol ⏸ di pojok kanan atas membuka menu Jeda (Lanjut main, Mulai ulang, Ke menu) dan menjeda permainan; area ketuknya minimal sekitar 48 piksel. HP yang dipegang mendatar memakai layout lebar, dan menu serta layar lain dipadatkan di layar pendek supaya muat tanpa digulir. Bila layar diputar saat bermain, game berhenti dan meminta layar dikembalikan (lihat bagian Layout tegak dan lebar). Teks kecil di dalam game ikut membesar di layar kecil (minimal sekitar 11 piksel).
 
 Catatan: belum ada uji dengan anak sungguhan.
 
@@ -171,7 +183,9 @@ Di Mudah (stage 1 / 2 / 3) dengan salah 15%: sebelum telur 10 / 10 / 10, sesudah
 
 Telur sisa rata-rata pada Menantang stage 3 dengan salah 25%: 1,0. Perisai terutama menolong pemain yang cukup baik; robot yang sangat sering salah tetap kesulitan.
 
-**Uji otomatis (9 November 2026).** Halaman uji memainkan game sungguhan di browser: 77 uji mencakup angka dan hitungan, tabel stage, tembak dan kesalahan, perisai, telur, tukar posisi, bos, layar tinjauan, jalur, menu dan cerita, serta layout tegak dan lebar (pemilihan layout, batas ganda 5%, aturan jalur lebar, jeda dan pulih saat layar berganti, 300 kali ubah ukuran cepat, dan layar pendek). Hasilnya: 70 lulus, 0 gagal, 5 hanya berupa angka, dan 2 uji animasi yang hanya jalan bila halaman uji dibuka di tab terdepan. Pemain robot yang selalu membidik pasangan benar (4 atau 6 detik per tembakan) memainkan ratusan permainan di semua stage dan tingkat, di kedua layout, serta satu permainan penuh stage 1 sampai 3 di masing-masing layout; hasilnya tidak ada bola tanpa pasangan, tidak ada saat tanpa peluru yang berguna, tidak ada peluru yang jenisnya tidak cocok dengan panel, dan tidak ada galat halaman. Karena robot ini selalu memilih jawaban benar, ia tidak mengukur kesulitan untuk anak. Layout tegak terbukti tidak berubah oleh penambahan layout lebar: panjang jalur, posisi naga dan sarang, bos, jumlah bola, laju, isi latar, dan bola pertama sama dengan rekaman sebelumnya (18 perbandingan, 0 beda).
+**Uji otomatis (9 November 2026).** Halaman uji memainkan game sungguhan di browser: 95 uji mencakup angka dan hitungan, tabel stage, tembak dan kesalahan, perisai, telur, tukar posisi, bos, layar tinjauan, jalur, menu dan cerita, layout tegak dan lebar (pemilihan layout, batas ganda 5%, aturan jalur lebar, jeda dan pulih saat layar berganti, 300 kali ubah ukuran cepat, dan layar pendek), serta 18 uji untuk layar sambutan, pengaturan, menu Jeda, dan suara (lihat di bawah). Hasilnya: 88 lulus, 0 gagal, 5 hanya berupa angka, dan 2 uji animasi yang hanya jalan bila halaman uji dibuka di tab terdepan.
+
+**Uji layar sambutan, pengaturan, Jeda, dan suara (18 uji).** Layar sambutan tampil pertama dengan isi yang benar dan tanpa tombol suara; alur sambutan → menu → cerita → stage 1 tanpa jalan kembali; ketukan ganda tidak menekan tombol menu; tombol pengaturan tersimpan dan terbaca lagi setelah halaman dimuat ulang, sinkron antara menu dan menu Jeda; Efek gambar mati menghentikan percikan dan gerak splash; Efek gambar bawaan mati saat perangkat meminta gerak dikurangi; menu Jeda berisi tepat tombol yang disepakati; Mulai ulang mengembalikan stage yang sama (jalur sama, telur penuh, skor stage 0, skor total tetap) dan Ke menu langsung; tombol ⏸ digambar di tempat ✕ (dicek per piksel); efek suara terpasang di tempat yang benar (tembak, ledak, salah, telur dicuri, menang, kalah); tidak ada AudioContext sebelum ketukan pertama, lagu berganti menu ↔ main, volume turun saat Jeda; tab disembunyikan menghentikan suara; `AUDIO_AKTIF = false` mematikan semuanya. Bunyi diukur di konteks suara tanpa speaker: kedua lagu dan keenam efek menghasilkan bunyi (tidak senyap), tidak meluap (puncak musik sekitar 0,11 dan 0,15 dari penuh; puncak efek 0,11 sampai 0,25), dan pelan. Tata letak diperiksa di 10 ukuran (360×740, 390×844, 768×1024, 1366×768, 1280×720, 1024×576, 844×390, 667×375, 800×360, 932×430): layar sambutan penuh layar tanpa saling menimpa dan kolom ≤ 480 piksel; tombol pengaturan di pojok kanan atas tanpa menimpa kotak menu; menu Jeda muat tanpa digulir. Semua ini hanya mengukur perilaku dan angka; telinga manusia belum menilai suara. Pemain robot yang selalu membidik pasangan benar (4 atau 6 detik per tembakan) memainkan ratusan permainan di semua stage dan tingkat, di kedua layout, serta satu permainan penuh stage 1 sampai 3 di masing-masing layout; hasilnya tidak ada bola tanpa pasangan, tidak ada saat tanpa peluru yang berguna, tidak ada peluru yang jenisnya tidak cocok dengan panel, dan tidak ada galat halaman. Karena robot ini selalu memilih jawaban benar, ia tidak mengukur kesulitan untuk anak. Layout tegak terbukti tidak berubah oleh penambahan layout lebar: panjang jalur, posisi naga dan sarang, bos, jumlah bola, laju, isi latar, dan bola pertama sama dengan rekaman sebelumnya (18 perbandingan, 0 beda).
 
 **Layout lebar dibanding tegak (robot yang kadang salah).** Robot menembak tiap 2,5–4,5 detik dengan tingkat salah acak tertentu, Menantang dengan + − × ÷, 40 percobaan per sel (ini robot, bukan anak). Jumlah menang dari 40, stage 1 / 2 / 3:
 
@@ -188,7 +202,7 @@ Total menang: tegak 383 dan lebar 381 dari 480. Selisih per sel paling besar 4 d
 
 ## Rincian untuk pengembangan
 
-Seluruh game ada di satu berkas `index.html` (HTML, gaya, dan JavaScript tanpa pustaka tambahan), digambar di kanvas (area gambar di halaman). Berkas dibagi 12 bagian bertanda komentar; semua angka yang sering diubah ada di Bagian 1 (Pengaturan).
+Seluruh game ada di satu berkas `index.html` (HTML, gaya, dan JavaScript tanpa pustaka tambahan), digambar di kanvas (area gambar di halaman). Berkas dibagi 12 bagian bertanda komentar (ditambah Bagian 8B untuk pengaturan dan suara); semua angka yang sering diubah ada di Bagian 1 (Pengaturan).
 
 | Bagian | Isi |
 | --- | --- |
@@ -196,8 +210,9 @@ Seluruh game ada di satu berkas `index.html` (HTML, gaya, dan JavaScript tanpa p
 | 2–3 | Alat bantu dan jalur (titik-titik jalur dengan sudut membulat) |
 | 4–6 | Keadaan game, hitungan, bola tembakan dan angka panel |
 | 7–8 | Alur stage (banner, peragaan, menang/kalah), efek, telur, perisai, tukar posisi |
+| 8B | Pengaturan Musik / Suara / Efek gambar (tombol, simpanan), mesin suara (dua lagu, enam efek, penjadwal nada, peralihan lagu, volume jeda, berhenti saat tab tersembunyi) |
 | 9–10 | Logika permainan dan menembak |
-| 11–12 | Gambar, layar sentuh, menu, cerita, dialog keluar, pemilihan layout dan jeda saat layout berganti |
+| 11–12 | Gambar (termasuk tombol ⏸), layar sentuh, layar sambutan, menu, cerita, menu Jeda, pemilihan layout dan jeda saat layout berganti |
 
 Angka pengaturan utama:
 
@@ -215,6 +230,8 @@ Penjaga agar tidak buntu: sekitar 70% bola tembakan dibuat sebagai pasangan bola
 
 Pengaturan telur di Bagian 1: EGGS = 3, PROTECT_T = 2 detik, NEST_PUSH = 216 (4 jarak bola), NEST_SLOW_T = 4 detik, NEST_SLOW = 0,5, EGG_BONUS = 500, EGG_AT = 0,5 (pertengahan stage), SWAP_EVERY (Mudah 14–20, Menantang 8–14 detik), SWAP_WARN = 1,5 detik, SHIELD_AT = 5 jawaban benar berturut-turut.
 
+Pengaturan layar sambutan dan suara di Bagian 1: `SPLASH` (judul, tombol, kolom, bola, kecepatan gerak, warna), `SPLASH_ART` (gambar), `AUDIO_AKTIF` (true/false), `AUDIO` (volume keseluruhan, musik, efek, pengali saat Jeda, lama peralihan lagu), dan `PREF_KEY` (nama simpanan pengaturan). Lagu dan efek suara didefinisikan di Bagian 8B (`TRACKS`, `SFX`); untuk mengubah nada cukup ubah daftar nada di sana.
+
 Pengaturan layout di Bagian 1: `LAYOUT_LEBAR_AKTIF` (true/false), `TEGAK_W` = 600, dan `WIDE` (dunia 1000×600; batas masuk 1,05 dan kembali 0,95). `resize()` memilih layout dan memasang dunia; `syncLayout()` mengunci layout saat bermain dan menjeda game bila layar berganti bentuk.
 
 Tampilan: dunia tegak lebar 600 dengan tinggi menyesuaikan layar (1000–1300), dunia lebar 1000×600; kanvas diskalakan penuh dengan batas ketajaman layar 2,5×. Kontrol memakai pointer events sehingga sentuhan dan mouse sama. Tiap stage menyimpan daftar 3 jalur tegak (titik jalur, posisi naga, posisi bos) dan satu jalur lebar (`wide`) di Bagian 1; jalur tegak terpilih disimpan per permainan. Peluru menembus: peluru mengejar bola sasaran dan mengabaikan bola lain; jika bola sasaran hilang di tengah jalan, peluru menjadi tembakan lurus biasa. Jika halaman dimuat saat ukuran jendela masih 0 (bingkai atau tab tersembunyi), game memakai ukuran cadangan lalu menyesuaikan diri begitu ukuran asli ada. Game tayang sebagai halaman statis di GitHub Pages tanpa proses build.
@@ -224,6 +241,8 @@ Tampilan: dunia tegak lebar 600 dengan tinggi menyesuaikan layar (1000–1300), 
 Batasan saat ini:
 
 - Belum diuji di HP asli, Safari iPhone, dan sentuhan sungguhan; hanya simulasi dan tangkapan layar ukuran HP.
+- Suara hanya diukur otomatis (bunyi ada, tidak meluap, pelan) dan dicek urutan serta pemicunya; enak atau tidaknya di telinga, kenyaringan di speaker HP, dan perilaku Safari iPhone (izin suara, suara berhenti saat layar dikunci) belum didengar langsung. Volume dan nada bisa disetel di `AUDIO` dan `TRACKS`/`SFX`; `AUDIO_AKTIF = false` mematikan semuanya.
+- Gambar layar sambutan masih emoji sementara (satu tempat penggantian: `SPLASH_ART`).
 - Gambar masih emoji sementara; belum ada gambar resmi karakter dan aturan merek.
 - Pecahan hanya berpenyebut sama, tidak disederhanakan (2/4 tetap 2/4), dan belum ada pecahan campuran; jenis baru belum diuji pada anak. Di Mudah penyebut kini 3, 4, 5 (stage 1 memakai ⅓ dan ⅔).
 - Layout lebar memakai dunia tetap 1000×600, jadi di layar yang lebih lebar dari rasio 1,67 (misalnya HP mendatar) ada pita kosong di sisi dan bola tampak muncul dari tepi dunia, bukan tepi layar; di layar 4:3 pitanya ada di atas dan bawah. Stage 2 lebar hanya miring sekitar 2,5°.
