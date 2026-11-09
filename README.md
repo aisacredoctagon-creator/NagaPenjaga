@@ -51,5 +51,4 @@ Berjalan di browser tanpa instal. Dirancang untuk laptop dan HP (dipegang tegak)
 ## Catatan teknis
 
 - Seluruh game ada di satu berkas, [`index.html`](index.html), tanpa pustaka tambahan.
-- Untuk menjalankan di komputer sendiri: unduh repo ini, lalu buka `index.html` di browser. [PERLU DIKONFIRMASI: membuka berkas langsung belum dicoba; yang diuji lewat server lokal]
 - Dokumen lengkap (aturan, hitungan, rincian pengembangan): [konsep-naga-penjaga-telur.md](konsep-naga-penjaga-telur.md).
