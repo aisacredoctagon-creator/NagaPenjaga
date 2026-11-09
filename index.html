@@ -43,6 +43,46 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
 .rv small{display:block;color:#a9d8b4;font-size:12.5px}
 .rv b{font-size:17px}
 #rvList{max-height:52vh;overflow:auto;margin-top:6px}
+.cols{display:block}
+@media (max-height:780px) and (min-width:600px){          /* layar pendek dan lebar (HP mendatar, laptop kecil, 1280x720, 1024x600): menu dua kolom dan jarak dirapatkan; target sentuh tetap minimal 44 piksel */
+  .overlay{padding:8px}
+  .panel{padding:12px 14px 14px;border-radius:16px}
+  #menu .panel{max-width:760px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;align-items:start}
+  h1{font-size:22px} h2{font-size:21px;margin-bottom:4px}
+  h3{margin:10px 0 5px;font-size:12px}
+  .sub{font-size:13px;line-height:1.35}
+  .seg button{min-height:44px;padding:8px 6px;font-size:14px}
+  .chips{grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .chip{min-height:44px;padding:6px 4px;font-size:14px}
+  .big{margin-top:12px;font-size:17px}
+  .note{font-size:11.5px;line-height:1.35;margin-top:8px}
+  .story-emoji{font-size:52px;min-height:60px;margin-top:0}
+  .story-text{font-size:18px;min-height:60px;margin:4px 4px 2px}
+  .dots{margin:6px 0 2px}
+  .link{padding:8px;margin-top:2px}
+  .stats{grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;font-size:12px}
+  .stats div{padding:6px 8px}
+  .stats b{font-size:17px}
+  .row{margin-top:10px}
+  #rvList{max-height:42vh}
+}
+@media (max-height:400px) and (min-width:600px){          /* HP mendatar paling pendek (±360): dirapatkan lagi supaya menu dan layar selesai tidak perlu digulir */
+  .panel{padding:8px 12px 10px}
+  h1{font-size:20px} h2{font-size:19px;margin-bottom:2px}
+  h3{margin:6px 0 4px}
+  .sub{font-size:12px;line-height:1.3}
+  .big{margin-top:8px}
+  .note{font-size:11px;margin-top:6px;line-height:1.3}
+  .stats{margin-top:6px} .stats div{padding:4px 8px} .stats b{font-size:16px}
+  .row{margin-top:8px}
+  #end .row + .row{margin-top:6px !important}
+  #rvList{max-height:36vh}
+}
+.lp-ico{font-size:64px;line-height:1.2;margin-bottom:4px}
+.lp-ico span{display:inline-block;transition:transform .25s}
+.lp-ico span.lebar{transform:rotate(90deg)}
+@media (max-height:780px) and (min-width:600px){.lp-ico{font-size:48px}}
 .hidden{display:none !important}
 </style>
 </head>
@@ -51,7 +91,7 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
 
 <!-- MENU -->
 <div id="menu" class="overlay">
-  <div class="panel">
+  <div class="panel"><div class="cols"><div class="col">
     <h1>🐲 Naga Penjaga Telur</h1>
     <p class="sub">Cocokkan dua bola supaya hasilnya sama dengan angka di atas. 3 stage, 1 penyihir jahat!</p>
 
@@ -67,6 +107,7 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
       <button type="button" data-v="0">Tanpa waktu</button>
     </div>
 
+    </div><div class="col">
     <h3>3. Hitungan (boleh lebih dari satu)</h3>
     <div class="chips" id="ops">
       <button type="button" class="chip sel" data-v="+">+ Tambah</button>
@@ -80,7 +121,7 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
 
     <button type="button" class="btn primary big" id="start">▶ Mulai Petualangan</button>
     <p class="note">Ketuk / klik bola yang dituju: peluru menembus bola lain. Ketuk naga untuk menukar peluru. Kamu menjaga 3 telur: jawaban salah atau bola yang sampai di sarang membuat satu telur dicuri penyihir. Jawaban salah juga membuat jalur sedikit lebih cepat.</p>
-  </div>
+  </div></div></div>
 </div>
 
 <!-- CERITA -->
@@ -121,7 +162,17 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
   </div>
 </div>
 
-<!-- PUTAR HP (layar pendek dan mendatar) -->
+<!-- JEDA: layout layar berganti saat bermain -->
+<div id="layoutpause" class="overlay hidden" style="z-index:30">
+  <div class="panel" style="text-align:center">
+    <div class="lp-ico"><span id="lpPhone">📱</span> ↻</div>
+    <h2>Putar layar kembali</h2>
+    <p class="sub" id="lpSub">ke posisi tegak</p>
+    <p class="note">Permainan berhenti. Skor, telur, dan perisaimu aman. Di komputer: ubah ukuran jendela kembali.</p>
+  </div>
+</div>
+
+<!-- PUTAR HP (hanya dipakai bila layout lebar dimatikan) -->
 <div id="rotate" class="overlay hidden" style="z-index:20">
   <div class="panel" style="text-align:center">
     <div class="story-emoji" style="font-size:56px;min-height:0">📱↻</div>
@@ -150,6 +201,9 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
    BAGIAN 1 — PENGATURAN (angka-angka yang boleh Anda ubah)
    ===================================================================== */
 var W = 600, H = 1000;          // ukuran dunia game; tinggi H menyesuaikan bentuk layar
+var LAYOUT_LEBAR_AKTIF = true;  // false = hanya layout tegak: game persis seperti sebelum layout lebar ada (termasuk layar "Putar HP")
+var TEGAK_W = 600;              // lebar dunia layout tegak
+var WIDE = { W: 1000, H: 600, masuk: 1.05, keluar: 0.95 };   // dunia layout lebar; lebar >= 1,05 x tinggi layar: masuk lebar; <= 0,95 x tinggi: kembali tegak
 var TIME_LIMIT = 300;           // detik per stage, jika memilih "Dengan waktu"
 var CFG = {
   R: 26, D: 54, shotR: 26, groove: 68, s0: 420,   // ukuran bola, jarak antar bola, lebar jalur
@@ -190,15 +244,21 @@ var BOSS_ADDS = 1;              // jumlah bola tambahan tiap mantra
 
 /* Tiga stage: jalur (titik-titik belokan), tingkat kesulitan, dan cerita pendek */
 var STAGES = [                   // tiap stage punya 3 jalur; satu dipilih acak saat stage dimulai
-  { name: 'Hutan Hijau', story: 'Lindungi telur pertama!', nMul: 1.0, vMul: 1.0, rad: 70, routes: [
+  { name: 'Hutan Hijau', story: 'Lindungi telur pertama!', nMul: 1.0, vMul: 1.0, rad: 70,
+    wide: { dragon: { x: 500, y: 520, abs: true }, path: [[-60, 160], [820, 160], [820, 270], [180, 270], [180, 380], [560, 380]] },   // jalur layout lebar (dunia 1000x600)
+    routes: [
     { dragon: { x: 300, bottom: true }, path: [[-60, 180], [520, 180], [520, 340], [80, 340], [80, 500], [520, 500], [520, 650], [300, 650]] },
     { dragon: { x: 300, bottom: true }, path: [[660, 180], [80, 180], [80, 330], [520, 330], [520, 480], [80, 480], [80, 690], [230, 690]] },
     { dragon: { x: 300, y: 560, free: true }, path: [[-60, 200], [520, 200], [520, 720], [80, 720], [80, 410], [340, 410]] } ] },
-  { name: 'Gunung Bersalju', story: 'Lindungi telur kedua!', nMul: 1.1, vMul: 1.08, rad: 70, routes: [
+  { name: 'Gunung Bersalju', story: 'Lindungi telur kedua!', nMul: 1.1, vMul: 1.08, rad: 70,
+    wide: { dragon: { x: 500, y: 520, abs: true }, path: [[1060, 125], [150, 165], [150, 270], [850, 310], [850, 415], [560, 415]] },
+    routes: [
     { dragon: { x: 300, bottom: true }, path: [[660, 170], [60, 240], [60, 370], [540, 430], [540, 560], [60, 620], [60, 690], [300, 690]] },
     { dragon: { x: 300, y: 520, free: true }, path: [[660, 175], [70, 235], [70, 330], [540, 390], [540, 700], [110, 700], [110, 560]] },
     { dragon: { x: 300, bottom: true }, path: [[-60, 175], [520, 230], [520, 340], [70, 395], [70, 500], [530, 555], [530, 700], [330, 700]] } ] },
-  { name: 'Gunung Api', story: 'Kalahkan Penyihir Jahat!', nMul: 1.1, vMul: 1.05, rad: 65, boss: true, routes: [
+  { name: 'Gunung Api', story: 'Kalahkan Penyihir Jahat!', nMul: 1.1, vMul: 1.05, rad: 65, boss: true,
+    wide: { dragon: { x: 470, y: 520, abs: true }, boss: { x: 950, y: 155 }, path: [[1060, 190], [60, 190], [60, 295], [940, 295], [940, 400], [300, 400]] },
+    routes: [
     { dragon: { x: 300, bottom: true }, boss: { x: 50, y: 120 }, path: [[-60, 170], [540, 170], [540, 300], [60, 300], [60, 430], [540, 430], [540, 560], [60, 560], [60, 690], [300, 690]] },
     { dragon: { x: 300, y: 490, free: true }, boss: { x: 50, y: 120 }, path: [[-60, 190], [520, 190], [520, 740], [80, 740], [80, 340], [440, 340], [440, 640], [240, 640]] },
     { dragon: { x: 300, bottom: true }, boss: { x: 550, y: 135 }, path: [[620, 170], [60, 170], [60, 300], [540, 300], [540, 430], [60, 430], [60, 560], [540, 560], [540, 690], [150, 690]] } ] }
@@ -229,6 +289,8 @@ var ri = function (a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
 var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
 function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
 var canvas = $('c'), ctx = canvas.getContext('2d');
+function popTop() { return LAYOUT === 'lebar' ? 125 : 150; }   // tinggi tulisan melayang global ("Soal baru!", dll.)
+function popMin() { return LAYOUT === 'lebar' ? 110 : 170; }   // tulisan melayang tidak naik lebih tinggi dari ini (di bawah HUD)
 
 /* =====================================================================
    BAGIAN 3 — JALUR (dibuat dari titik belokan, sudutnya dibulatkan)
@@ -283,7 +345,8 @@ function tangentAt(s) {
    BAGIAN 4 — KEADAAN GAME (semua data yang berubah saat bermain)
    ===================================================================== */
 var DRAGON = { x: W / 2, y: 872, free: false };   // free = naga di tengah layar, boleh menembak ke segala arah
-var CUR = 1, PATH_DY = 0, builtH = -1, bg = null;
+var CUR = 1, PATH_DY = 0, builtKey = '', bg = null;
+var LAYOUT = 'tegak', WANT = 'tegak', LPAUSE = false;   // layout dunia yang terpasang, layout yang diminta bentuk layar, dan jeda karena layout berganti saat bermain
 var SEL = { level: 'mudah', timed: true, ops: { '+': true, '-': true, '*': false, '/': false, int: false, dec: false, frac: false } };
 var G = {
   mode: 'menu',            // menu | story | banner | intro | play | end
@@ -400,7 +463,7 @@ function genAmmo() {
   var ok = vis.filter(function (b) { return b.dom === OPDOM[G.key.op] && partners(b.val, G.key.op, G.key.k).length; });
   if (vis.length && !ok.length) {          // tidak ada pasangan yang mungkin: ganti angka panel
     G.key = pickKey(); G.keyMatches = 0; G.staleAmmo = true;   // peluru yang sedang dipegang dibuat untuk soal lama: harus diganti
-    popup(W / 2, 150, 'Soal baru!', '#fff');
+    popup(W / 2, popTop(),'Soal baru!', '#fff');
     ok = vis.filter(function (b) { return b.dom === OPDOM[G.key.op] && partners(b.val, G.key.op, G.key.k).length; });
   }
   if (ok.length && Math.random() < 0.7) {
@@ -435,6 +498,7 @@ function ensureUseful() {                  // aturan: minimal salah satu dari pe
    BAGIAN 7 — ALUR STAGE (mulai, spanduk, peragaan, selesai)
    ===================================================================== */
 function curRoute(i) {                     // jalur yang sedang dipakai di stage i
+  if (LAYOUT === 'lebar') return STAGES[i - 1].wide;      // layout lebar: satu jalur per stage
   var r = G.routePick[i]; return STAGES[i - 1].routes[r === undefined ? 0 : r];
 }
 function setStage(i) {                     // pasang jalur, naga, dan latar untuk stage i
@@ -442,7 +506,7 @@ function setStage(i) {                     // pasang jalur, naga, dan latar untu
   var st = STAGES[i - 1], rt = curRoute(i);
   buildPath(rt.path, PATH_DY, st.rad);
   DRAGON.x = rt.dragon.x; DRAGON.free = !!rt.dragon.free;
-  DRAGON.y = rt.dragon.bottom ? H - 128 : rt.dragon.y + PATH_DY;
+  DRAGON.y = rt.dragon.abs ? rt.dragon.y : (rt.dragon.bottom ? H - 128 : rt.dragon.y + PATH_DY);
   buildBg();
 }
 function makeBall() {
@@ -565,10 +629,10 @@ function mistake(x, y, label) {
   G.speedMul = Math.min(MAX_SPEEDUP, 1 + MISTAKE_SPEEDUP * G.mistakes);
   G.okStreak = 0;
   popup(x, y - 30, 'Belum pas', '#ff8a80', { size: 20 });
-  if (label) popup(x, Math.max(170, y - 85), label, '#ffb199', { size: 30, rate: 0.5, rise: 14 });
+  if (label) popup(x, Math.max(popMin(),y - 85), label, '#ffb199', { size: 30, rate: 0.5, rise: 14 });
   if (G.shield && G.protT <= 0 && G.eggs > 0) {      // perisai menahan satu kesalahan, lalu pecah
     G.shield = false; var np = nestPos(); burst(np.x, np.y, '#ffd54a', 18);
-    popup(np.x, Math.max(170, np.y - 120), 'Perisai pecah! Telur aman', '#ffe58a', { size: 24, rate: 0.7 });
+    popup(np.x, Math.max(popMin(),np.y - 120), 'Perisai pecah! Telur aman', '#ffe58a', { size: 24, rate: 0.7 });
   } else loseEgg();
 }
 function swapDelay() { var r = SWAP_EVERY[G.level] || SWAP_EVERY.mudah; return r[0] + Math.random() * (r[1] - r[0]); }
@@ -599,7 +663,7 @@ function loseEgg() {                        // satu telur dicuri penyihir (tidak
   G.gains = G.gains.filter(function (g) { return g.slot !== G.eggs; });
   G.steals.push({ slot: G.eggs, t: 0 });
   var np = nestPos();
-  popup(np.x, Math.max(170, np.y - 120), 'Telur dicuri!', '#ff8a80', { size: 26, rate: 0.7 });
+  popup(np.x, Math.max(popMin(),np.y - 120), 'Telur dicuri!', '#ff8a80', { size: 26, rate: 0.7 });
   if (G.eggs === 1) G.roar = 1.4;           // telur terakhir: naga mengaum
   if (G.eggs <= 0) endStage(false, 'egg');
 }
@@ -607,7 +671,7 @@ function nestHit() {                        // bola depan sampai sarang: bola hi
   var np = nestPos(), b0 = G.balls.shift();
   burst(np.x, np.y, '#b36bff', 22);
   G.tailS -= NEST_PUSH; G.slowT = NEST_SLOW_T;
-  if (b0 && b0.egg) popup(np.x, Math.max(170, np.y - 160), 'Telur naga lepas', '#ffcf9e', { size: 22, rate: 0.7 });
+  if (b0 && b0.egg) popup(np.x, Math.max(popMin(),np.y - 160), 'Telur naga lepas', '#ffcf9e', { size: 22, rate: 0.7 });
   loseEgg();
 }
 function collectEgg(x, y) {                 // bola telur naga dijawab benar: telur bertambah, atau +500 jika sudah penuh
@@ -628,7 +692,7 @@ function trySpawnEgg() {                    // titipkan telur naga di satu bola 
   });
   if (!c.length) return;
   pick(c).egg = true; G.eggPhase = 1;
-  popup(W / 2, 150, 'Telur naga muncul!', '#ffe58a', { size: 30, rate: 0.6 });
+  popup(W / 2, popTop(),'Telur naga muncul!', '#ffe58a', { size: 30, rate: 0.6 });
 }
 
 /* =====================================================================
@@ -643,14 +707,14 @@ function removePair(a, b) {                 // hapus 2 bola bersebelahan yang co
   addScore(2, mx, my);
   G.wrongStreak = 0; G.pairsDone++;
   if (a.egg || b.egg) { collectEgg(mx + (a.ox + b.ox) / 2, my + (a.oy + b.oy) / 2); G.eggPhase = 2; }
-  popup(mx, Math.max(170, my - 85), pairEq(a.val, b.val, G.key.op, a.dom) + ' ✓', '#9be37a', { size: 30, rate: 0.5, rise: 14 });
+  popup(mx, Math.max(popMin(),my - 85), pairEq(a.val, b.val, G.key.op, a.dom) + ' ✓', '#9be37a', { size: 30, rate: 0.5, rise: 14 });
   G.balls.splice(lo, 2);
   var f = G.balls[lo - 1], k = G.balls[lo];
   if (f && k) G.pairs.push({ f: f, k: k, t: 0 });
   G.keyMatches++;
   if (G.keyMatches >= KEYS_PER_ROUND && G.balls.length) {
     G.keyMatches = 0; G.key = pickKey(); reloadAmmo();
-    popup(W / 2, 150, 'Soal baru!', '#fff');
+    popup(W / 2, popTop(),'Soal baru!', '#fff');
   }
 }
 function logShot(ball, nb, partner) {      // catat tiap jawaban untuk layar tinjauan
@@ -686,7 +750,7 @@ function resolveHit(s, ball) {
     G.hits++;
     if (!G.shield && ++G.okStreak >= SHIELD_AT) {
       G.shield = true; G.okStreak = 0; var sp = nestPos();
-      popup(sp.x, Math.max(170, sp.y - 120), '🛡 Perisai siap!', '#ffe58a', { size: 26, rate: 0.7 });
+      popup(sp.x, Math.max(popMin(),sp.y - 120), '🛡 Perisai siap!', '#ffe58a', { size: 26, rate: 0.7 });
     }
     removePair(nb, partner);
   }
@@ -778,7 +842,7 @@ function bossCast() {                      // mantra penyihir: angka panel berga
     var b = makeBall(); b.vis = G.tailS; G.balls.push(b); G.totalN++;
   }
   G.key = pickKey(); G.keyMatches = 0; reloadAmmo();
-  popup(W / 2, 150, 'Mantra baru!', '#d9b3ff', { size: 30, rate: 0.6 });
+  popup(W / 2, popTop(),'Mantra baru!', '#d9b3ff', { size: 30, rate: 0.6 });
 }
 function update(dt) {
   G.time += dt; if (G.cool > 0) G.cool -= dt;
@@ -866,8 +930,11 @@ function buildBg() {
   g.fillStyle = T.nest1; g.beginPath(); g.arc(ex, ey, 62, 0, 6.2832); g.fill();
   g.fillStyle = T.nest2; g.beginPath(); g.arc(ex, ey, 50, 0, 6.2832); g.fill();
   g.font = '46px ' + EMOJI; g.textAlign = 'center'; g.textBaseline = 'middle';
-  var spots = [[46, H - 250], [554, H - 240], [44, H - 140], [556, H - 150]];
+  var spots = (LAYOUT === 'lebar') ? [[940, H - 62], [880, H - 28], [790, H - 48], [700, H - 26]]      // layout lebar: hiasan di kanan-bawah (kiri-bawah dipakai petunjuk)
+    : [[46, H - 250], [554, H - 240], [44, H - 140], [556, H - 150]];
   for (i = 0; i < spots.length; i++) g.fillText(T.deco[i], spots[i][0], spots[i][1]);
+  var pbg = (LAYOUT === 'lebar') ? 'linear-gradient(180deg,' + T.top + ' 0%,' + T.mid + ' 60%,' + T.bot + ' 100%)' : '';   // layout lebar: latar halaman menyatu dengan tema stage
+  document.documentElement.style.background = pbg; document.body.style.background = pbg;
 }
 function drawFrac(text, x, y, fs, tc) {      // pecahan bersusun: pembilang, garis, penyebut
   var p = text.split('/'), w = Math.max(p[0].length, p[1].length) * fs * 0.6 + 6;
@@ -987,7 +1054,7 @@ var CLOSE = { x: 556, y: 40 };
 function drawHUD() {
   var cx = W / 2, st = STAGES[G.stage - 1];
   CLOSE.x = W - 44;
-  if (st.boss) {                            // stage 3: ikon penyihir besar bisa menumpuk dengan HUD, jadi teks HUD diberi latar gelap tembus pandang
+  if (st.boss || LAYOUT === 'lebar') {      // stage 3 (ikon penyihir besar) dan semua stage di layout lebar (jalur lewat tepat di bawah HUD): teks HUD diberi latar gelap tembus pandang
     var bu = fsz(15) / 15, pb = (G.mode === 'play' ? 38 + 70 * bu + 14 : 38 + 46 * bu + 10), lb = 110 + (fsz(13) - 13) * 0.6 + 12;
     ctx.fillStyle = 'rgba(14,4,28,.55)';
     rr(6, 12, 156, pb - 12, 12); ctx.fill();
@@ -1055,9 +1122,14 @@ function drawHUD() {
   }
   if (G.mode === 'play') {
     var hint = 'Ketuk bola untuk menembaknya · Ketuk naga untuk menukar peluru';
-    ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(255,255,255,.65)';
-    ctx.font = fitFont(hint, fsz(13), W - 24) + 'px ' + FONT;
-    ctx.fillText(hint, cx, H - 20);
+    ctx.fillStyle = 'rgba(255,255,255,.65)';
+    if (LAYOUT === 'lebar') {               // layout lebar: dua baris di kiri-bawah supaya tidak menabrak naga di tengah-bawah
+      ctx.textAlign = 'left'; ctx.font = fitFont('Ketuk naga untuk menukar peluru', fsz(13), 380) + 'px ' + FONT;
+      ctx.fillText('Ketuk bola untuk menembaknya', 20, H - 40); ctx.fillText('Ketuk naga untuk menukar peluru', 20, H - 18);
+    } else {
+      ctx.textAlign = 'center'; ctx.font = fitFont(hint, fsz(13), W - 24) + 'px ' + FONT;
+      ctx.fillText(hint, cx, H - 20);
+    }
   }
 }
 function drawIntro() {
@@ -1186,21 +1258,56 @@ function render() {
 /* =====================================================================
    BAGIAN 12 — LAYAR, SENTUHAN, MENU, CERITA
    ===================================================================== */
-var ROT = false;                            // true = HP mendatar dan layar pendek: tampil "Putar HP", permainan berhenti
+var ROT = false;                            // hanya bila LAYOUT_LEBAR_AKTIF = false: HP mendatar dan layar pendek menampilkan "Putar HP"
 var SCALE = 1;                             // piksel layar per satuan game (dipakai agar tombol kecil tetap mudah diketuk)
 var sizeFallback = false;                  // true bila jendela sempat berukuran 0 (tab/bingkai tersembunyi saat dimuat)
+var layoutChanged = false;                 // true = layout dunia baru saja berganti, jalur dan latar harus dibangun ulang
+function pickLayout(vw, vh) {              // layout menurut bentuk layar, dengan batas ganda agar tidak berkedip di layar hampir persegi
+  if (!LAYOUT_LEBAR_AKTIF) return 'tegak';
+  var r = vw / vh;
+  if (WANT === 'lebar') return r <= WIDE.keluar ? 'tegak' : 'lebar';
+  return r >= WIDE.masuk ? 'lebar' : 'tegak';
+}
+function setLayout(name) { LAYOUT = name; W = (name === 'lebar') ? WIDE.W : TEGAK_W; layoutChanged = true; }
+function syncLayout() {                    // pasang layout yang diminta layar; saat bermain layout terkunci dan game dijeda sampai layout semula kembali
+  var m = G.mode, was = LPAUSE, rebuild = false;
+  if (m === 'play') LPAUSE = (WANT !== LAYOUT);
+  else {
+    LPAUSE = false;
+    if (WANT !== LAYOUT) { setLayout(WANT); rebuild = (m === 'banner' || m === 'intro'); }   // belum ada kemajuan di spanduk/peragaan: stage disusun ulang diam-diam
+  }
+  if (LPAUSE !== was) {
+    $('layoutpause').classList.toggle('hidden', !LPAUSE);
+    if (!LPAUSE) G.cool = Math.max(G.cool, 0.35);                  // ketukan terakhir tidak langsung jadi tembakan
+  }
+  if (LPAUSE) {
+    $('lpPhone').className = LAYOUT === 'lebar' ? 'lebar' : '';
+    $('lpSub').textContent = LAYOUT === 'lebar' ? 'ke posisi mendatar' : 'ke posisi tegak';
+  }
+  return rebuild;
+}
+function refreshScene() {                  // setelah layout berganti di luar permainan: hitung ulang posisi bola dari jaraknya di jalur
+  G.balls.forEach(function (b) { b.ox = 0; b.oy = 0; if (b.vis > -CFG.D) { var p = posAt(b.vis); b.x = p.x; b.y = p.y; } });
+  G.shots = []; G.parts = []; G.pops = []; G.pairs = []; G.swap = null;
+}
 function resize() {
   var vw = window.innerWidth, vh = window.innerHeight;
   sizeFallback = !(vw > 0 && vh > 0);
-  ROT = !sizeFallback && vw > vh && vh < 500;
+  ROT = !LAYOUT_LEBAR_AKTIF && !sizeFallback && vw > vh && vh < 500;
   $('rotate').classList.toggle('hidden', !ROT);
-  if (!(vw > 0)) vw = W;                    // ukuran 0 membuat tinggi NaN dan game mati: pakai ukuran cadangan sampai ukuran asli ada
+  if (!(vw > 0)) vw = TEGAK_W;              // ukuran 0 membuat tinggi NaN dan game mati: pakai ukuran cadangan sampai ukuran asli ada
   if (!(vh > 0)) vh = 1000;
-  var newH = Math.round(Math.min(1300, Math.max(1000, W / (vw / vh))));
-  if (newH !== builtH) {
-    builtH = newH; H = newH;
-    PATH_DY = Math.max(0, Math.round((H - 1000) * 0.5));
+  WANT = pickLayout(vw, vh);
+  var rebuildStage = syncLayout();
+  var newH = (LAYOUT === 'lebar') ? WIDE.H : Math.round(Math.min(1300, Math.max(1000, TEGAK_W / (vw / vh))));
+  var key = LAYOUT + ':' + newH;
+  if (key !== builtKey || layoutChanged) {
+    var swapped = layoutChanged;
+    builtKey = key; H = newH; layoutChanged = false;
+    PATH_DY = (LAYOUT === 'lebar') ? 0 : Math.max(0, Math.round((H - 1000) * 0.5));
     setStage(CUR);
+    if (swapped) refreshScene();
+    if (rebuildStage) startStage(G.stage);
   }
   var s = Math.min(vw / W, vh / H);
   SCALE = s;
@@ -1218,13 +1325,14 @@ function showMenu() {
   G.mode = 'menu'; G.paused = false; $('quit').classList.add('hidden');
   $('end').classList.add('hidden'); $('review').classList.add('hidden'); $('story').classList.add('hidden'); $('menu').classList.remove('hidden');
   setStage(1);
+  resize();                                // layout bisa saja berganti selama bermain: samakan dengan bentuk layar sekarang
 }
 canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
 canvas.addEventListener('pointermove', function (e) { G.aim = toLogical(e); });
 canvas.addEventListener('pointerdown', function (e) {
   e.preventDefault();
   if (G.mode !== 'play' && G.mode !== 'intro' && G.mode !== 'banner') return;
-  if (G.paused || ROT) return;
+  if (G.paused || ROT || LPAUSE) return;
   var p = toLogical(e); G.aim = p;
   if (Math.hypot(p.x - CLOSE.x, p.y - CLOSE.y) < Math.max(32, 24 / SCALE)) {   // area ketuk minimal ±48 piksel layar
     G.paused = true; $('quit').classList.remove('hidden'); return;               // tanya dulu, permainan berhenti sementara
@@ -1309,7 +1417,7 @@ function frame(ts) {
   window.requestAnimationFrame(frame);
   if (sizeFallback && window.innerWidth > 0 && window.innerHeight > 0) resize();   // ukuran asli sudah ada: pasang ulang
   var dt =Math.min(0.05, ((ts - last) / 1000) || 0); last = ts;
-  if (G.paused || ROT) { /* menunggu jawaban "Keluar ke menu?" atau HP sedang mendatar: semuanya berhenti */ }
+  if (G.paused || ROT || LPAUSE) { /* menunggu jawaban "Keluar ke menu?", atau layout layar berganti saat bermain: semuanya berhenti */ }
   else if (G.mode === 'play') update(dt);
   else if (G.mode === 'intro') updateIntro(dt);
   else if (G.mode === 'banner') updateBanner(dt);

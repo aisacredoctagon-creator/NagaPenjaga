@@ -1,19 +1,19 @@
 # Konsep Game Naga Penjaga Telur
 
-Tanggal: 8 November 2026 (diperbarui 9 November 2026, versi 2.6)
+Tanggal: 8 November 2026 (diperbarui 9 November 2026, versi 2.6 dengan layout lebar)
 
 ## Ringkasan
 
 Naga Penjaga Telur adalah game matematika di browser untuk anak usia 6–14 tahun: pemain menembakkan bola angka agar dua bola yang dihitung hasilnya sama dengan angka di panel, lalu keduanya meledak. Versi 2 sudah bisa dimainkan penuh dari menu sampai layar tamat, dengan 3 stage dan satu bos.
 
 - **Tujuan:** melatih tambah, kurang, kali, dan bagi lewat permainan, bukan lewat kuis yang ditempelkan.
-- **Bentuk:** satu halaman web (HTML5), responsif di laptop, PC, Android, dan iPhone lewat browser. Dimainkan dengan layar berdiri.
+- **Bentuk:** satu halaman web (HTML5), responsif di laptop, PC, Android, dan iPhone lewat browser. Ada dua layout yang berganti otomatis menurut bentuk layar: tegak (HP berdiri, tablet tegak) dan lebar (laptop, PC, HP mendatar).
 - **Lama main:** sekitar 3–5 menit per stage; waktu bisa dinyalakan atau dimatikan.
 - **Tingkat:** Mudah dan Menantang.
 - **Nyawa:** 3 telur di sarang tiap stage; salah jawab atau bola yang sampai di sarang membuat satu telur dicuri penyihir. 5 jawaban benar berturut-turut memberi perisai yang menahan satu salah jawab.
 - **Tinjauan:** setelah stage selesai atau kalah, ada layar terpisah untuk melihat jawaban (kesalahan dulu, hanya dibaca).
 - **Dimainkan di:** https://aisacredoctagon-creator.github.io/NagaPenjaga/
-- **Yang belum ada:** pecahan berpenyebut beda, gambar resmi karakter, dan uji di HP asli.
+- **Yang belum ada:** pecahan berpenyebut beda, gambar resmi karakter, uji di HP asli, dan 9 jalur lebar (sekarang satu jalur lebar per stage).
 
 ## Cerita
 
@@ -63,9 +63,29 @@ Bos di stage 3: penyihir berdiri di awal jalur. Bar nyawanya menunjukkan sisa bo
 
 Jumlah bola dasar dan laju dasar di tabel dikali pengali stage; angka persisnya ada di bagian rincian pengembangan.
 
-**Jalur dan posisi acak.** Tiap stage punya 3 jalur (total 9 variasi) dengan panjang setara (selisih paling banyak 7%). Satu jalur dipilih acak saat stage dimulai dan tetap sama jika pemain mengulang stage setelah kalah; permainan baru mengacak lagi. Naga berada di tengah bawah layar atau di tengah layar (naga tengah menembak ke segala arah), dan sarang telur di tempat berbeda tiap jalur.
+**Jalur dan posisi acak (layout tegak).** Tiap stage punya 3 jalur tegak (total 9 variasi) dengan panjang setara (selisih paling banyak 7%). Satu jalur dipilih acak saat stage dimulai dan tetap sama jika pemain mengulang stage setelah kalah; permainan baru mengacak lagi. Naga berada di tengah bawah layar atau di tengah layar (naga tengah menembak ke segala arah), dan sarang telur di tempat berbeda tiap jalur. Layout lebar punya satu jalur per stage (lihat bagian Layout tegak dan lebar).
 
-Aturan perancangan jalur: di layar standar (tinggi dunia 1000) sarang paling jauh 260 satuan dari naga, jarak sarang dari tempat bola masuk paling sedikit 450 satuan, dan jalur tidak lewat dekat naga (kecuali menuju sarang). Di layar HP yang tinggi (tinggi dunia sampai 1300) jarak sarang ke naga bisa sampai sekitar 370 satuan; ini hanya soal tata letak dan tidak memengaruhi permainan. Di stage 3, penyihir berdiri dekat tempat bola masuk.
+Aturan perancangan jalur: di layar standar (tinggi dunia 1000) sarang paling jauh 260 satuan dari naga, jarak sarang dari tempat bola masuk paling sedikit 450 satuan, dan jalur tidak lewat dekat naga (kecuali menuju sarang). Di layar HP yang tinggi (tinggi dunia sampai 1300) jarak sarang ke naga bisa sampai sekitar 370 satuan; ini hanya soal tata letak dan tidak memengaruhi permainan. Di stage 3, penyihir berdiri dekat tempat bola masuk. Aturan yang sama berlaku untuk jalur lebar.
+
+## Layout tegak dan lebar
+
+Game punya dua layout dengan jalur yang digambar khusus untuk masing-masing, supaya terasa dirancang untuk layarnya dan tidak sekadar diperbesar. Mekanik, jumlah bola, laju, telur, perisai, dan bos sama di keduanya.
+
+| | Tegak | Lebar |
+| --- | --- | --- |
+| Dunia (satuan game) | lebar 600, tinggi 1000–1300 menyesuaikan layar | 1000 × 600 tetap |
+| Dipakai di | HP berdiri, tablet tegak, jendela sempit | laptop, PC, HP mendatar |
+| Jalur | 3 per stage (total 9), dipilih acak | 1 per stage (total 3) |
+| Naga | tengah bawah atau tengah layar | tengah bawah |
+
+- **Pemilihan layout:** lebar layar lebih besar dari tingginya → lebar; selain itu tegak. Dengan batas ganda 5%: masuk lebar saat lebar ≥ 1,05 × tinggi, kembali tegak saat lebar ≤ 0,95 × tinggi, dan di antaranya layout tidak berganti (supaya tidak berkedip di layar hampir persegi).
+- **Jalur lebar:** panjang 2037 (stage 1), 2036 (stage 2), dan 2651 (stage 3), setara jalur tegak di stage yang sama (selisih paling banyak 7%). Semua aturan jalur terpenuhi: jarak antar-baris ≥100, jalur ≥100 dari naga, sarang ≤260 dari naga, jarak masuk ke sarang ≥450, dan di stage 3 bos ≤200 dari tempat bola masuk. Bola masuk dari 60 satuan di luar layar (dari kiri di stage 1, dari kanan di stage 2 dan 3). Stage 2 hanya miring sekitar 2,5° (di tegak sekitar 6,7°) karena tinggi dunia 600.
+- **Tampilan lebar:** latar gelap tembus pandang di belakang HUD di semua stage (jalur lewat tepat di bawahnya), petunjuk bawah dua baris di kiri-bawah, dan tulisan melayang global sedikit lebih tinggi. Latar halaman di luar dunia ikut warna tema stage.
+- **Layout berganti di menu, cerita, dan layar selesai:** hanya tampilan yang berganti, posisi bola dihitung ulang dari jaraknya di jalur.
+- **Layout berganti saat spanduk stage atau peragaan:** belum ada kemajuan yang bisa hilang, jadi stage disusun ulang diam-diam untuk layout baru.
+- **Layout berganti saat bermain:** layout terkunci dan game berhenti penuh (jalur, peluru, waktu, mantra bos, hitung mundur tukar, perisai). Tampil pesan "Putar layar kembali" ke posisi tegak atau mendatar dengan ikon HP yang berputar (di komputer: ubah ukuran jendela kembali). Game lanjut otomatis begitu layout semula kembali; skor, telur, perisai, dan posisi bola tidak berubah.
+- **Layar pendek dan lebar** (tinggi sampai 780 piksel, termasuk HP mendatar): menu jadi dua kolom dan jarak dirapatkan; di tinggi sampai 400 piksel dirapatkan lagi. Menu, cerita, layar selesai, dan tinjauan muat tanpa digulir di HP mendatar setinggi 360–430 piksel.
+- **Pengaman:** satu konstanta `LAYOUT_LEBAR_AKTIF`. Bila diset salah, game kembali seperti sebelum layout lebar ada (selalu tegak, dan layar "Putar HP" muncul di HP mendatar yang pendek).
 
 ## Matematika di dalam permainan
 
@@ -121,7 +141,7 @@ Prototipe awal membingungkan karena "angka kunci" tidak jelas. Empat perbaikan d
 
 Prinsip yang dipakai: sedikit teks, banyak isyarat gambar, dan contoh. Anak usia 6–8 tahun masih belajar membaca, jadi petunjuk utamanya harus berupa gambar. Saat jenis bilangan dicampur, bola dan lubang di panel diberi warna yang sama per jenis (asli hijau-biru, bulat biru, desimal merah muda, pecahan ungu), supaya anak tahu bola mana yang dicari.
 
-Perlindungan salah ketuk dan layar kecil: tombol ✕ di pojok kanan atas membuka pertanyaan "Keluar ke menu?" dan menjeda permainan; area ketuknya minimal sekitar 48 piksel. Di HP yang dipegang mendatar (tinggi layar di bawah 500 piksel) tampil layar "Putar HP ke posisi tegak" dan permainan berhenti sampai HP ditegakkan lagi. Teks kecil di dalam game ikut membesar di layar kecil (minimal sekitar 11 piksel).
+Perlindungan salah ketuk dan layar kecil: tombol ✕ di pojok kanan atas membuka pertanyaan "Keluar ke menu?" dan menjeda permainan; area ketuknya minimal sekitar 48 piksel. HP yang dipegang mendatar memakai layout lebar, dan menu serta layar lain dipadatkan di layar pendek supaya muat tanpa digulir. Bila layar diputar saat bermain, game berhenti dan meminta layar dikembalikan (lihat bagian Layout tegak dan lebar). Teks kecil di dalam game ikut membesar di layar kecil (minimal sekitar 11 piksel).
 
 Catatan: belum ada uji dengan anak sungguhan.
 
@@ -151,9 +171,20 @@ Di Mudah (stage 1 / 2 / 3) dengan salah 15%: sebelum telur 10 / 10 / 10, sesudah
 
 Telur sisa rata-rata pada Menantang stage 3 dengan salah 25%: 1,0. Perisai terutama menolong pemain yang cukup baik; robot yang sangat sering salah tetap kesulitan.
 
-**Uji otomatis (9 November 2026).** Halaman uji memainkan game sungguhan di browser: 64 uji mencakup angka dan hitungan, tabel stage, tembak dan kesalahan, perisai, telur, tukar posisi, bos, layar tinjauan, jalur, menu dan cerita. Pemain robot yang selalu membidik pasangan benar (4 atau 6 detik per tembakan) memainkan ratusan permainan di semua stage dan tingkat serta satu permainan penuh stage 1 sampai 3; hasilnya tidak ada bola tanpa pasangan, tidak ada saat tanpa peluru yang berguna, tidak ada peluru yang jenisnya tidak cocok dengan panel, dan tidak ada galat halaman. Karena robot ini selalu memilih jawaban benar, ia tidak mengukur kesulitan untuk anak.
+**Uji otomatis (9 November 2026).** Halaman uji memainkan game sungguhan di browser: 77 uji mencakup angka dan hitungan, tabel stage, tembak dan kesalahan, perisai, telur, tukar posisi, bos, layar tinjauan, jalur, menu dan cerita, serta layout tegak dan lebar (pemilihan layout, batas ganda 5%, aturan jalur lebar, jeda dan pulih saat layar berganti, 300 kali ubah ukuran cepat, dan layar pendek). Hasilnya: 70 lulus, 0 gagal, 5 hanya berupa angka, dan 2 uji animasi yang hanya jalan bila halaman uji dibuka di tab terdepan. Pemain robot yang selalu membidik pasangan benar (4 atau 6 detik per tembakan) memainkan ratusan permainan di semua stage dan tingkat, di kedua layout, serta satu permainan penuh stage 1 sampai 3 di masing-masing layout; hasilnya tidak ada bola tanpa pasangan, tidak ada saat tanpa peluru yang berguna, tidak ada peluru yang jenisnya tidak cocok dengan panel, dan tidak ada galat halaman. Karena robot ini selalu memilih jawaban benar, ia tidak mengukur kesulitan untuk anak. Layout tegak terbukti tidak berubah oleh penambahan layout lebar: panjang jalur, posisi naga dan sarang, bos, jumlah bola, laju, isi latar, dan bola pertama sama dengan rekaman sebelumnya (18 perbandingan, 0 beda).
 
-**Tampilan.** Tangkapan layar di lebar 360, 390, 768 piksel dan desktop untuk menu, bermain, spanduk stage, tinjauan, dan layar kalah: tidak ada teks terpotong dan tidak ada tombol HTML di bawah 44 piksel.
+**Layout lebar dibanding tegak (robot yang kadang salah).** Robot menembak tiap 2,5–4,5 detik dengan tingkat salah acak tertentu, Menantang dengan + − × ÷, 40 percobaan per sel (ini robot, bukan anak). Jumlah menang dari 40, stage 1 / 2 / 3:
+
+| Salah | Tegak | Lebar |
+| --- | --- | --- |
+| 5% | 39 / 40 / 40 | 40 / 40 / 40 |
+| 10% | 38 / 38 / 36 | 40 / 39 / 35 |
+| 15% | 38 / 32 / 31 | 35 / 32 / 31 |
+| 25% | 22 / 15 / 14 | 18 / 17 / 14 |
+
+Total menang: tegak 383 dan lebar 381 dari 480. Selisih per sel paling besar 4 dari 40. Jadi tingkat kesulitan layout lebar setara dengan tegak menurut robot ini. Dengan hanya 10 percobaan per sel, dua kali jalan memberi selisih yang berbeda-beda (kebisingan), karena itu jumlah percobaan dinaikkan.
+
+**Tampilan.** Tangkapan layar di lebar 360, 390, 768 piksel (tegak) serta 844×390, 1024×600, dan 1024×576 (lebar) untuk menu, bermain, spanduk stage, tinjauan, dan layar kalah atau selesai: tidak ada teks terpotong dan tidak ada tombol HTML di bawah 44 piksel. Menu, cerita, layar selesai, dan tinjauan diperiksa otomatis di 11 ukuran, termasuk HP mendatar setinggi 360–430 piksel: tidak ada yang perlu digulir. Ukuran 1920×1080 dan 1280×720 (rasio 16:9 yang sama dengan 1024×576) tidak bisa dipotret utuh di lingkungan uji.
 
 ## Rincian untuk pengembangan
 
@@ -166,7 +197,7 @@ Seluruh game ada di satu berkas `index.html` (HTML, gaya, dan JavaScript tanpa p
 | 4–6 | Keadaan game, hitungan, bola tembakan dan angka panel |
 | 7–8 | Alur stage (banner, peragaan, menang/kalah), efek, telur, perisai, tukar posisi |
 | 9–10 | Logika permainan dan menembak |
-| 11–12 | Gambar, layar sentuh, menu, cerita, dialog keluar, layar putar HP |
+| 11–12 | Gambar, layar sentuh, menu, cerita, dialog keluar, pemilihan layout dan jeda saat layout berganti |
 
 Angka pengaturan utama:
 
@@ -184,7 +215,9 @@ Penjaga agar tidak buntu: sekitar 70% bola tembakan dibuat sebagai pasangan bola
 
 Pengaturan telur di Bagian 1: EGGS = 3, PROTECT_T = 2 detik, NEST_PUSH = 216 (4 jarak bola), NEST_SLOW_T = 4 detik, NEST_SLOW = 0,5, EGG_BONUS = 500, EGG_AT = 0,5 (pertengahan stage), SWAP_EVERY (Mudah 14–20, Menantang 8–14 detik), SWAP_WARN = 1,5 detik, SHIELD_AT = 5 jawaban benar berturut-turut.
 
-Tampilan: lebar logis 600, tinggi menyesuaikan layar (1000–1300), kanvas diskalakan penuh dengan batas ketajaman layar 2,5×. Kontrol memakai pointer events sehingga sentuhan dan mouse sama. Tiap stage menyimpan daftar 3 jalur (titik jalur, posisi naga, posisi bos) di Bagian 1; jalur terpilih disimpan per permainan. Peluru menembus: peluru mengejar bola sasaran dan mengabaikan bola lain; jika bola sasaran hilang di tengah jalan, peluru menjadi tembakan lurus biasa. Jika halaman dimuat saat ukuran jendela masih 0 (bingkai atau tab tersembunyi), game memakai ukuran cadangan lalu menyesuaikan diri begitu ukuran asli ada. Game tayang sebagai halaman statis di GitHub Pages tanpa proses build.
+Pengaturan layout di Bagian 1: `LAYOUT_LEBAR_AKTIF` (true/false), `TEGAK_W` = 600, dan `WIDE` (dunia 1000×600; batas masuk 1,05 dan kembali 0,95). `resize()` memilih layout dan memasang dunia; `syncLayout()` mengunci layout saat bermain dan menjeda game bila layar berganti bentuk.
+
+Tampilan: dunia tegak lebar 600 dengan tinggi menyesuaikan layar (1000–1300), dunia lebar 1000×600; kanvas diskalakan penuh dengan batas ketajaman layar 2,5×. Kontrol memakai pointer events sehingga sentuhan dan mouse sama. Tiap stage menyimpan daftar 3 jalur tegak (titik jalur, posisi naga, posisi bos) dan satu jalur lebar (`wide`) di Bagian 1; jalur tegak terpilih disimpan per permainan. Peluru menembus: peluru mengejar bola sasaran dan mengabaikan bola lain; jika bola sasaran hilang di tengah jalan, peluru menjadi tembakan lurus biasa. Jika halaman dimuat saat ukuran jendela masih 0 (bingkai atau tab tersembunyi), game memakai ukuran cadangan lalu menyesuaikan diri begitu ukuran asli ada. Game tayang sebagai halaman statis di GitHub Pages tanpa proses build.
 
 ## Batasan dan rencana lanjutan
 
@@ -193,6 +226,8 @@ Batasan saat ini:
 - Belum diuji di HP asli, Safari iPhone, dan sentuhan sungguhan; hanya simulasi dan tangkapan layar ukuran HP.
 - Gambar masih emoji sementara; belum ada gambar resmi karakter dan aturan merek.
 - Pecahan hanya berpenyebut sama, tidak disederhanakan (2/4 tetap 2/4), dan belum ada pecahan campuran; jenis baru belum diuji pada anak. Di Mudah penyebut kini 3, 4, 5 (stage 1 memakai ⅓ dan ⅔).
+- Layout lebar memakai dunia tetap 1000×600, jadi di layar yang lebih lebar dari rasio 1,67 (misalnya HP mendatar) ada pita kosong di sisi dan bola tampak muncul dari tepi dunia, bukan tepi layar; di layar 4:3 pitanya ada di atas dan bawah. Stage 2 lebar hanya miring sekitar 2,5°.
+- Keseimbangan layout lebar hanya diuji dengan robot (setara dengan tegak, lihat bagian Status); belum dicoba dengan pemain sungguhan.
 - Konsep "Persamaan Bolong" tidak ada di v2 (hanya di prototipe lama).
 - Keseimbangan kesulitan baru diuji dengan robot. Dengan sistem telur, game jauh lebih ketat bagi pemain yang sering salah (lihat tabel di bagian Status); perlu dicoba dengan pemain sungguhan. Angka mundur jalur, perlambatan, dan jeda tukar masih tebakan awal.
 
@@ -200,5 +235,6 @@ Rencana lanjutan:
 
 - [ ] Keseimbangan telur: aturan telur tetap + perisai berlaku sekarang; pelonggaran A (telur hilang tiap 2 salah) masih opsi bila anak yang kesulitan terlalu sering kalah, termasuk Menantang stage 2 dan 3.
 - [ ] Pecahan berpenyebut beda.
+- [ ] Sembilan jalur lebar (3 per stage seperti tegak) dan dunia lebar yang lentur mengikuti bentuk layar, tanpa pita kosong.
 - [ ] Cara mengumpulkan masukan dari pemain.
 - [ ] Gambar resmi karakter dan aturan merek.
