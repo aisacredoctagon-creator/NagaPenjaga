@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pratinjau token gaya Naga Penjaga</title>
+<link rel="stylesheet" href="gaya-token.css">
+<style>
+body{margin:0;padding:18px;font:600 16px var(--ng-huruf);background:linear-gradient(180deg,#e9f1ff,#e3dcfb);color:var(--ng-teks)}
+h2{margin:22px 0 8px;font:800 20px var(--ng-huruf)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sw{width:84px;font-size:11px;line-height:1.25}
+.sw i{display:block;height:36px;border-radius:10px;border:1px solid rgba(0,0,0,.15);margin-bottom:3px}
+.peta{padding:14px;border-radius:var(--ng-r-panel);color:#fff}
+.peta.h{background:linear-gradient(180deg,var(--ng-hutan),var(--ng-hutan-gelap))}
+.peta.s{background:linear-gradient(180deg,var(--ng-salju-terang),var(--ng-salju-gelap))}
+.peta.b{background:linear-gradient(180deg,var(--ng-berapi-lantai),var(--ng-berapi-gelap))}
+.kon{font-size:12px;margin-top:10px}
+.kon span{display:inline-block;margin:2px 8px 2px 0;padding:2px 8px;border-radius:8px;background:#fff;border:1px solid #ccd}
+.ok{color:#0a7a2a}.no{color:#b00020}
+</style>
+</head>
+<body>
+<h2>Judul dan chip karakter</h2>
+<div class="row"><span class="ng-pil">3 Naga Penjaga</span><span class="ng-pil ungu">Penyihir Jahat</span><span class="ng-pil ungu">Bola-bola Sihir</span></div>
+<div class="row" style="margin-top:10px"><span class="ng-chip es">Esvara</span><span class="ng-chip api">Baranji</span><span class="ng-chip angin">Bayunara</span><span class="ng-chip sihir">Morvax</span></div>
+
+<h2>Panel</h2>
+<div class="row"><div class="ng-panel" style="width:260px"><b>Naga Es</b><br>Panel terang biru muda untuk kartu naga dan isi layar.</div>
+<div class="ng-panel ungu" style="width:260px"><b>Penyihir Jahat</b><br>Panel lavender untuk Morvax dan bola sihir.</div></div>
+
+<h2>Tombol</h2>
+<div class="row"><button class="ng-tombol">Stage berikutnya ▶</button><button class="ng-tombol kedua">Main lagi</button><button class="ng-tombol khusus">📝 Lihat jawabanmu</button><button class="ng-tombol pasif">Menu</button></div>
+
+<h2>Bola (orb) dengan cakram angka</h2>
+<div class="row"><span class="ng-orb"><b>7</b></span><span class="ng-orb bulat"><b>−3</b></span><span class="ng-orb desimal"><b>0,5</b></span><span class="ng-orb pecahan"><b>¾</b></span>
+<span style="font-size:12px">hijau = asli, biru = bulat, jingga = desimal, ungu = pecahan</span></div>
+
+<h2>Area peta dan HUD (sedikit gelap)</h2>
+<div class="row">
+<div class="peta h" style="width:200px"><span class="ng-hud">Skor 120</span><br><span class="ng-chip angin" style="margin-top:6px">Bayunara</span></div>
+<div class="peta s" style="width:200px;color:#0d2c5a"><span class="ng-hud">Skor 120</span><br><span class="ng-chip es" style="margin-top:6px">Esvara</span></div>
+<div class="peta b" style="width:200px"><span class="ng-hud">Skor 120</span><br><span class="ng-chip api" style="margin-top:6px">Baranji</span></div>
+</div>
+
+<h2>Palet (diukur dari gambar konsep)</h2>
+<div class="row" id="sw"></div>
+
+<h2>Kontras teks (minimal 4,5 : 1 teks kecil; 3 : 1 teks besar tebal)</h2>
+<div class="kon" id="kon"></div>
+
+<script>
+var cs = getComputedStyle(document.documentElement);
+function v(n) { return cs.getPropertyValue(n).trim(); }
+var names = ['--ng-pil-biru','--ng-pil-ungu','--ng-es','--ng-api','--ng-angin','--ng-sihir','--ng-peta-hutan','--ng-peta-salju','--ng-peta-api','--ng-panel-biru','--ng-panel-ungu','--ng-hutan','--ng-salju','--ng-berapi-lantai','--ng-orb-ungu','--ng-orb-biru','--ng-orb-jingga','--ng-orb-hijau','--ng-tombol-utama','--ng-tombol-kedua','--ng-tombol-khusus','--ng-tombol-pasif','--ng-teks'];
+document.getElementById('sw').innerHTML = names.map(function (n) { return '<div class="sw"><i style="background:var(' + n + ')"></i>' + n.replace('--ng-', '') + '<br>' + v(n) + '</div>'; }).join('');
+function lum(h) { var c = [1, 3, 5].map(function (i) { var x = parseInt(h.substr(i, 2), 16) / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; }
+function cr(a, b) { var l1 = lum(a), l2 = lum(b); if (l1 < l2) { var t = l1; l1 = l2; l2 = t; } return (l1 + 0.05) / (l2 + 0.05); }
+var pairs = [['putih di pil biru', '#ffffff', '--ng-pil-biru', 4.5], ['putih di pil ungu', '#ffffff', '--ng-pil-ungu', 4.5], ['putih di chip es', '#ffffff', '--ng-es', 3], ['putih di chip api', '#ffffff', '--ng-api', 3], ['putih di chip angin', '#ffffff', '--ng-angin', 3], ['putih di chip sihir', '#ffffff', '--ng-sihir', 4.5],
+  ['putih di tombol utama', '#ffffff', '--ng-tombol-utama', 3], ['putih di tombol kedua', '#ffffff', '--ng-tombol-kedua', 4.5], ['putih di tombol khusus', '#ffffff', '--ng-tombol-khusus', 4.5], ['putih di tombol pasif', '#ffffff', '--ng-tombol-pasif', 3],
+  ['teks navy di panel biru', '--ng-teks', '--ng-panel-biru', 4.5], ['teks navy di panel ungu', '--ng-teks', '--ng-panel-ungu', 4.5]];
+document.getElementById('kon').innerHTML = pairs.map(function (p) { var a = p[1].charAt(0) === '#' ? p[1] : v(p[1]), b = v(p[2]), r = cr(a, b); return '<span class="' + (r >= p[3] ? 'ok' : 'no') + '">' + p[0] + ': ' + r.toFixed(1) + ' : 1 (target ' + p[3] + ')</span>'; }).join('');
+</script>
+</body>
+</html>

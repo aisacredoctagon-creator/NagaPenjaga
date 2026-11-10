@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Uji gaya layar menang dan kalah</title>
+<style>
+/* =====================================================================
+   UJI GAYA — layar menang / kalah Naga Penjaga (berkas terpisah, tidak dipakai game)
+   Semua warna ada di :root. Cahaya selalu dari ATAS: kilau di bagian atas,
+   bayangan dan "tebing" di bagian bawah, tidak pernah ke samping.
+   ===================================================================== */
+:root{
+  /* palet inti (diukur dari strip warna di gambar referensi) */
+  --tosca:#00a5c1; --navy:#132840; --krem:#d8ddcc; --cokelat:#645a45; --oranye:#f16301; --pink:#f03da9;
+  /* turunan palet: lebih terang (hi), lebih gelap (lo), tepi (dk) */
+  --tosca-hi:#3fcbe0; --tosca-lo:#007b93; --tosca-dk:#0a3f52;
+  --oranye-hi:#ff8f3a; --oranye-lo:#d94f00; --oranye-dk:#6a2a05;
+  --cokelat-hi:#8d7f66; --cokelat-lo:#4b4233; --cokelat-dk:#2b251a;
+  --krem-hi:#eef1e4; --krem-lo:#c6cab6; --krem-dk:#a7ab97;
+  /* pengecualian yang diminta di prompt (di luar 6 warna palet): emas untuk bintang dan hiasan pita, merah tua untuk pita kalah */
+  --emas-hi:#ffe27a; --emas:#f4b92a; --emas-lo:#c98a0e; --emas-dk:#6b4708;
+  --merah-hi:#c8404f; --merah:#a02334; --merah-dk:#4a0f19;
+  --font:"Trebuchet MS","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-judul:"Arial Narrow","Roboto Condensed","HelveticaNeue-CondensedBold","Franklin Gothic Medium Cond","Trebuchet MS","Segoe UI",Arial,sans-serif;   /* huruf sempit bila ada di perangkat; bila tidak, huruf biasa */
+  --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--font);color:var(--cokelat-dk);background:radial-gradient(120% 90% at 50% 0%,#1f4a66 0%,var(--navy) 62%,#0b1a2b 100%) fixed;-webkit-tap-highlight-color:transparent}
+
+/* ---- tombol pengganti keadaan (alat uji, bukan bagian desain) ---- */
+.ctl{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px 10px 0}
+.ctl button{font:inherit;font-size:14px;font-weight:700;min-height:44px;padding:6px 12px;border-radius:10px;border:2px solid var(--cokelat-dk);background:var(--cokelat);color:var(--krem);cursor:pointer}
+.ctl button[aria-pressed=true]{background:var(--krem);color:var(--cokelat-dk);border-color:var(--krem-dk)}
+
+.stage{display:flex;justify-content:center;padding:34px 12px 28px}
+
+/* ---- PANEL: krem batu, tepi cokelat tipis, "tebing" gelap di bawah, bayangan lembut ---- */
+.panel{position:relative;width:min(100%,400px);padding:18px 18px 22px;border:3px solid var(--cokelat);border-radius:10px;
+  background:linear-gradient(180deg,var(--krem-hi) 0%,var(--krem) 38%,var(--krem-lo) 100%);
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.75),inset 0 -5px 0 rgba(100,90,69,.18),0 6px 0 var(--cokelat),0 18px 26px rgba(8,18,30,.6)}
+.panel::before{content:"";position:absolute;inset:7px;border-radius:6px;border:1.5px solid rgba(100,90,69,.22);pointer-events:none}
+
+/* ---- gambar tokoh: emoji besar ---- */
+/* medali cekung (piring) tempat emoji, seperti lubang telur: emoji tidak lagi "menempel" di panel */
+.hero{position:relative;width:116px;height:116px;margin:-8px auto 0;border-radius:50%;display:flex;align-items:center;justify-content:center;padding-bottom:30px;
+  font-family:var(--emoji);font-size:64px;line-height:1;border:4px solid var(--cokelat);
+  background:radial-gradient(circle at 50% 28%,#cfd3bf 0%,var(--krem-lo) 55%,#aeb29d 100%);
+  box-shadow:inset 0 6px 9px rgba(50,45,30,.42),0 4px 0 var(--cokelat),0 6px 0 rgba(255,255,255,.0),0 14px 14px rgba(40,34,20,.32)}
+.hero::before{content:"";position:absolute;inset:5px;border-radius:50%;border:2px solid var(--emas);opacity:.75;pointer-events:none}
+.hero .em,.hero .sec img{position:relative;filter:drop-shadow(0 4px 2px rgba(40,34,20,.4))}
+.hero .em img{width:1em;height:1em;object-fit:contain;display:block}
+.hero .sec{position:absolute;right:-16px;top:-8px;font-size:36px;filter:drop-shadow(0 3px 2px rgba(40,34,20,.4))}
+.hero .sec img{width:1em;height:1em;object-fit:contain;display:block}
+
+/* ---- PITA: badan tengah bergradasi, ekor bersudut gelap di kiri-kanan, garis hiasan emas ---- */
+.ribbon{--c-hi:var(--tosca-hi);--c:var(--tosca);--c-lo:var(--tosca-lo);--c-tail-hi:var(--tosca-lo);--c-tail-lo:var(--tosca-dk);--c-edge:var(--tosca-dk);
+  position:relative;height:74px;margin:-34px -12px 0}
+.ribbon.kalah{--c-hi:var(--merah-hi);--c:var(--merah);--c-lo:#7b1a2a;--c-tail-hi:#7b1a2a;--c-tail-lo:var(--merah-dk);--c-edge:var(--merah-dk)}
+.tail{position:absolute;top:16px;width:64px;height:54px;background:linear-gradient(180deg,var(--c-tail-hi),var(--c-tail-lo));
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%,24% 50%);filter:drop-shadow(0 3px 0 var(--c-edge))}
+.tail.l{left:0} .tail.r{right:0;transform:scaleX(-1)}
+.fold{position:absolute;top:56px;width:18px;height:14px;background:var(--c-edge);clip-path:polygon(0 0,100% 0,100% 100%)}
+.fold.l{left:50px} .fold.r{right:50px;transform:scaleX(-1)}
+.band{position:absolute;left:36px;right:36px;top:0;height:58px;display:flex;align-items:center;justify-content:center;
+  border:3px solid var(--c-edge);border-radius:9px;background:linear-gradient(180deg,var(--c-hi) 0%,var(--c) 48%,var(--c-lo) 100%);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 4px 0 var(--c-edge),0 12px 14px rgba(8,18,30,.4)}
+.band::before{content:"";position:absolute;inset:3px;border-radius:5px;border:2px solid var(--emas);opacity:.9;pointer-events:none}
+.band::after{content:"";position:absolute;left:6px;right:6px;top:5px;height:30%;border-radius:4px 4px 12px 12px;background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,0));pointer-events:none}
+.band b{position:relative;z-index:1;font-family:var(--font-judul);font-stretch:condensed;font-size:33px;letter-spacing:.05em;text-transform:uppercase;font-weight:900;color:#fff;
+  text-shadow:0 2px 0 var(--c-edge),0 -1px 0 var(--c-edge),1px 0 0 var(--c-edge),-1px 0 0 var(--c-edge),0 4px 6px rgba(0,0,0,.35)}
+
+/* ---- BINTANG: dua lapis bentuk bintang yang sama (tepi gelap + isi emas), sedikit melengkung ---- */
+.stars{display:flex;justify-content:center;align-items:flex-end;gap:6px;height:72px;margin-top:6px}
+.star{position:relative;width:60px;height:57px}
+.star i,.star u{position:absolute;display:block;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.star i{inset:0;background:var(--emas-dk);filter:drop-shadow(0 3px 0 rgba(60,40,5,.55))}
+.star u{inset:4px 4px 5px 4px;background:linear-gradient(180deg,var(--emas-hi) 0%,var(--emas) 50%,var(--emas-lo) 100%)}
+.star.mid{width:72px;height:68px;margin-bottom:8px}
+.star.off u{background:linear-gradient(180deg,#2a4560,var(--navy))}
+.star.off i{background:#0a1522;filter:none}
+.stars.pop .star{animation:pop .5s cubic-bezier(.3,1.6,.5,1) both}
+.stars.pop .star:nth-child(2){animation-delay:.12s} .stars.pop .star:nth-child(3){animation-delay:.24s}
+@keyframes pop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ---- teks pendek ---- */
+.msg{margin:10px 6px 0;text-align:center;font-size:19px;line-height:1.35;font-weight:700;color:var(--cokelat)}
+.rule{height:2px;margin:14px 8px 12px;background:var(--krem-dk);border-bottom:1px solid rgba(255,255,255,.8)}
+
+/* ---- lubang telur dan pelat skor: cekung (bayangan di dalam, cahaya di tepi bawah) ---- */
+.info{display:grid;grid-template-columns:1.25fr 1fr;gap:10px}
+.plate{border-radius:11px;padding:8px 8px 9px;text-align:center;border:2px solid var(--krem-dk);
+  background:linear-gradient(180deg,var(--krem-lo),#d3d6c3);box-shadow:inset 0 3px 5px rgba(60,54,38,.28),0 2px 0 rgba(255,255,255,.85)}
+.plate small{display:block;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--cokelat)}
+.plate strong{display:block;font-size:30px;line-height:1.1;color:var(--cokelat-dk);font-weight:900}
+.slots{display:flex;justify-content:center;gap:6px;margin-top:5px}
+.slot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--emoji);font-size:22px;
+  background:radial-gradient(circle at 50% 30%,#b9bda9,#a2a690);box-shadow:inset 0 3px 4px rgba(50,45,30,.45),0 2px 0 rgba(255,255,255,.8);border:2px solid var(--cokelat)}
+.slot.off span{filter:grayscale(1);opacity:.3}
+
+/* ---- TOMBOL: gradasi, tepi gelap 3 px, kilau di setengah atas, tebing 4 px di bawah ---- */
+.btns{display:grid;gap:12px;margin-top:16px}
+.btn{--hi:var(--oranye-hi);--mid:var(--oranye);--lo:var(--oranye-lo);--edge:var(--oranye-dk);
+  position:relative;min-height:54px;padding:8px 18px;font-family:var(--font-judul);font-stretch:condensed;font-size:24px;font-weight:900;letter-spacing:.03em;color:#fff;cursor:pointer;
+  border:3px solid var(--edge);border-radius:9px;background:linear-gradient(180deg,var(--hi) 0%,var(--mid) 50%,var(--lo) 100%);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 4px 0 var(--edge),0 9px 10px rgba(8,18,30,.38);
+  text-shadow:0 2px 0 var(--edge),0 -1px 0 var(--edge),1px 0 0 var(--edge),-1px 0 0 var(--edge);transition:transform .08s,box-shadow .08s}
+.btn::after{content:"";position:absolute;left:7px;right:7px;top:4px;height:30%;border-radius:6px 6px 12px 12px;background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0));pointer-events:none}
+.btn:active{transform:translateY(3px);box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 1px 0 var(--edge),0 3px 4px rgba(8,18,30,.35)}
+.btn:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+.btn.kedua{--hi:#2bb9d1;--mid:#0090a9;--lo:var(--tosca-lo);--edge:var(--tosca-dk)}   /* tosca sedikit digelapkan supaya teks putih lebih terbaca (kontras ≥ 3,5) */
+.btn.pasif{--hi:var(--cokelat-hi);--mid:var(--cokelat);--lo:var(--cokelat-lo);--edge:var(--cokelat-dk);font-size:19px;min-height:50px}
+.btn.khusus{--hi:#fa74c8;--mid:#f03da9;--lo:#bf1f7e;--edge:#650e44;font-size:20px;min-height:50px}   /* merah muda: hanya untuk "Lihat jawabanmu" */
+.hidden{display:none !important}
+
+/* ---- angka tambahan. Varian A: satu baris kecil. Varian B: semua angka sebagai petak kecil ---- */
+.stats{margin-top:12px}
+.stats.a{padding:6px 8px;border-radius:9px;text-align:center;font-size:13px;font-weight:700;line-height:1.55;color:var(--cokelat);border:2px solid var(--krem-dk);
+  background:linear-gradient(180deg,var(--krem-lo),#d3d6c3);box-shadow:inset 0 2px 4px rgba(60,54,38,.25),0 2px 0 rgba(255,255,255,.85)}
+.stats.a b{color:var(--cokelat-dk);font-weight:900}
+.stats.a span{white-space:nowrap}
+.stats.a span+span::before{content:"·";margin:0 6px;opacity:.6}
+.stats.b{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.stats.b div{padding:5px 6px 6px;border-radius:9px;text-align:center;border:2px solid var(--krem-dk);background:linear-gradient(180deg,var(--krem-lo),#d3d6c3);box-shadow:inset 0 2px 4px rgba(60,54,38,.25),0 2px 0 rgba(255,255,255,.85)}
+.stats.b small{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--cokelat)}
+.stats.b strong{display:block;font-size:19px;line-height:1.15;color:var(--cokelat-dk);font-weight:900}
+.stats.b div:last-child:nth-child(odd){grid-column:1 / -1}
+.ctl.v{padding-top:6px}
+
+/* ---- HP mendatar pendek: dua kolom supaya muat tanpa digulir ---- */
+@media (max-height:700px) and (min-width:620px){
+  .stage{padding:14px 12px}
+  .panel{width:min(100%,760px);display:grid;grid-template-columns:1fr 1fr;column-gap:20px;align-items:center;padding:12px 18px 16px}
+  .panel::before{inset:6px}
+  .left{grid-column:1} .right{grid-column:2}
+  .hero{width:84px;height:84px;font-size:40px;padding-bottom:22px;margin-top:-4px;border-width:3px} .hero .sec{font-size:26px;right:-12px;top:-6px}
+  .ribbon{margin-top:-22px}
+  .stars{height:52px;margin-top:2px} .star{width:44px;height:42px} .star.mid{width:54px;height:51px;margin-bottom:6px}
+  .rule{margin:8px 8px 6px} .msg{margin-top:6px;font-size:17px}
+  .btns{margin-top:8px;gap:6px;grid-template-columns:1fr 1fr}
+  .btns .btn{min-height:46px;font-size:19px;padding:4px 10px} .btns .btn:first-child{grid-column:1 / -1}
+  .btns:has(.kedua) .btn.khusus{grid-column:1 / -1;order:9}      /* 4 tombol: utama penuh, Main lagi + Menu berdampingan, Lihat jawabanmu penuh */
+  .btns .btn:nth-child(2):last-child{grid-column:1 / -1}          /* 2 tombol: keduanya penuh */
+  .stats.b{grid-template-columns:repeat(6,1fr)}
+  .stats.b div,.stats.b div:last-child:nth-child(odd){grid-column:span 2}
+  .stats.b div:nth-child(4):nth-last-child(2),.stats.b div:nth-child(5):last-child{grid-column:span 3}
+  .stats.b div:nth-child(4):last-child{grid-column:span 6}
+  .info{gap:8px} .plate{padding:5px 6px 6px} .plate strong{font-size:24px} .slot{width:32px;height:32px;font-size:18px} .slots{margin-top:3px}
+  .stats{margin-top:8px} .stats.a{padding:4px 6px;font-size:12px;line-height:1.4}
+  .stats.b{gap:4px} .stats.b div{padding:3px 4px 4px} .stats.b strong{font-size:16px} .stats.b small{font-size:10px}
+}
+@media (prefers-reduced-motion:reduce){.stars.pop .star{animation:none}.btn{transition:none}}
+@media (max-width:380px){.band b{font-size:28px}.btn{font-size:21px}.msg{font-size:17px}}
+</style>
+</head>
+<body>
+
+<div class="ctl" id="ctlS" role="group" aria-label="Ganti keadaan layar contoh">
+  <button type="button" data-s="m3" aria-pressed="true">Menang 3 ⭐</button>
+  <button type="button" data-s="m2" aria-pressed="false">Menang 2 ⭐</button>
+  <button type="button" data-s="m1" aria-pressed="false">Menang 1 ⭐</button>
+  <button type="button" data-s="k" aria-pressed="false">Kalah: telur</button>
+  <button type="button" data-s="w" aria-pressed="false">Kalah: waktu</button>
+  <button type="button" data-s="t" aria-pressed="false">Tamat</button>
+</div>
+<div class="ctl v" id="ctlV" role="group" aria-label="Pilih tampilan angka tambahan">
+  <button type="button" data-v="a" aria-pressed="true">Angka A: satu baris kecil</button>
+  <button type="button" data-v="b" aria-pressed="false">Angka B: semua angka</button>
+</div>
+
+<div class="stage">
+  <section class="panel" id="panel" aria-live="polite">
+    <div class="left">
+      <div class="hero" id="hero"></div>
+      <div class="ribbon" id="ribbon">
+        <div class="tail l"></div><div class="tail r"></div><div class="fold l"></div><div class="fold r"></div>
+        <div class="band"><b id="title"></b></div>
+      </div>
+      <div class="stars pop" id="stars"></div>
+      <div class="rule"></div>
+      <p class="msg" id="msg"></p>
+    </div>
+    <div class="right">
+      <div class="info" id="info"></div>
+      <div class="stats a" id="stats"></div>
+      <div class="btns" id="btns"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* Keadaan contoh. Bintang mengikuti aturan game sekarang: telur selamat dan ketepatan.
+   3 bintang = telur >= 2 dan ketepatan >= 80%; 2 bintang = telur >= 2 atau ketepatan >= 60%; selain itu 1.
+   plates = dua pelat besar; stats = angka tambahan [label panjang, label pendek, nilai]. */
+var LJ = ['Ketepatan', 'Tepat'], KS = ['Kesalahan', 'Salah'], RT = ['Rentetan terbaik', 'Rentetan'], WK = ['Waktu main', 'Waktu'];
+var BTN_MENANG = ['Stage berikutnya ▶', 'Main lagi', '📝 Lihat jawabanmu', 'Menu'];
+function eggs(n) { var h = '<div class="slots">', i; for (i = 0; i < 3; i++) h += '<span class="slot' + (i < n ? '' : ' off') + '"><span>🥚</span></span>'; return h + '</div>'; }
+var S = {
+  m3: { win: true, stars: 3, t: 'MENANG!', msg: 'Ketiga telur selamat! Kamu hebat!', btn: BTN_MENANG,
+        plates: [['Telur selamat', eggs(3)], ['Skor stage', '<strong>830</strong>']],
+        stats: [LJ.concat('92%'), KS.concat('1'), RT.concat('7'), WK.concat('2:41'), ['Skor total', 'Total', '1.250']] },
+  m2: { win: true, stars: 2, t: 'MENANG!', msg: 'Dua telur selamat. Ayo lebih teliti lagi!', btn: BTN_MENANG,
+        plates: [['Telur selamat', eggs(2)], ['Skor stage', '<strong>560</strong>']],
+        stats: [LJ.concat('78%'), KS.concat('3'), RT.concat('5'), WK.concat('3:12'), ['Skor total', 'Total', '980']] },
+  m1: { win: true, stars: 1, t: 'MENANG!', msg: 'Satu telur selamat. Hampir saja dicuri!', btn: BTN_MENANG,
+        plates: [['Telur selamat', eggs(1)], ['Skor stage', '<strong>380</strong>']],
+        stats: [LJ.concat('64%'), KS.concat('6'), RT.concat('3'), WK.concat('4:05'), ['Skor total', 'Total', '640']] },
+  k:  { win: false, t: 'KALAH', msg: 'Penyihir membawa kabur telurmu! Coba lagi, pasti bisa!', hero: ['🧙', '🥚'], btn: ['Coba lagi', '📝 Lihat jawabanmu', 'Menu'],
+        plates: [['Telur selamat', eggs(0)], ['Skor stage', '<strong>210</strong>']],
+        stats: [LJ.concat('51%'), KS.concat('9'), RT.concat('2'), WK.concat('2:05')] },
+  w:  { win: false, t: 'KALAH', msg: 'Waktu habis! Coba lagi, pasti bisa!', hero: ['⏰', '🥚'], btn: ['Coba lagi', '📝 Lihat jawabanmu', 'Menu'],
+        plates: [['Telur selamat', eggs(2)], ['Skor stage', '<strong>450</strong>']],
+        stats: [LJ.concat('70%'), KS.concat('4'), RT.concat('6'), WK.concat('5:00')] },
+  t:  { win: true, stars: 3, t: 'MENANG!', msg: 'Penyihir Jahat kalah. Dunia aman berkat kamu!', hero: ['🐲', '🎉'], btn: ['Main lagi', '📝 Lihat jawabanmu'],
+        plates: [['Bintang', '<strong>8 / 9</strong>'], ['Skor total', '<strong>3.420</strong>']],
+        stats: [['Stage 1', 'Stage 1', '⭐⭐⭐'], ['Stage 2', 'Stage 2', '⭐⭐'], ['Stage 3', 'Stage 3', '⭐⭐⭐']] }
+};
+/* Gambar medali. Untuk lambang resmi nanti: ganti isi baris ini dengan nama berkas gambar di folder yang sama (mis. 'lambang-menang.png'). */
+var HERO_ART = { menang: '🐲', lencanaMenang: '✨' };
+function $(id) { return document.getElementById(id); }
+function art(cls, v) {
+  return '<span class="' + cls + '">' + (/\.(png|jpe?g|svg|webp|gif)$/i.test(v) ? '<img alt="" src="' + v + '">' : v) + '</span>';
+}
+var cur = 'm3', variant = 'a';
+function show() {
+  var s = S[cur], i, h, hero = s.hero || [HERO_ART.menang, HERO_ART.lencanaMenang];
+  $('hero').innerHTML = art('em', hero[0]) + art('sec', hero[1]);
+  $('ribbon').className = 'ribbon' + (s.win ? '' : ' kalah');
+  $('title').textContent = s.t;
+  $('msg').textContent = s.msg;
+  h = '';
+  if (s.win) for (i = 0; i < 3; i++) h += '<span class="star' + (i === 1 ? ' mid' : '') + (i < s.stars ? '' : ' off') + '"><i></i><u></u></span>';
+  $('stars').innerHTML = h;
+  $('info').innerHTML = s.plates.map(function (p) { return '<div class="plate"><small>' + p[0] + '</small>' + p[1] + '</div>'; }).join('');
+  var st = $('stats'); st.className = 'stats ' + variant;
+  st.innerHTML = variant === 'a'
+    ? s.stats.map(function (r) { return '<span>' + r[1] + ' <b>' + r[2] + '</b></span>'; }).join('')
+    : s.stats.map(function (r) { return '<div><small>' + r[0] + '</small><strong>' + r[2] + '</strong></div>'; }).join('');
+  $('btns').innerHTML = s.btn.map(function (t, k) {
+    var cls = k === 0 ? '' : (t === 'Menu' ? ' pasif' : (/jawaban/.test(t) ? ' khusus' : ' kedua'));
+    return '<button type="button" class="btn' + cls + '">' + t + '</button>';
+  }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('#ctlS button'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-s') === cur ? 'true' : 'false'); });
+  Array.prototype.forEach.call(document.querySelectorAll('#ctlV button'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-v') === variant ? 'true' : 'false'); });
+  var sr = $('stars'); sr.classList.remove('pop'); void sr.offsetWidth; sr.classList.add('pop');
+}
+$('ctlS').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { cur = b.getAttribute('data-s'); show(); } });
+$('ctlV').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { variant = b.getAttribute('data-v'); show(); } });
+(function () { var m = /^#(\w+?)(?:-(a|b))?$/.exec(location.hash || ''); if (m && S[m[1]]) cur = m[1]; if (m && m[2]) variant = m[2]; show(); })();
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+/* =====================================================================
+   NAGA PENJAGA — TOKEN GAYA VISUAL (Tahap 1, belum dipasang di game)
+   Sumber: referensi/konsep-visual.webp. Warna bertanda [UKUR] diambil dari gambar
+   (median piksel); [TURUNAN] dibuat dari warna terukur (lebih terang/gelap);
+   [USULAN] tidak ada di gambar dan menunggu persetujuan.
+   Cahaya selalu dari ATAS: kilau di bagian atas, bayangan jatuh ke bawah.
+   ===================================================================== */
+:root {
+  /* ---- Judul dan label (pil kapsul) ---- */
+  --ng-pil-biru:       #2b62a4;   /* [UKUR] "3 Naga Penjaga" */
+  --ng-pil-ungu:       #5e4ba1;   /* [UKUR] "Penyihir Jahat", "Bola-bola Sihir", "Telur Naga & Sarangnya" */
+  --ng-pil-teks:       #ffffff;
+  --ng-pil-biru-atas:  #3b78c4;   /* [TURUNAN] gradasi pil: terang di atas */
+  --ng-pil-ungu-atas:  #7561bd;   /* [TURUNAN] */
+
+  /* ---- Chip nama karakter (satu warna per unsur) ---- */
+  --ng-es:        #3181c9;        /* [UKUR] Esvara, Naga Es */
+  --ng-api:       #e65328;        /* [UKUR] Baranji, Naga Api */
+  --ng-angin:     #518d60;        /* [UKUR] Bayunara, Naga Angin */
+  --ng-sihir:     #6c52af;        /* [UKUR] Morvax, Penyihir Jahat */
+  --ng-es-gelap:    #23639f;      /* [TURUNAN] tepi dan teks kecil */
+  --ng-api-gelap:   #b23a18;      /* [TURUNAN] */
+  --ng-angin-gelap: #3d6c49;      /* [TURUNAN] */
+  --ng-sihir-gelap: #4f3a8a;      /* [TURUNAN] */
+
+  /* ---- Pil nama peta (gelap, dengan lingkar ikon) ---- */
+  --ng-peta-hutan:  #065548;      /* [UKUR] Hutan Misterius */
+  --ng-peta-salju:  #0a4996;      /* [UKUR] Gunung Bersalju */
+  --ng-peta-api:    #992112;      /* [UKUR] Gunung Berapi */
+
+  /* ---- Panel (terang, kartu pastel) ---- */
+  --ng-panel-biru:   #ddecfc;     /* [UKUR] kartu naga */
+  --ng-panel-ungu:   #d8d2fb;     /* [UKUR] kartu penyihir dan bola */
+  --ng-panel-ungu2:  #dbddfb;     /* [UKUR] */
+  --ng-panel-putih:  #f4f8ff;     /* [TURUNAN] isi kartu, terang di atas */
+  --ng-panel-tepi:   rgba(255,255,255,.85);   /* [TURUNAN] garis terang tipis di tepi */
+
+  /* ---- Area peta (gelap) dan HUD ---- */
+  --ng-hutan-terang: #b4b88d;     /* [UKUR] persentil 85 peta hutan */
+  --ng-hutan:        #759357;     /* [UKUR] median */
+  --ng-hutan-gelap:  #3a6542;     /* [UKUR] persentil 15 */
+  --ng-salju-terang: #d6e7ff;     /* [UKUR] */
+  --ng-salju:        #99b1e1;     /* [UKUR] */
+  --ng-salju-gelap:  #456daa;     /* [UKUR] */
+  --ng-berapi-terang: #dd896a;    /* [UKUR] */
+  --ng-berapi-lantai: #935b50;    /* [UKUR] */
+  --ng-berapi-gelap:  #6e3a2a;    /* [UKUR] */
+  --ng-lava:         #ff7a1f;     /* [USULAN] cahaya aliran lava (oranye terang di gambar peta) */
+  --ng-hud-gelap:    rgba(18,24,60,.58);   /* [USULAN] latar teks HUD di atas peta ("sedikit gelap di area peta") */
+
+  /* ---- Permata bola (orb): tepi gelap, isi, kilau ---- */
+  --ng-orb-ungu-tepi:   #4a0e86;  --ng-orb-ungu:   #8a35d8;  --ng-orb-ungu-kilau:   #e2c6ff;   /* [UKUR+TURUNAN] */
+  --ng-orb-biru-tepi:   #1a5fb0;  --ng-orb-biru:   #3aa0ea;  --ng-orb-biru-kilau:   #d4ecff;
+  --ng-orb-jingga-tepi: #b33a04;  --ng-orb-jingga: #f56a14;  --ng-orb-jingga-kilau: #ffd9a8;
+  --ng-orb-hijau-tepi:  #4f8a0e;  --ng-orb-hijau:  #7cc61e;  --ng-orb-hijau-kilau:  #e3f5b8;
+  /* pemetaan jenis bilangan -> warna orb (disetujui: ungu gelap tidak dipakai) */
+  --ng-jenis-asli:     var(--ng-orb-hijau);
+  --ng-jenis-bulat:    var(--ng-orb-biru);
+  --ng-jenis-desimal:  var(--ng-orb-jingga);
+  --ng-jenis-pecahan:  var(--ng-orb-ungu);
+
+  /* ---- Teks ---- */
+  --ng-teks:         #1d2f63;     /* [USULAN] teks gelap di panel terang (navy, selaras dengan pil biru) */
+  --ng-teks-kecil:   #3a4f8a;     /* [USULAN] subjudul */
+  --ng-teks-terang:  #ffffff;
+  --ng-teks-bayang:  rgba(10,20,60,.45);
+
+  /* ---- Tombol (turunan dari pil kapsul; warna tombol = USULAN) ---- */
+  --ng-tombol-utama-atas:  #ff8a3a;   --ng-tombol-utama:  #e65328;   --ng-tombol-utama-tepi:  #8f2a0d;   /* jingga dari chip Baranji */
+  --ng-tombol-kedua-atas:  #4ea3f0;   --ng-tombol-kedua:  #2b62a4;   --ng-tombol-kedua-tepi:  #173d70;   /* biru dari pil judul */
+  --ng-tombol-khusus-atas: #8f78d6;   --ng-tombol-khusus: #5e4ba1;   --ng-tombol-khusus-tepi: #3a2a70;   /* ungu: "Lihat jawabanmu" */
+  --ng-tombol-pasif-atas:  #9aa6c8;   --ng-tombol-pasif:  #6f7ca3;   --ng-tombol-pasif-tepi:  #46507a;   /* netral biru-abu */
+
+  /* ---- Bentuk ---- */
+  --ng-r-panel:   22px;           /* [UKUR] sudut kartu di gambar ±20–24 px pada lebar 1500 */
+  --ng-r-pil:     999px;          /* [UKUR] semua label berbentuk kapsul penuh */
+  --ng-r-tombol:  999px;          /* [TURUNAN] kapsul seperti pil */
+  --ng-r-kecil:   12px;
+  --ng-tepi-tombol: 3px;          /* [USULAN] "garis tepi tebal bernuansa permata" */
+  --ng-tepi-panel:  2px;
+
+  /* ---- Bayangan dan kilau (cahaya dari atas) ---- */
+  --ng-bayang-panel:  0 8px 22px rgba(30,50,110,.20);
+  --ng-bayang-pil:    0 3px 8px rgba(20,40,100,.28);
+  --ng-bayang-tombol: 0 4px 0 var(--ng-tepi-bawah, rgba(0,0,0,.25)), 0 10px 14px rgba(10,20,60,.30);
+  --ng-kilau-atas:    inset 0 2px 0 rgba(255,255,255,.65);          /* garis kilau di tepi atas */
+  --ng-kilau-lembut:  linear-gradient(180deg, rgba(255,255,255,.42), rgba(255,255,255,0));
+
+  /* ---- Huruf ---- */
+  --ng-huruf: "Nunito","Poppins","Segoe UI","Trebuchet MS",Roboto,"Helvetica Neue",Arial,sans-serif;   /* [USULAN] bulat dan tebal seperti gambar; tanpa berkas huruf luar */
+  --ng-huruf-emoji: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+  --ng-berat-judul: 800;
+  --ng-berat-teks:  600;
+  --ng-ukuran-judul: 28px;  --ng-ukuran-sub: 18px;  --ng-ukuran-teks: 16px;  --ng-ukuran-kecil: 13px;
+
+  /* ---- Jarak dan sentuhan ---- */
+  --ng-s1: 4px; --ng-s2: 8px; --ng-s3: 12px; --ng-s4: 16px; --ng-s5: 24px;
+  --ng-sentuh-min: 48px;          /* tombol utama minimal 48 px, lainnya minimal 44 px */
+}
+
+/* ---------- Komponen contoh (untuk pratinjau; dipasang ke game di Tahap 3) ---------- */
+.ng-pil {
+  display: inline-flex; align-items: center; gap: var(--ng-s2); padding: 6px 16px;
+  border-radius: var(--ng-r-pil); color: var(--ng-pil-teks); font: var(--ng-berat-judul) 18px var(--ng-huruf);
+  background: linear-gradient(180deg, var(--ng-pil-biru-atas), var(--ng-pil-biru));
+  box-shadow: var(--ng-kilau-atas), var(--ng-bayang-pil); text-shadow: 0 1px 0 var(--ng-teks-bayang);
+}
+.ng-pil.ungu { background: linear-gradient(180deg, var(--ng-pil-ungu-atas), var(--ng-pil-ungu)); }
+.ng-chip { display: inline-block; padding: 3px 14px; border-radius: var(--ng-r-pil); color: #fff; font: var(--ng-berat-judul) 15px var(--ng-huruf); box-shadow: var(--ng-kilau-atas), var(--ng-bayang-pil); }
+.ng-chip.es { background: var(--ng-es); } .ng-chip.api { background: var(--ng-api); } .ng-chip.angin { background: var(--ng-angin); } .ng-chip.sihir { background: var(--ng-sihir); }
+.ng-panel {
+  border-radius: var(--ng-r-panel); padding: var(--ng-s4); color: var(--ng-teks); font: var(--ng-berat-teks) var(--ng-ukuran-teks) var(--ng-huruf);
+  background: linear-gradient(180deg, var(--ng-panel-putih), var(--ng-panel-biru));
+  border: var(--ng-tepi-panel) solid var(--ng-panel-tepi); box-shadow: var(--ng-bayang-panel);
+}
+.ng-panel.ungu { background: linear-gradient(180deg, #efeaff, var(--ng-panel-ungu)); }
+.ng-tombol {
+  --atas: var(--ng-tombol-utama-atas); --isi: var(--ng-tombol-utama); --tepi: var(--ng-tombol-utama-tepi); --ng-tepi-bawah: var(--ng-tombol-utama-tepi);
+  position: relative; min-height: var(--ng-sentuh-min); padding: 8px 22px; cursor: pointer; color: #fff;
+  font: var(--ng-berat-judul) 20px var(--ng-huruf); border: var(--ng-tepi-tombol) solid var(--tepi); border-radius: var(--ng-r-tombol);
+  background: linear-gradient(180deg, var(--atas), var(--isi)); box-shadow: var(--ng-kilau-atas), var(--ng-bayang-tombol);
+  text-shadow: 0 2px 0 var(--tepi), 0 0 6px var(--ng-teks-bayang);
+}
+.ng-tombol::after { content: ""; position: absolute; left: 12px; right: 12px; top: 4px; height: 36%; border-radius: 999px; background: var(--ng-kilau-lembut); pointer-events: none; }
+.ng-tombol:active { transform: translateY(3px); box-shadow: var(--ng-kilau-atas), 0 1px 0 var(--tepi); }
+.ng-tombol.kedua  { --atas: var(--ng-tombol-kedua-atas);  --isi: var(--ng-tombol-kedua);  --tepi: var(--ng-tombol-kedua-tepi);  --ng-tepi-bawah: var(--ng-tombol-kedua-tepi); }
+.ng-tombol.khusus { --atas: var(--ng-tombol-khusus-atas); --isi: var(--ng-tombol-khusus); --tepi: var(--ng-tombol-khusus-tepi); --ng-tepi-bawah: var(--ng-tombol-khusus-tepi); }
+.ng-tombol.pasif  { --atas: var(--ng-tombol-pasif-atas);  --isi: var(--ng-tombol-pasif);  --tepi: var(--ng-tombol-pasif-tepi);  --ng-tepi-bawah: var(--ng-tombol-pasif-tepi); font-size: 18px; }
+.ng-hud { display: inline-block; padding: 4px 14px; border-radius: var(--ng-r-pil); background: var(--ng-hud-gelap); color: #fff; font: var(--ng-berat-judul) 18px var(--ng-huruf); }
+.ng-orb { --tepi: var(--ng-orb-hijau-tepi); --isi: var(--ng-orb-hijau); --kilau: var(--ng-orb-hijau-kilau);
+  display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; font: 800 24px var(--ng-huruf); color: var(--ng-teks);
+  background: radial-gradient(circle at 35% 30%, var(--kilau) 0, var(--isi) 45%, var(--tepi) 100%); box-shadow: inset 0 -4px 6px rgba(0,0,0,.18), 0 4px 8px rgba(10,20,60,.3); }
+.ng-orb.bulat   { --tepi: var(--ng-orb-biru-tepi);   --isi: var(--ng-orb-biru);   --kilau: var(--ng-orb-biru-kilau); }
+.ng-orb.desimal { --tepi: var(--ng-orb-jingga-tepi); --isi: var(--ng-orb-jingga); --kilau: var(--ng-orb-jingga-kilau); }
+.ng-orb.pecahan { --tepi: var(--ng-orb-ungu-tepi);   --isi: var(--ng-orb-ungu);   --kilau: var(--ng-orb-ungu-kilau); }
+.ng-orb b { display: flex; align-items: center; justify-content: center; width: 62%; height: 62%; border-radius: 50%; background: #fff; box-shadow: inset 0 2px 3px rgba(0,0,0,.18); }   /* cakram datar agar angka terbaca */
+@media (prefers-reduced-motion: reduce) { .ng-tombol { transition: none; } }
