@@ -96,6 +96,17 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
   .big{margin-top:12px}
   .note{font-size:12px;line-height:1.35;margin-top:8px}
 }
+@media (max-width:599px) and (max-height:700px){          /* HP tegak pendek (±640 tinggi): menu dirapatkan lagi supaya tampil utuh tanpa digulir; target sentuh tetap ≥ 44 px */
+  .panel{padding:12px 14px 14px}
+  .sub{font-size:13px;line-height:1.3}
+  h3{margin:8px 0 4px;font-size:12px}
+  .seg button{min-height:44px;padding:6px 8px;font-size:14px}
+  .chips{grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .chip{min-height:44px;padding:4px 2px;font-size:13px;line-height:1.1}
+  .big{margin-top:10px}
+  .tg{min-height:44px}
+  #setbar{margin-bottom:4px}
+}
 @media (max-height:400px) and (min-width:600px){          /* HP mendatar paling pendek (±360): dirapatkan lagi supaya menu dan layar selesai tidak perlu digulir */
   .panel{padding:6px 12px 8px}
   h1{font-size:20px} h2{font-size:19px;margin-bottom:2px}
@@ -266,6 +277,18 @@ body.noefek .ez-bintang.pop .star{animation:none}
 .ez-slot.off>*{filter:grayscale(1);opacity:.35}
 .bt,.ik{width:1.1em;height:1.1em;vertical-align:-.2em}
 .ez-stat .bt{width:1.25em;height:1.25em}
+@media (max-width:599px) and (max-height:820px){          /* HP tegak pendek: hanya panel, gambar naga, dan bintang yang mengecil; tombol tidak diubah, supaya semua tombol muat tanpa digulir */
+  .ez{padding:12px 16px 16px}
+  .ez-hero{width:84px;height:84px;padding-bottom:20px;font-size:42px;margin-top:-4px;border-width:3px}
+  .ez-hero img{height:54px;max-width:66px}
+  .ez-hero svg.ik{width:40px;height:40px}
+  .ez-hero .len{font-size:26px;top:-6px}
+  .ez-pita{margin-top:-24px}
+  .ez-bintang{height:50px;margin-top:2px}.ez-bintang .star{width:42px;height:40px}.ez-bintang .star.mid{width:52px;height:49px;margin-bottom:6px}
+  .ez-info{margin-top:8px;gap:8px}.ez-plat{padding:5px 6px 6px}.ez-plat strong{font-size:24px}.ez-slot{width:32px;height:32px}.ez-slot img{height:22px}
+  .ez-stat{margin-top:8px;padding:4px 6px;font-size:12px;line-height:1.4}
+  .ez-tombol{margin-top:12px;gap:8px}
+}
 </style>
 </head>
 <body>
@@ -321,7 +344,6 @@ body.noefek .ez-bintang.pop .star{animation:none}
     </div>
 
     <button type="button" class="btn primary big" id="start">Mulai Petualangan</button>
-    <p class="note">Arahkan (di HP: tahan jari) ke bola: kotak di panel mengikuti. Klik (di HP: lepas jari) untuk menembak; lepas di tempat kosong = batal. Ketuk naga: tukar peluru. Kamu menjaga 3 telur: salah jawab atau bola sampai di sarang membuat satu telur dicuri. Salah juga mempercepat jalur.</p>
   </div></div></div>
 </div>
 
@@ -343,8 +365,6 @@ body.noefek .ez-bintang.pop .star{animation:none}
       <div class="ez-hero" id="ezHero"></div>
       <div class="ez-pita" id="ezPita"><div class="tail l"></div><div class="tail r"></div><div class="fold l"></div><div class="fold r"></div><div class="band"><b id="endTitle"></b></div></div>
       <div class="ez-bintang pop" id="ezBintang"></div>
-      <div class="ez-rule"></div>
-      <p class="ez-pesan" id="endMsg"></p>
     </div>
     <div class="ez-kanan">
       <div class="ez-info" id="ezInfo"></div>
@@ -963,7 +983,7 @@ function startStage(i) {
   var nOps = G.ops.filter(function (k) { return OPDOM[k] === 'n'; });
   G.M = nOps.length ? Math.max.apply(null, nOps.map(maxNum)) : 9;
   G.doms = []; G.ops.forEach(function (k) { if (G.doms.indexOf(OPDOM[k]) < 0) G.doms.push(OPDOM[k]); });
-  G.shots = []; G.parts = []; G.pops = []; G.pairs = [];
+  G.shots = []; G.parts = []; G.pops = []; G.verdict = null; G.pairs = [];
   G.time = 0; G.cool = 0; G.score = 0; G.combo = 0; G.bestCombo = 0;
   G.fired = 0; G.hits = 0; G.mistakes = 0; G.speedMul = 1; G.keyMatches = 0; G.wrongStreak = 0;
   G.lost = false; G.chk = 0; G.bossT = 0; G.bossPulse = 0;
@@ -1052,7 +1072,7 @@ function endStage(win, why) {
   }
   $('ezPita').className = 'ez-pita' + (win ? '' : ' kalah');
   $('ezHero').innerHTML = hero + '<span class="len">' + badge + '</span>';
-  $('endTitle').textContent = title; $('endMsg').textContent = msg;
+  $('endTitle').textContent = title;
   var sh = ''; if (win) for (i = 0; i < 3; i++) sh += '<span class="star' + (i === 1 ? ' mid' : '') + (i < stars ? '' : ' off') + '"><i></i><u></u></span>';
   $('ezBintang').innerHTML = sh; $('ezBintang').classList.toggle('hidden', !win);
   $('ezBintang').classList.remove('pop'); void $('ezBintang').offsetWidth; $('ezBintang').classList.add('pop');
@@ -1087,7 +1107,7 @@ function mistake(x, y, label) {
   G.speedMul = Math.min(MAX_SPEEDUP, 1 + MISTAKE_SPEEDUP * G.mistakes);
   G.okStreak = 0; sfx('salah');
   popup(x, y - 30, 'Belum pas', '#ff8a80', { size: 20 });
-  if (label) popup(x, Math.max(popMin(),y - 85), label, '#ffb199', { size: 30, rate: 0.5, rise: 14 });
+  if (label) { if (gk()) G.verdict = { t: label, ok: false, life: 1 }; else popup(x, Math.max(popMin(),y - 85), label, '#ffb199', { size: 30, rate: 0.5, rise: 14 }); }
   if (G.shield && G.protT <= 0 && G.eggs > 0) {      // perisai menahan satu kesalahan, lalu pecah
     G.shield = false; var np = nestPos(); burst(np.x, np.y, '#ffd54a', 18);
     popup(np.x, Math.max(popMin(),np.y - 120), 'Perisai pecah! Telur aman', '#ffe58a', { size: 24, rate: 0.7 });
@@ -1324,7 +1344,8 @@ function removePair(a, b) {                 // hapus 2 bola bersebelahan yang co
   addScore(2, mx, my); sfx('ledak', Math.pow(1.06, Math.min(Math.max(G.combo - 1, 0), 6)));   // makin panjang rentetan, makin tinggi nadanya
   G.wrongStreak = 0; G.pairsDone++;
   if (a.egg || b.egg) { collectEgg(mx + (a.ox + b.ox) / 2, my + (a.oy + b.oy) / 2); G.eggPhase = 2; }
-  popup(mx, Math.max(popMin(), my - 85), fullEq(a.val, b.val, a.dom) + ' ✓', '#9be37a', { size: FIXON() ? 24 : 30, rate: 0.5, rise: 14 });
+  if (gk()) G.verdict = { t: fullEq(a.val, b.val, a.dom) + ' ✓', ok: true, life: 1 };      // gaya kartun: info jawaban tampil di dalam panel atas
+  else popup(mx, Math.max(popMin(), my - 85), fullEq(a.val, b.val, a.dom) + ' ✓', '#9be37a', { size: FIXON() ? 24 : 30, rate: 0.5, rise: 14 });
   G.balls.splice(lo, 2);
   var f = G.balls[lo - 1], k = G.balls[lo];
   if (f && k) G.pairs.push({ f: f, k: k, t: 0 });
@@ -1438,6 +1459,7 @@ function updateFx(dt) {
     var q = G.pops[i]; q.y -= q.rise * dt; q.life -= dt * q.rate;
     if (q.life <= 0) G.pops.splice(i, 1);
   }
+  if (G.verdict) { G.verdict.life -= dt / 1.9; if (G.verdict.life <= 0) G.verdict = null; }   // info jawaban di panel hilang sendiri setelah ±2 detik
   if (G.bossPulse > 0) G.bossPulse -= dt;
   if (G.roar > 0) G.roar -= dt;
   for (i = G.steals.length - 1; i >= 0; i--) { G.steals[i].t += dt; if (G.steals[i].t > STEAL_T) G.steals.splice(i, 1); }
@@ -2234,7 +2256,7 @@ function hintLines() {                   // dua baris untuk layout lebar
 function drawLivePanel(cx) {
   var K = G.key, op = K.op, dm = OPDOM[K.op], hc = DOMCOL[dm], sym = SYM[op], nb = gayaBaru(), kk = gk(), tx = kk ? KT.garis : nb ? GAYA.teks : '#4a2b00';
   var ORBISI = { n: '#7cc61e', i: '#3aa0ea', d: '#f56a14', f: '#8a35d8' }, ORBTEPI = { n: '#4f8a0e', i: '#1a5fb0', d: '#b33a04', f: '#4a0e86' };
-  var fix = FIXON() && K.c !== undefined, by = 54, R = 20, PW = 336;
+  var fix = FIXON() && K.c !== undefined, by = 54, R = 20, PW = kk ? 316 : 336;
   var s = null, x = null, auto = false;
   if (G.mode === 'intro' && G.intro) {
     s = { val: G.intro.a, dom: G.intro.dom }; if (G.tourStep >= 1) x = { val: G.intro.b, dom: G.intro.dom }; auto = true;
@@ -2244,14 +2266,14 @@ function drawLivePanel(cx) {
   }
   var ok = !!(x && !x.bad && s && matches(s.val, x.val, op, K.k));
   ctx.textAlign = 'center';
-  if (kk) { rr(cx - PW / 2, 18, PW, 96, 28); ctx.fillStyle = KT.garis; ctx.fill(); }      // bayangan padat di bawah panel
-  rr(cx - PW / 2, 12, PW, 96, nb ? 28 : 18);
-  if (kk) ctx.fillStyle = KT.krem;
-  else if (nb) { var pg = ctx.createLinearGradient(0, 12, 0, 108); pg.addColorStop(0, GAYA.panelAtas); pg.addColorStop(1, GAYA.panelBawah); ctx.fillStyle = pg; } else ctx.fillStyle = 'rgba(255,229,138,.96)';
-  ctx.fill();
-  ctx.lineWidth = kk ? 4 : 3; ctx.strokeStyle = kk ? KT.garis : nb ? GAYA.tepi : '#b8801a';
-  if (G.mode === 'intro') { ctx.lineWidth = 5 + 2 * Math.sin(G.introT * 8); ctx.strokeStyle = kk ? KT.kuning : '#fff'; }
-  ctx.stroke();
+  if (!kk) {                                // gaya kartun: latar panel digambar sekali oleh drawHUD (satu panel atas); gaya lama menggambar kotaknya sendiri
+    rr(cx - PW / 2, 12, PW, 96, nb ? 28 : 18);
+    if (nb) { var pg = ctx.createLinearGradient(0, 12, 0, 108); pg.addColorStop(0, GAYA.panelAtas); pg.addColorStop(1, GAYA.panelBawah); ctx.fillStyle = pg; } else ctx.fillStyle = 'rgba(255,229,138,.96)';
+    ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = nb ? GAYA.tepi : '#b8801a';
+    if (G.mode === 'intro') { ctx.lineWidth = 5 + 2 * Math.sin(G.introT * 8); ctx.strokeStyle = '#fff'; }
+    ctx.stroke();
+  }
   var tail = fix ? [sym, fmtP(K.c, dm), '=', fmt(K.T, dm)] : ['=', fmt(K.k, dm)];
   ctx.font = 'bold 32px ' + FONT;
   var tw = tail.map(function (t) { return t.indexOf('/') > 0 ? 38 : ctx.measureText(t).width; });
@@ -2285,13 +2307,17 @@ function drawLivePanel(cx) {
     px += tw[i] + gap;
   }
   G.tailBox = fix ? { x0: cx + (x0 + slotW + 12 - cx) * f, x1: cx + (px - gap - cx) * f } : null;
-  if ((midOn() || auto) && s) {
+  var vd = (kk && G.verdict && G.mode === 'play') ? G.verdict : null;      // info jawaban benar/salah setelah menembak: tampil di dalam panel, di bawah soal
+  if (vd) {
+    ctx.textAlign = 'center'; ctx.font = '900 ' + fsz(15) + 'px ' + FONT; ctx.fillStyle = vd.ok ? '#1B7F37' : '#C0303F'; ctx.globalAlpha = Math.min(1, vd.life * 3);
+    ctx.fillText(vd.t, cx, by + 44); ctx.globalAlpha = 1;
+  } else if ((midOn() || auto) && s) {
     ctx.textAlign = 'center'; ctx.font = 'bold 15px ' + FONT; ctx.fillStyle = tx;
     var line;
     if (x && !x.bad) line = pairEq(s.val, x.val, op, dm).replace(' tidak habis dibagi', ' tak habis');
     else if (x) line = 'Beda jenis bilangan';
     else { line = auto ? '' : 'Bidik sebuah bola'; ctx.globalAlpha = 0.55; }
-    ctx.fillText(line, x0 + slotW / 2, by + 44); ctx.globalAlpha = 1;
+    ctx.fillText(line, kk ? cx : x0 + slotW / 2, by + 44); ctx.globalAlpha = 1;
   }
   ctx.restore(); ctx.textBaseline = 'alphabetic';
 }
@@ -2348,11 +2374,10 @@ function drawHUD() {
   if (st.boss || LAYOUT === 'lebar' || gayaBaru()) {      // stage 3 (ikon penyihir besar) dan semua stage di layout lebar (jalur lewat tepat di bawah HUD): teks HUD diberi latar gelap tembus pandang
     var bu = fsz(15) / 15, pb = (G.mode === 'play' ? 38 + 70 * bu + 14 : 38 + 46 * bu + 10), lb = 110 + (fsz(13) - 13) * 0.6 + 12;
     ctx.fillStyle = gayaBaru() ? GAYA.hud : 'rgba(14,4,28,.55)'; var rh = gayaBaru() ? 20 : 12;
-    if (hk) {                                                       // kapsul krem bergaris tebal dengan bayangan padat
-      [[6, 12, 156, pb - 12], [W - 146, 72, 140, lb - 72]].forEach(function (q) {
-        rr(q[0], q[1] + 4, q[2], q[3], 18); ctx.fillStyle = KT.garis; ctx.fill();
-        rr(q[0], q[1], q[2], q[3], 18); ctx.fillStyle = KT.krem; ctx.fill(); ctx.lineWidth = 3.5; ctx.strokeStyle = KT.garis; ctx.stroke();
-      });
+    if (hk) {                                                       // satu panel atas krem bergaris tebal dengan bayangan padat: info kiri, soal dan info jawaban di tengah, waktu dan jeda di kanan
+      rr(6, 13, W - 12, 108, 22); ctx.fillStyle = KT.garis; ctx.fill();
+      rr(6, 8, W - 12, 108, 22); ctx.fillStyle = KT.krem; ctx.fill();
+      ctx.lineWidth = G.mode === 'intro' && SEL.live ? 5 + 2 * Math.sin(G.introT * 8) : 4; ctx.strokeStyle = G.mode === 'intro' && SEL.live ? KT.kuning : KT.garis; ctx.stroke();
     } else {
       rr(6, 12, 156, pb - 12, rh); ctx.fill();
       rr(W - 146, 72, 140, lb - 72, rh); ctx.fill();
@@ -2360,8 +2385,9 @@ function drawHUD() {
   }
   ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
   ctx.fillStyle = htc; ctx.font = (hk ? '900 ' : 'bold ') + '22px ' + FONT;
-  ctx.fillText('Skor ' + (G.totalScore + ((G.mode === 'end' && !G.lost) ? 0 : G.score)), 20, 38);   // setelah menang, skor stage sudah masuk ke skor total
+  ctx.fillText('Skor ' + (G.totalScore + ((G.mode === 'end' && !G.lost) ? 0 : G.score)), 20, hk ? 32 : 38);   // setelah menang, skor stage sudah masuk ke skor total
   var u = fsz(15) / 15, ry2 = 38 + 24 * u, ry3 = 38 + 46 * u, ry4 = 38 + 70 * u;   // di layar kecil teks dan jarak barisnya ikut membesar
+  if (hk) { var spb = fsz(15) * 1.32; ry2 = 32 + spb; ry3 = ry2 + spb; ry4 = ry3 + fsz(15) * 1.25; }   // panel satu blok lebih pendek: jarak baris dirapatkan, tepi bawah panel tetap di y 116
   ctx.font = (hk ? '800 ' : '') + fsz(15) + 'px ' + FONT; ctx.fillStyle = hk ? KT.garis : '#ffffff'; ctx.globalAlpha = hk ? 1 : 0.85;
   ctx.fillText('Sisa bola ' + G.balls.length, 20, ry2);
   ctx.fillText('Stage ' + G.stage + ' / 3', 20, ry3);
@@ -2380,10 +2406,11 @@ function drawHUD() {
   }
   ctx.textAlign = 'right'; ctx.fillStyle = htc;
   ctx.font = (hk ? '900 ' : 'bold ') + (G.timed ? 20 : fsz(15)) + 'px ' + FONT;
-  if (hk && G.timed) { var tt = fmtTime(TIME_LIMIT - G.time); ctx.fillText(tt, W - 20, 90); ktJam(ctx, W - 20 - ctx.measureText(tt).width - 16, 83, 8, KT.garis); }
-  else ctx.fillText(G.timed ? '⏱ ' + fmtTime(TIME_LIMIT - G.time) : '∞ Tanpa waktu', W - 20, 90);
+  var yw = hk ? 84 : 90;                                              // baris waktu dan laju sedikit naik di panel satu blok
+  if (hk && G.timed) { var tt = fmtTime(TIME_LIMIT - G.time); ctx.fillText(tt, W - 20, yw); ktJam(ctx, W - 20 - ctx.measureText(tt).width - 16, yw - 7, 8, KT.garis); }
+  else ctx.fillText(G.timed ? '⏱ ' + fmtTime(TIME_LIMIT - G.time) : '∞ Tanpa waktu', W - 20, yw);
   ctx.font = (hk ? '800 ' : '') + fsz(13) + 'px ' + FONT; ctx.globalAlpha = hk ? 1 : 0.8;
-  ctx.fillText('Laju ×' + G.speedMul.toFixed(2), W - 20, 110 + (fsz(13) - 13) * 0.6); ctx.globalAlpha = 1;
+  ctx.fillText('Laju ×' + G.speedMul.toFixed(2), W - 20, (hk ? 103 : 110) + (fsz(13) - 13) * 0.6); ctx.globalAlpha = 1;
   var cr = Math.max(22, 17 / SCALE), bw = cr * 0.26, bh = cr * 0.86;     // tombol jeda (⏸) di tempat tombol ✕ dulu; di layar kecil ikut membesar
   if (hk) { ctx.beginPath(); ctx.arc(CLOSE.x, CLOSE.y + 4, cr, 0, 6.2832); ctx.fillStyle = KT.garis; ctx.fill(); }
   ctx.beginPath(); ctx.arc(CLOSE.x, CLOSE.y, cr, 0, 6.2832); ctx.fillStyle = hk ? KT.krem : 'rgba(0,0,0,.35)'; ctx.fill();
@@ -2643,7 +2670,7 @@ function syncLayout() {                    // pasang layout yang diminta layar; 
 }
 function refreshScene() {                  // setelah layout berganti di luar permainan: hitung ulang posisi bola dari jaraknya di jalur
   G.balls.forEach(function (b) { b.ox = 0; b.oy = 0; if (b.vis > -CFG.D) { var p = posAt(b.vis); b.x = p.x; b.y = p.y; } });
-  G.shots = []; G.parts = []; G.pops = []; G.pairs = []; G.swap = null;
+  G.shots = []; G.parts = []; G.pops = []; G.verdict = null; G.pairs = []; G.swap = null;
 }
 function resize() {
   var vw = window.innerWidth, vh = window.innerHeight;
