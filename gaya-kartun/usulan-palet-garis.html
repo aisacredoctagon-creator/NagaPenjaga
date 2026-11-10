@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Usulan palet dan gaya garis — Naga Penjaga (kartun garis tebal)</title>
+<style>
+:root{
+  --garis:#1D2B3A;          /* satu-satunya warna garis tepi di seluruh game */
+  --krem:#FFF8E7;           /* panel, kilau, angka */
+  --kuning:#FFD23F;         /* peluru */
+  --jingga:#FF8A2A; --biru:#2F7DF0; --ungu:#9B5DE5; --pasif:#9AA8BD;
+  --bg:#EEF3F8; --teks:#1D2B3A; --lembut:#5A6B7D;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--teks);font-family:"Nunito","Poppins","Segoe UI",system-ui,sans-serif;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:26px;margin:0 0 4px} h2{font-size:20px;margin:34px 0 4px} h3{font-size:15px;margin:14px 0 6px}
+p{margin:4px 0 10px} .kecil{font-size:13px;color:var(--lembut)}
+.kartu{background:#fff;border:3px solid var(--garis);border-radius:16px;padding:14px 16px;box-shadow:0 4px 0 var(--garis)}
+.baris{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+.sw{width:112px}
+.sw i{display:block;height:54px;border:3px solid var(--garis);border-radius:12px}
+.sw b{display:block;font-size:13px;margin-top:4px;line-height:1.2} .sw span{font-size:12px;color:var(--lembut);font-family:ui-monospace,Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:2px solid #d5deea;padding:7px 8px;text-align:left;vertical-align:top} th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--lembut)}
+.tombol{font:inherit;font-weight:900;font-size:20px;color:#fff;border:4px solid var(--garis);border-radius:999px;padding:10px 26px;cursor:default;
+  text-shadow:-2px -2px 0 var(--garis),2px -2px 0 var(--garis),-2px 2px 0 var(--garis),2px 2px 0 var(--garis),0 3px 0 var(--garis);
+  box-shadow:0 6px 0 var(--garis),inset 0 4px 0 rgba(255,255,255,.45)}
+.t-utama{background:linear-gradient(#FFA24D,#FF8A2A)} .t-kedua{background:linear-gradient(#5B9AF5,#2F7DF0)} .t-khusus{background:linear-gradient(#B07BEB,#9B5DE5)} .t-pasif{background:linear-gradient(#B3BFD0,#9AA8BD)}
+.ok{color:#1c7a3a;font-weight:800} .gagal{color:#b3261e;font-weight:800}
+.stage{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+svg{display:block}
+.pilih li{margin:6px 0}
+code{background:#e3eaf3;padding:1px 5px;border-radius:5px;font-size:.92em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Usulan palet dan gaya garis</h1>
+<p class="kecil">Naga Penjaga · gaya "kartun garis tebal" · cabang <code>redesign-kartun</code>. Ini usulan, belum dipasang di game. Setiap contoh di bawah digambar dengan SVG; di game akan digambar ulang di kanvas dengan bentuk dan angka yang sama.</p>
+
+<h2>1. Aturan garis (satu aturan untuk semua)</h2>
+<div class="kartu">
+<table>
+<tr><th>Benda</th><th>Tebal garis tepi</th><th>Catatan</th></tr>
+<tr><td>Bola angka, peluru</td><td><b>7% diameter</b> (batas 6–8%)</td><td>Bola 52 px → garis ±3,6 px. Garis selalu di luar isi, tidak memakan area angka.</td></tr>
+<tr><td>Angka di bola</td><td>tepi gelap ±9% ukuran huruf</td><td>Angka putih bertepi gelap (peluru: angka gelap tanpa tepi). Huruf Nunito tebal.</td></tr>
+<tr><td>Naga, penyihir, telur, sarang</td><td>4 px (ukuran dunia 600 px)</td><td>Garis sedikit lebih tebal di sisi bawah-kanan supaya terasa volume.</td></tr>
+<tr><td>Jalur</td><td>tepi gelap 5 px, lalu dasar, lalu tengah lebih terang</td><td>Jalur selalu terpisah jelas dari tanah, apa pun warna peta.</td></tr>
+<tr><td>Panel, tombol, kartu</td><td>4 px, dengan bayangan padat 5–6 px di bawah</td><td>Tombol terlihat "bisa ditekan"; saat ditekan bayangan hilang dan tombol turun.</td></tr>
+<tr><td>Hiasan latar (pohon, batu, kristal)</td><td>3 px, warna garis sama</td><td>Latar tidak boleh lebih tajam dari bola: hiasan memakai warna lebih kalem, bola paling jenuh.</td></tr>
+</table>
+<p class="kecil">Warna garis hanya satu: <code>#1D2B3A</code> (biru-hitam hangat). Tidak ada garis hitam murni dan tidak ada garis berwarna.</p>
+</div>
+
+<h2>2. Empat jenis bilangan: warna + bentuk penanda</h2>
+<p>Warna tetap sama dengan sekarang (hijau, biru, jingga, ungu) supaya yang sudah dikenal pemain tidak berubah. Biru bulat dipakai <code>#2F7DF0</code> sesuai prompt. <b>Penanda bentuk</b> di tepi kanan-bawah bola membuat jenis tetap terbaca bagi anak yang sulit membedakan warna.</p>
+<div class="kartu"><div class="baris" id="empat"></div>
+<table style="margin-top:12px">
+<tr><th>Jenis</th><th>Warna (atas → bawah)</th><th>Penanda</th><th>Contoh teks</th></tr>
+<tr><td>Bilangan asli</td><td>hijau <code>#5BD66F</code> → <code>#2FA84A</code></td><td>lingkaran ●</td><td>7</td></tr>
+<tr><td>Bilangan bulat</td><td>biru <code>#5B9AF5</code> → <code>#2F7DF0</code></td><td>belah ketupat ◆</td><td>−3</td></tr>
+<tr><td>Desimal</td><td>jingga <code>#FFB45B</code> → <code>#FF8A2A</code></td><td>segitiga ▲</td><td>0,5</td></tr>
+<tr><td>Pecahan</td><td>ungu <code>#B885F0</code> → <code>#9B5DE5</code></td><td>persegi ■</td><td>3/4 (bersusun)</td></tr>
+</table>
+<p class="kecil">Kilau putih kecil selalu di kiri atas. Bola tidak punya bayangan lunak: hanya bayangan padat setengah lingkaran di bawah (gaya kartun).</p>
+</div>
+
+<h3>Ukuran nyata di layar 360 px (uji keterbacaan)</h3>
+<div class="kartu"><div class="baris" id="ukuran" style="align-items:center;gap:2px"></div>
+<p class="kecil">Dari kiri: 52 px (HP lega), 44 px, 36 px (HP kecil 360 px). Penanda masih terlihat sebagai bentuk berbeda pada 36 px; jika tidak, ukuran penanda dinaikkan menjadi 30% diameter.</p></div>
+
+<h2>3. Peluru dan panel persamaan</h2>
+<div class="kartu"><div class="baris" id="panelbaris" style="align-items:center"></div>
+<p class="kecil">Peluru kuning <code>#FFD23F</code> dengan angka gelap: tidak pernah tertukar dengan bola di jalur. Penanda jenis tetap ada di peluru. Panel krem paling terang di layar, lubang berwarna sesuai jenis bola yang dicari, garis putus-putus gelap.</p></div>
+
+<h2>4. Tombol</h2>
+<div class="kartu"><div class="baris" style="align-items:center;gap:18px;padding-bottom:8px">
+<button class="tombol t-utama">▶ Mulai</button><button class="tombol t-kedua">Lanjut</button><button class="tombol t-khusus">Lihat jawabanmu</button><button class="tombol t-pasif">Menu</button></div>
+<p class="kecil">Teks tombol putih dengan tepi gelap 2 px (kontras terhadap tepi, bukan terhadap warna isi). Jingga = aksi utama, biru = lanjut, ungu = fitur khusus, abu-biru = pasif. Tinggi minimal 48 px.</p></div>
+
+<h2>5. Palet tiap peta</h2>
+<p>Tiap peta memakai tanah kalem + jalur dengan tepi gelap + hiasan bergaris. Bola tetap paling jenuh. Nama peta di prompt ("Hutan Hijau", "Gunung Api") berbeda dari nama yang kini tayang ("Hutan Misterius", "Gunung Berapi"): lihat keputusan di bawah.</p>
+<div class="stage" id="stage"></div>
+
+<h2>6. Naga, telur, penyihir</h2>
+<div class="kartu"><div class="baris" id="makhluk"></div>
+<table style="margin-top:12px">
+<tr><th>Naga penjaga</th><th>Warna dasar</th><th>Warna perut / sayap</th></tr>
+<tr><td>Bayunara (Naga Angin, stage 1)</td><td><code>#4CC36B</code></td><td>krem <code>#FFF1B8</code></td></tr>
+<tr><td>Esvara (Naga Es, stage 2)</td><td><code>#5BC0F0</code></td><td>putih biru <code>#E6F6FF</code></td></tr>
+<tr><td>Baranji (Naga Api, stage 3)</td><td><code>#FF6B3D</code></td><td>kuning <code>#FFD23F</code></td></tr>
+<tr><td>Morvax (penyihir)</td><td>ungu tua <code>#5B3A8C</code></td><td>topi miring dan terlalu besar, hidung bulat; ia mudah tersandung jubahnya sendiri (kelemahan lucu, tidak menakutkan)</td></tr>
+</table>
+<p class="kecil">Gambar naga dan penyihir dari AI nanti dipakai bila berkasnya sudah ada; sebelum itu naga digambar dengan kode memakai warna di atas.</p></div>
+
+<h2>7. Cek kontras</h2>
+<div class="kartu"><table id="kontras"><tr><th>Pasangan</th><th>Rasio</th><th>Target</th><th>Hasil</th></tr></table>
+<p class="kecil">Dihitung dengan rumus WCAG di halaman ini. Angka putih berada di atas isi bola yang sedang, tetapi selalu bertepi gelap, jadi keterbacaan ditentukan oleh tepi (rasio putih terhadap <code>#1D2B3A</code>).</p></div>
+
+<h2>8. Yang perlu Anda putuskan</h2>
+<div class="kartu"><ol class="pilih">
+<li><b>Penanda bentuk</b> (●, ◆, ▲, ■ di tepi bola). Setuju, atau pilih cara lain (mis. ikon kecil di dalam bola)?</li>
+<li><b>Warna empat jenis</b>: tetap hijau/biru/jingga/ungu seperti sekarang?</li>
+<li><b>Tebal garis</b>: 7% diameter untuk bola dan 4 px untuk benda besar. Terlalu tebal / terlalu tipis?</li>
+<li><b>Warna garis tunggal</b> <code>#1D2B3A</code>.</li>
+<li><b>Palet peta</b>: tanah kalem + jalur bertepi gelap seperti contoh. Salju memakai jalur putih-biru, Berapi memakai jalur merah tua (bukan jingga) supaya bola jingga tidak hilang.</li>
+<li><b>Nama peta</b>: pakai yang kini tayang (Hutan Misterius, Gunung Bersalju, Gunung Berapi) atau yang di prompt (Hutan Hijau, Gunung Bersalju, Gunung Api)?</li>
+<li><b>Aset lama</b>: ke-21 gambar WebP gaya konsep tidak dipakai lagi di cabang ini. Gambar naga/telur/sarang/penyihir diganti gambar AI bergaya kartun bila sudah ada; sampai itu, digambar dengan kode. Setuju?</li>
+</ol></div>
+</div>
+
+<script>
+var GARIS = '#1D2B3A', KREM = '#FFF8E7', uid = 0;
+var JENIS = {
+  asli:   { t: '#5BD66F', b: '#2FA84A', m: 'lingkaran', teks: '7' },
+  bulat:  { t: '#5B9AF5', b: '#2F7DF0', m: 'belah', teks: '−3' },
+  desimal:{ t: '#FFB45B', b: '#FF8A2A', m: 'segitiga', teks: '0,5' },
+  pecahan:{ t: '#B885F0', b: '#9B5DE5', m: 'persegi', teks: '3/4' }
+};
+function penanda(cx, cy, s, bentuk, sw) {
+  var h = s / 2, p = 'fill="' + KREM + '" stroke="' + GARIS + '" stroke-width="' + sw + '" stroke-linejoin="round"';
+  if (bentuk === 'lingkaran') return '<circle cx="' + cx + '" cy="' + cy + '" r="' + h + '" ' + p + '/>';
+  if (bentuk === 'belah') return '<polygon points="' + cx + ',' + (cy - h * 1.15) + ' ' + (cx + h * 1.15) + ',' + cy + ' ' + cx + ',' + (cy + h * 1.15) + ' ' + (cx - h * 1.15) + ',' + cy + '" ' + p + '/>';
+  if (bentuk === 'segitiga') return '<polygon points="' + cx + ',' + (cy - h * 1.15) + ' ' + (cx + h * 1.2) + ',' + (cy + h * 0.9) + ' ' + (cx - h * 1.2) + ',' + (cy + h * 0.9) + '" ' + p + '/>';
+  return '<rect x="' + (cx - h) + '" y="' + (cy - h) + '" width="' + s + '" height="' + s + '" rx="' + s * 0.15 + '" ' + p + '/>';
+}
+function bola(d, jenis, peluru) {      // mengembalikan teks SVG sebuah bola (peluru = kuning, angka gelap)
+  var J = JENIS[jenis], id = 'g' + (++uid), pad = d * 0.34, W = d + pad, r = d / 2, sw = d * 0.07, cx = r + pad / 2, cy = r + pad / 2 - pad * 0.1, rr = r - sw / 2;
+  var atas = peluru ? '#FFE680' : J.t, bawah = peluru ? '#FFC21F' : J.b, tc = peluru ? GARIS : '#fff', fs = d * (J.teks.length > 2 ? 0.40 : 0.48);
+  var s = '<svg width="' + W + '" height="' + (W + d * 0.06) + '" viewBox="0 0 ' + W + ' ' + (W + d * 0.06) + '"><defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + atas + '"/><stop offset="1" stop-color="' + bawah + '"/></linearGradient></defs>';
+  s += '<ellipse cx="' + cx + '" cy="' + (cy + r * 1.0 + d * 0.04) + '" rx="' + r * 0.78 + '" ry="' + d * 0.06 + '" fill="' + GARIS + '" opacity=".28"/>';   // bayangan padat di bawah
+  s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + rr + '" fill="url(#' + id + ')" stroke="' + GARIS + '" stroke-width="' + sw + '"/>';
+  s += '<ellipse cx="' + (cx - r * 0.38) + '" cy="' + (cy - r * 0.5) + '" rx="' + r * 0.22 + '" ry="' + r * 0.11 + '" fill="#fff" opacity=".85" transform="rotate(-35 ' + (cx - r * 0.38) + ' ' + (cy - r * 0.5) + ')"/>';
+  if (jenis === 'pecahan') {
+    var fsz = d * 0.3, lw = d * 0.34;
+    ['3', '4'].forEach(function (n, i) { var y = cy + (i ? fsz * 0.92 : -fsz * 0.28), t = '<text x="' + cx + '" y="' + y + '" text-anchor="middle" font-family="Nunito,Poppins,sans-serif" font-weight="900" font-size="' + fsz + '"'; s += t + (peluru ? ' fill="' + tc + '">' : ' fill="#fff" stroke="' + GARIS + '" stroke-width="' + d * 0.07 + '" paint-order="stroke" stroke-linejoin="round">') + n + '</text>'; });
+    s += '<rect x="' + (cx - lw / 2) + '" y="' + (cy - fsz * 0.02) + '" width="' + lw + '" height="' + Math.max(2, d * 0.07) + '" rx="1" fill="' + (peluru ? GARIS : '#fff') + '"' + (peluru ? '' : ' stroke="' + GARIS + '" stroke-width="' + d * 0.03 + '"') + '/>';
+  } else {
+    s += '<text x="' + cx + '" y="' + (cy + fs * 0.36) + '" text-anchor="middle" font-family="Nunito,Poppins,sans-serif" font-weight="900" font-size="' + fs + '"' + (peluru ? ' fill="' + tc + '">' : ' fill="#fff" stroke="' + GARIS + '" stroke-width="' + d * 0.09 + '" paint-order="stroke" stroke-linejoin="round">') + J.teks + '</text>';
+  }
+  s += penanda(cx + r * 0.72, cy + r * 0.72, d * 0.27, J.m, Math.max(1.6, sw * 0.8));
+  return s + '</svg>';
+}
+var el = function (id) { return document.getElementById(id); };
+// 1. empat jenis
+el('empat').innerHTML = Object.keys(JENIS).map(function (k) { return '<div style="text-align:center">' + bola(92, k) + '<div class="kecil"><b>' + k + '</b></div></div>'; }).join('');
+// ukuran nyata
+el('ukuran').innerHTML = [52, 44, 36].map(function (d) { return ['asli', 'bulat', 'desimal', 'pecahan'].map(function (k) { return bola(d, k); }).join(''); }).join('<span style="width:18px"></span>');
+// 3. panel + peluru
+function lubang(k) { var J = JENIS[k]; return '<svg width="58" height="58"><circle cx="29" cy="29" r="24" fill="' + J.t + '" fill-opacity=".45" stroke="' + GARIS + '" stroke-width="3.5" stroke-dasharray="6 5"/></svg>'; }
+var tpanel = function (t, x) { return '<span style="font-weight:900;font-size:' + (x || 36) + 'px">' + t + '</span>'; };
+el('panelbaris').innerHTML =
+  '<div style="background:' + KREM + ';border:4px solid ' + GARIS + ';border-radius:20px;box-shadow:0 6px 0 ' + GARIS + ';padding:8px 18px;display:flex;align-items:center;gap:10px">' + lubang('asli') + tpanel('+') + lubang('asli') + tpanel('=') + tpanel('10', 42) + '</div>' +
+  '<div style="background:' + KREM + ';border:4px solid ' + GARIS + ';border-radius:20px;box-shadow:0 6px 0 ' + GARIS + ';padding:8px 18px;display:flex;align-items:center;gap:10px">' + lubang('pecahan') + tpanel('+') + lubang('pecahan') + tpanel('=') + '<span style="display:inline-block;text-align:center;font-weight:900;line-height:1.05"><span style="font-size:22px">5</span><br><span style="display:block;height:4px;background:' + GARIS + ';border-radius:2px"></span><span style="font-size:22px">6</span></span></div>' +
+  '<div style="text-align:center">' + bola(64, 'bulat', true) + '<div class="kecil">peluru</div></div><div style="text-align:center">' + bola(44, 'desimal', true) + '<div class="kecil">peluru berikut</div></div>';
+// 5. peta
+var PETA = [
+  { nama: 'Stage 1 · hutan', tanah: ['#8FD468', '#6DBA4E'], tepi: GARIS, dasar: '#D9A066', tengah: '#EDC38E', hias: 'pohon', pohon: ['#2F8F46', '#58C46B'], pal: [['#8FD468', 'tanah atas'], ['#6DBA4E', 'tanah bawah'], ['#D9A066', 'jalur'], ['#EDC38E', 'tengah jalur'], ['#2F8F46', 'pohon gelap'], ['#58C46B', 'pohon terang']] },
+  { nama: 'Stage 2 · gunung bersalju', tanah: ['#EAF6FF', '#BFE0F5'], tepi: GARIS, dasar: '#CFE9FF', tengah: '#F7FCFF', hias: 'cemara', pohon: ['#2E7D8C', '#FFFFFF'], pal: [['#EAF6FF', 'salju atas'], ['#BFE0F5', 'salju bawah'], ['#CFE9FF', 'jalur es'], ['#F7FCFF', 'tengah jalur'], ['#2E7D8C', 'cemara'], ['#5BC0F0', 'kristal']] },
+  { nama: 'Stage 3 · gunung api', tanah: ['#5E3347', '#3E2232'], tepi: GARIS, dasar: '#8E2F2A', tengah: '#C04A2E', hias: 'batu', pohon: ['#2B1A26', '#FF8A2A'], pal: [['#5E3347', 'batu atas'], ['#3E2232', 'batu bawah'], ['#8E2F2A', 'jalur lava'], ['#C04A2E', 'tengah lava'], ['#FF8A2A', 'tepi menyala'], ['#FFD23F', 'bara']] }
+];
+function peta(P, i) {
+  var id = 'p' + i, path = 'M-10,34 L250,34 Q285,34 285,62 Q285,90 250,90 L40,90', s = '<svg viewBox="0 0 300 130" width="100%"><defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.tanah[0] + '"/><stop offset="1" stop-color="' + P.tanah[1] + '"/></linearGradient></defs><rect width="300" height="130" fill="url(#' + id + ')"/>';
+  var deco = function (x, y, k) {
+    if (P.hias === 'pohon') return '<circle cx="' + x + '" cy="' + y + '" r="' + 11 * k + '" fill="' + P.pohon[0] + '" stroke="' + GARIS + '" stroke-width="3"/><circle cx="' + (x - 3 * k) + '" cy="' + (y - 3 * k) + '" r="' + 5 * k + '" fill="' + P.pohon[1] + '"/>';
+    if (P.hias === 'cemara') return '<polygon points="' + x + ',' + (y - 16 * k) + ' ' + (x + 11 * k) + ',' + (y + 8 * k) + ' ' + (x - 11 * k) + ',' + (y + 8 * k) + '" fill="' + P.pohon[0] + '" stroke="' + GARIS + '" stroke-width="3" stroke-linejoin="round"/><polygon points="' + x + ',' + (y - 16 * k) + ' ' + (x + 5 * k) + ',' + (y - 5 * k) + ' ' + (x - 5 * k) + ',' + (y - 5 * k) + '" fill="#fff"/>';
+    return '<polygon points="' + (x - 11 * k) + ',' + (y + 8 * k) + ' ' + (x - 6 * k) + ',' + (y - 9 * k) + ' ' + (x + 5 * k) + ',' + (y - 12 * k) + ' ' + (x + 12 * k) + ',' + (y + 8 * k) + '" fill="' + P.pohon[0] + '" stroke="' + GARIS + '" stroke-width="3" stroke-linejoin="round"/><line x1="' + (x + 5 * k) + '" y1="' + (y - 12 * k) + '" x2="' + (x + 12 * k) + '" y2="' + (y + 8 * k) + '" stroke="' + P.pohon[1] + '" stroke-width="3"/>';
+  };
+  s += deco(24, 112, 1) + deco(70, 14, 0.9) + deco(150, 118, 1.1) + deco(262, 14, 0.9) + deco(280, 118, 1);
+  s += '<path d="' + path + '" fill="none" stroke="' + P.tepi + '" stroke-width="40" stroke-linecap="round"/><path d="' + path + '" fill="none" stroke="' + P.dasar + '" stroke-width="30" stroke-linecap="round"/><path d="' + path + '" fill="none" stroke="' + P.tengah + '" stroke-width="16" stroke-linecap="round" opacity=".85"/>';
+  return s + '</svg>';
+}
+el('stage').innerHTML = PETA.map(function (P, i) {
+  var bolaSvg = '<div style="display:flex;gap:2px;margin-top:6px">' + ['asli', 'bulat', 'desimal', 'pecahan'].map(function (k) { return bola(38, k); }).join('') + '</div>';
+  return '<div class="kartu" style="padding:10px"><b>' + P.nama + '</b><div style="border:3px solid ' + GARIS + ';border-radius:12px;overflow:hidden;margin:6px 0">' + peta(P, i) + '</div>' + bolaSvg +
+    '<div class="baris" style="gap:6px;margin-top:8px">' + P.pal.map(function (c) { return '<div class="sw" style="width:84px"><i style="height:26px;background:' + c[0] + '"></i><span>' + c[0] + '</span><b style="font-weight:600;font-size:11px">' + c[1] + '</b></div>'; }).join('') + '</div></div>';
+}).join('');
+// 6. makhluk: telur dan topi penyihir sederhana
+function telur(a, b, pola) { return '<svg width="64" height="78" viewBox="0 0 64 78"><ellipse cx="32" cy="74" rx="20" ry="4" fill="' + GARIS + '" opacity=".25"/><path d="M32,5 C48,5 58,32 58,50 C58,64 47,73 32,73 C17,73 6,64 6,50 C6,32 16,5 32,5 Z" fill="' + a + '" stroke="' + GARIS + '" stroke-width="4"/><path d="M12,48 Q32,36 52,48" fill="none" stroke="' + b + '" stroke-width="7" stroke-linecap="round"/><circle cx="22" cy="26" r="4" fill="#fff" opacity=".8"/>' + pola + '</svg>'; }
+function naga(c, perut) { return '<svg width="96" height="86" viewBox="0 0 96 86"><ellipse cx="48" cy="80" rx="30" ry="4" fill="' + GARIS + '" opacity=".25"/><path d="M14,40 Q2,14 20,10 Q30,24 34,34 Z M82,40 Q94,14 76,10 Q66,24 62,34 Z" fill="' + perut + '" stroke="' + GARIS + '" stroke-width="4" stroke-linejoin="round"/><ellipse cx="48" cy="54" rx="26" ry="24" fill="' + c + '" stroke="' + GARIS + '" stroke-width="4"/><ellipse cx="48" cy="62" rx="14" ry="14" fill="' + perut + '" stroke="' + GARIS + '" stroke-width="3"/><circle cx="38" cy="44" r="6" fill="#fff" stroke="' + GARIS + '" stroke-width="3"/><circle cx="58" cy="44" r="6" fill="#fff" stroke="' + GARIS + '" stroke-width="3"/><circle cx="39" cy="45" r="2.5" fill="' + GARIS + '"/><circle cx="59" cy="45" r="2.5" fill="' + GARIS + '"/><path d="M42,53 Q48,58 54,53" fill="none" stroke="' + GARIS + '" stroke-width="3" stroke-linecap="round"/></svg>'; }
+function penyihir() { return '<svg width="96" height="96" viewBox="0 0 96 96"><ellipse cx="48" cy="90" rx="26" ry="4" fill="' + GARIS + '" opacity=".25"/><path d="M20,86 Q48,40 76,86 Z" fill="#5B3A8C" stroke="' + GARIS + '" stroke-width="4" stroke-linejoin="round"/><circle cx="48" cy="50" r="17" fill="#F1C9A5" stroke="' + GARIS + '" stroke-width="4"/><path d="M24,46 Q52,40 76,46 L74,40 Q56,2 34,18 Q60,6 74,40" fill="#7B52B5" stroke="' + GARIS + '" stroke-width="4" stroke-linejoin="round"/><ellipse cx="50" cy="44" rx="30" ry="6" fill="#7B52B5" stroke="' + GARIS + '" stroke-width="4"/><circle cx="41" cy="52" r="3" fill="' + GARIS + '"/><circle cx="55" cy="52" r="3" fill="' + GARIS + '"/><circle cx="48" cy="58" r="4" fill="#F0A0A0" stroke="' + GARIS + '" stroke-width="2"/><path d="M42,64 Q48,68 54,64" fill="none" stroke="' + GARIS + '" stroke-width="3" stroke-linecap="round"/></svg>'; }
+el('makhluk').innerHTML = [['Bayunara', naga('#4CC36B', '#FFF1B8')], ['Esvara', naga('#5BC0F0', '#E6F6FF')], ['Baranji', naga('#FF6B3D', '#FFD23F')], ['Morvax', penyihir()], ['telur biru', telur('#7FC8FF', '#2F7DF0', '')], ['telur hijau', telur('#8BE08F', '#2FA84A', '')], ['telur jingga', telur('#FFC46B', '#FF8A2A', '')]]
+  .map(function (x) { return '<div style="text-align:center">' + x[1] + '<div class="kecil">' + x[0] + '</div></div>'; }).join('');
+// 7. kontras (WCAG)
+function lum(h) { var c = [1, 3, 5].map(function (i) { var v = parseInt(h.substr(i, 2), 16) / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; }
+function kontras(a, b) { var x = lum(a), y = lum(b); if (x < y) { var t = x; x = y; y = t; } return (x + 0.05) / (y + 0.05); }
+var CEK = [['Angka putih terhadap tepi gelap (bola)', '#FFFFFF', GARIS, 4.5], ['Angka gelap pada peluru kuning', GARIS, '#FFD23F', 4.5], ['Angka gelap pada peluru kuning (bawah)', GARIS, '#FFC21F', 4.5], ['Teks panel pada krem', GARIS, KREM, 4.5], ['Teks tombol putih terhadap tepi gelap', '#FFFFFF', GARIS, 4.5],
+  ['Garis tepi gelap terhadap bola biru (pemisah)', GARIS, '#2F7DF0', 3], ['Garis tepi gelap terhadap bola hijau', GARIS, '#2FA84A', 3], ['Garis tepi gelap terhadap bola jingga', GARIS, '#FF8A2A', 3], ['Garis tepi gelap terhadap bola ungu', GARIS, '#9B5DE5', 3],
+  ['Tepi jalur gelap terhadap tanah salju', GARIS, '#BFE0F5', 3], ['Tepi jalur gelap terhadap tanah hutan', GARIS, '#6DBA4E', 3], ['Tepi lava jingga terhadap dasar jalur api', '#FF8A2A', '#8E2F2A', 3]];
+el('kontras').innerHTML += CEK.map(function (c) { var r = kontras(c[1], c[2]), ok = r >= c[3]; return '<tr><td>' + c[0] + '</td><td>' + r.toFixed(1) + ' : 1</td><td>≥ ' + c[3] + '</td><td class="' + (ok ? 'ok' : 'gagal') + '">' + (ok ? 'lulus' : 'kurang') + '</td></tr>'; }).join('');
+</script>
+</body>
+</html>

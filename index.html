@@ -9,36 +9,38 @@
 *{box-sizing:border-box}
 /* ---- Token gaya visual baru (dari papan konsep, lihat gaya/pedoman-gaya-visual.md) ---- */
 :root{
-  --ng-pil-biru:#2b62a4;--ng-pil-biru-atas:#3b78c4;--ng-pil-ungu:#5e4ba1;--ng-pil-ungu-atas:#7561bd;
-  --ng-es:#3181c9;--ng-api:#e65328;--ng-angin:#518d60;--ng-sihir:#6c52af;
-  --ng-panel-biru:#ddecfc;--ng-panel-ungu:#d8d2fb;--ng-panel-putih:#f4f8ff;--ng-panel-tepi:rgba(255,255,255,.85);
-  --ng-teks:#1d2f63;--ng-teks-kecil:#3a4f8a;--ng-teks-bayang:rgba(10,20,60,.45);--ng-hud-gelap:rgba(18,24,60,.58);
-  --ng-tombol-utama-atas:#ff8a3a;--ng-tombol-utama:#e65328;--ng-tombol-utama-tepi:#8f2a0d;
-  --ng-tombol-kedua-atas:#4ea3f0;--ng-tombol-kedua:#2b62a4;--ng-tombol-kedua-tepi:#173d70;
-  --ng-tombol-khusus-atas:#8f78d6;--ng-tombol-khusus:#5e4ba1;--ng-tombol-khusus-tepi:#3a2a70;
-  --ng-tombol-pasif-atas:#9aa6c8;--ng-tombol-pasif:#6f7ca3;--ng-tombol-pasif-tepi:#46507a;
-  --ng-r-panel:22px;--ng-r-pil:999px;--ng-r-tombol:999px;
-  --ng-bayang-panel:0 8px 22px rgba(30,50,110,.20);--ng-bayang-pil:0 3px 8px rgba(20,40,100,.28);
-  --ng-kilau-atas:inset 0 2px 0 rgba(255,255,255,.65);--ng-kilau-lembut:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));
+  /* gaya kartun garis tebal (cabang redesign-kartun): satu warna garis --ng-garis, garis 4 px, bayangan padat tanpa blur */
+  --ng-garis:#1D2B3A;
+  --ng-pil-biru:#2F7DF0;--ng-pil-biru-atas:#5B9AF5;--ng-pil-ungu:#9B5DE5;--ng-pil-ungu-atas:#B07BEB;
+  --ng-es:#5BC0F0;--ng-api:#FF6B3D;--ng-angin:#4CC36B;--ng-sihir:#7B52B5;
+  --ng-panel-biru:#FFF8E7;--ng-panel-ungu:#F1E7FF;--ng-panel-putih:#FFF8E7;--ng-panel-tepi:#1D2B3A;
+  --ng-teks:#1D2B3A;--ng-teks-kecil:#46586B;--ng-teks-bayang:#1D2B3A;--ng-hud-gelap:rgba(29,43,58,.6);
+  --ng-tombol-utama-atas:#FFA24D;--ng-tombol-utama:#FF8A2A;--ng-tombol-utama-tepi:#1D2B3A;
+  --ng-tombol-kedua-atas:#5B9AF5;--ng-tombol-kedua:#2F7DF0;--ng-tombol-kedua-tepi:#1D2B3A;
+  --ng-tombol-khusus-atas:#B07BEB;--ng-tombol-khusus:#9B5DE5;--ng-tombol-khusus-tepi:#1D2B3A;
+  --ng-tombol-pasif-atas:#B3BFD0;--ng-tombol-pasif:#9AA8BD;--ng-tombol-pasif-tepi:#1D2B3A;
+  --ng-r-panel:24px;--ng-r-pil:999px;--ng-r-tombol:999px;
+  --ng-bayang-panel:0 7px 0 #1D2B3A;--ng-bayang-pil:0 4px 0 #1D2B3A;
+  --ng-kilau-atas:inset 0 4px 0 rgba(255,255,255,.45);--ng-kilau-lembut:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0));
   --ng-huruf:"Nunito","Poppins","Segoe UI","Trebuchet MS",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 html,body{margin:0;height:100%;overflow:hidden;background:#18331f;color:var(--ng-teks);font-family:var(--ng-huruf);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 #stage{position:fixed;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center}
 canvas{display:block;touch-action:none;background:#3a6542}
-.overlay{position:fixed;left:0;top:0;right:0;bottom:0;display:flex;padding:12px;background:rgba(14,22,60,.76);overflow:auto;-webkit-overflow-scrolling:touch;z-index:5}
+.overlay{position:fixed;left:0;top:0;right:0;bottom:0;display:flex;padding:12px;background:rgba(29,43,58,.72);overflow:auto;-webkit-overflow-scrolling:touch;z-index:5}
 .overlay.hidden{display:none}
-.panel{margin:auto;width:100%;max-width:480px;background:linear-gradient(180deg,var(--ng-panel-putih),var(--ng-panel-biru));border:2px solid var(--ng-panel-tepi);border-radius:var(--ng-r-panel);padding:18px 16px 20px;box-shadow:var(--ng-bayang-panel),0 16px 36px rgba(8,14,40,.38);color:var(--ng-teks)}
+.panel{margin:auto;width:100%;max-width:480px;background:linear-gradient(180deg,var(--ng-panel-putih),var(--ng-panel-biru));border:4px solid var(--ng-panel-tepi);border-radius:var(--ng-r-panel);padding:18px 16px 20px;box-shadow:var(--ng-bayang-panel);color:var(--ng-teks)}
 h1{margin:0 0 2px;font-size:26px;line-height:1.2;font-weight:800}
 h2{margin:0 0 6px;font-size:26px;line-height:1.25;font-weight:800}
 h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--ng-teks-kecil);font-weight:800}
 .sub{margin:0;color:var(--ng-teks-kecil);font-size:15px;line-height:1.4;font-weight:600}
-.seg button,.chip{font:inherit;color:var(--ng-teks);cursor:pointer;border:2px solid #9db8e6;background:linear-gradient(180deg,#ffffff,#e4ecfb);border-radius:16px;box-shadow:inset 0 2px 0 #fff,0 2px 0 rgba(43,98,164,.25)}
-.seg button.sel,.chip.sel{border-color:var(--ng-tombol-kedua-tepi) !important;background:linear-gradient(180deg,var(--ng-tombol-kedua-atas),var(--ng-tombol-kedua)) !important;color:#fff;text-shadow:0 1px 0 rgba(10,30,70,.55);box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 2px 0 var(--ng-tombol-kedua-tepi)}
+.seg button,.chip{font:inherit;color:var(--ng-teks);cursor:pointer;border:3px solid var(--ng-garis);background:#fff;border-radius:16px;box-shadow:0 3px 0 var(--ng-garis)}
+.seg button.sel,.chip.sel{border-color:var(--ng-garis) !important;background:linear-gradient(180deg,var(--ng-tombol-kedua-atas),var(--ng-tombol-kedua)) !important;color:#fff;text-shadow:-1.5px -1.5px 0 #1D2B3A,1.5px -1.5px 0 #1D2B3A,-1.5px 1.5px 0 #1D2B3A,1.5px 1.5px 0 #1D2B3A,0 2px 0 #1D2B3A;box-shadow:inset 0 3px 0 rgba(255,255,255,.4),0 3px 0 var(--ng-garis)}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .seg button{padding:12px 8px;font-size:15px;min-height:46px;font-weight:700}
 .chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .chip{padding:12px 8px;font-size:17px;font-weight:800;min-height:48px}
-.btn{--atas:var(--ng-tombol-kedua-atas);--isi:var(--ng-tombol-kedua);--tepi:var(--ng-tombol-kedua-tepi);position:relative;font:inherit;font-weight:800;font-size:17px;min-height:48px;padding:10px 18px;border-radius:var(--ng-r-tombol);border:3px solid var(--tepi);background:linear-gradient(180deg,var(--atas),var(--isi));color:#fff;cursor:pointer;text-shadow:0 2px 0 var(--tepi),0 0 6px var(--ng-teks-bayang);box-shadow:var(--ng-kilau-atas),0 4px 0 var(--tepi),0 9px 12px rgba(10,20,60,.28)}
+.btn{--atas:var(--ng-tombol-kedua-atas);--isi:var(--ng-tombol-kedua);--tepi:var(--ng-tombol-kedua-tepi);position:relative;font:inherit;font-weight:800;font-size:17px;min-height:48px;padding:10px 18px;border-radius:var(--ng-r-tombol);border:4px solid var(--tepi);background:linear-gradient(180deg,var(--atas),var(--isi));color:#fff;cursor:pointer;text-shadow:-2px -2px 0 var(--tepi),2px -2px 0 var(--tepi),-2px 2px 0 var(--tepi),2px 2px 0 var(--tepi),0 3px 0 var(--tepi);box-shadow:var(--ng-kilau-atas),0 5px 0 var(--tepi)}
 .btn::after{content:"";position:absolute;left:12px;right:12px;top:4px;height:32%;border-radius:999px;background:var(--ng-kilau-lembut);pointer-events:none}
 .btn:active{transform:translateY(3px);box-shadow:var(--ng-kilau-atas),0 1px 0 var(--tepi)}
 .btn.primary{--atas:var(--ng-tombol-utama-atas);--isi:var(--ng-tombol-utama);--tepi:var(--ng-tombol-utama-tepi)}
@@ -48,7 +50,7 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
 .row{display:flex;gap:8px;margin-top:16px}
 .row .btn{flex:1}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 0;font-size:14px}
-.stats div{background:linear-gradient(180deg,#e6e9f8,#d9e2f6);border-radius:12px;padding:8px 10px;color:var(--ng-teks-kecil)}
+.stats div{background:#fff;border:3px solid var(--ng-garis);border-radius:12px;padding:6px 8px;color:var(--ng-teks-kecil)}
 .stats b{display:block;font-size:20px;color:var(--ng-teks)}
 .note{font-size:12.5px;color:#5568a0;margin-top:12px;line-height:1.45;font-weight:600}
 .story-emoji{font-size:84px;text-align:center;line-height:1.15;margin-top:4px;min-height:96px}
@@ -58,7 +60,7 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
 .dot{width:10px;height:10px;border-radius:50%;background:#b4c4ea}
 .dot.on{background:var(--ng-tombol-utama)}
 .link{display:block;margin:6px auto 0;background:none;border:0;color:#3a5fa8;font:inherit;font-weight:700;text-decoration:underline;padding:12px;cursor:pointer;min-height:44px}
-.rv{background:linear-gradient(180deg,#f7f9ff,#e6edfb);border-radius:12px;padding:8px 10px;margin-top:8px;font-size:15px;line-height:1.4;border-left:5px solid var(--ng-api);color:var(--ng-teks)}
+.rv{background:#fff;border:3px solid var(--ng-garis);border-radius:12px;padding:8px 10px;margin-top:8px;font-size:15px;line-height:1.4;border-left:8px solid var(--ng-api);color:var(--ng-teks)}
 .rv.ok{border-left-color:var(--ng-angin)}
 .rv small{display:block;color:#5568a0;font-size:12.5px}
 .rv b{font-size:17px}
@@ -108,21 +110,21 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
   #rvList{max-height:36vh}
 }
 .lp-ico{font-size:64px;line-height:1.2;margin-bottom:4px}
+.hp{display:inline-block;width:.5em;height:.88em;vertical-align:-.1em;border:.07em solid var(--ng-garis);border-radius:.12em;background:#fff;box-shadow:0 .05em 0 var(--ng-garis)}
 .lp-ico span{display:inline-block;transition:transform .25s}
 .lp-ico span.lebar{transform:rotate(90deg)}
 @media (max-height:780px) and (min-width:600px){.lp-ico{font-size:48px}}
 /* ---- Tombol pengaturan Musik / Suara / Efek gambar (dipakai di menu dan di menu Jeda) ---- */
 .tgbar{display:flex;gap:6px;flex:none}
-.tg{flex:1 1 0;min-width:64px;min-height:48px;padding:3px 4px;font:inherit;color:inherit;cursor:pointer;border:2px solid rgba(255,255,255,.55);background:rgba(255,255,255,.14);color:#fff;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1.05}
-.tg-i{position:relative;font-size:18px}
-.tg-t{font-size:12px;font-weight:700}
-.tg-s{font-size:10.5px;opacity:.85}
-.tg.on{border-color:#fff;background:linear-gradient(180deg,var(--ng-tombol-kedua-atas),var(--ng-tombol-kedua));box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
-#pauseSet .tg{color:var(--ng-teks);border-color:#9db8e6;background:linear-gradient(180deg,#fff,#e4ecfb)}
-#pauseSet .tg.on{color:#fff;border-color:var(--ng-tombol-kedua-tepi);background:linear-gradient(180deg,var(--ng-tombol-kedua-atas),var(--ng-tombol-kedua));text-shadow:0 1px 0 rgba(10,30,70,.55)}
-.tg.off{opacity:.65}
-.tg.off .tg-i{filter:grayscale(1)}
-.tg.off .tg-i::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:3px;margin-top:-1px;background:#ff6a5a;border-radius:2px;transform:rotate(-35deg)}
+.tg{flex:1 1 0;min-width:64px;min-height:48px;padding:3px 4px;font:inherit;cursor:pointer;border:3px solid var(--ng-garis);background:var(--ng-panel-putih);color:var(--ng-teks);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1.05;box-shadow:0 3px 0 var(--ng-garis)}
+.tg-i{position:relative;display:block;height:20px}
+.tg-i svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.tg-t{font-size:12px;font-weight:800}
+.tg-s{font-size:10.5px;opacity:.85;font-weight:700}
+.tg.on{color:#fff;background:linear-gradient(180deg,var(--ng-tombol-kedua-atas),var(--ng-tombol-kedua));box-shadow:inset 0 3px 0 rgba(255,255,255,.4),0 3px 0 var(--ng-garis);text-shadow:-1px -1px 0 #1D2B3A,1px -1px 0 #1D2B3A,-1px 1px 0 #1D2B3A,1px 1px 0 #1D2B3A}
+.tg.on .tg-i svg{stroke:#fff;filter:drop-shadow(0 1px 0 #1D2B3A)}
+.tg.off{background:#DCE3EC}
+.tg.off .tg-i::after{content:"";position:absolute;left:-2px;right:-2px;top:50%;height:3px;margin-top:-1px;background:#E0455B;border:1px solid var(--ng-garis);border-radius:2px;transform:rotate(-35deg)}
 #menu{flex-direction:column}
 #menu .panel{flex:none}
 #setbar{align-self:flex-end;margin:0 0 6px;width:min(100%,360px)}
@@ -232,6 +234,38 @@ body.noefek .ez-bintang.pop .star{animation:none}
 }
 @media (max-width:380px){.ez-pita .band b{font-size:27px}.ez-pesan{font-size:17px}.ez-tombol .btn{font-size:19px}}
 .hidden{display:none !important}
+/* ---- Penyesuaian gaya kartun garis tebal: garis #1D2B3A, bayangan padat, tanpa kilau lembut ---- */
+.story-emoji{display:flex;justify-content:center;align-items:center;gap:6px}
+.story-emoji img{height:1.15em;width:auto;max-width:none;min-width:0;flex:0 1 auto;filter:none}
+.sp-hill{border-top:4px solid var(--ng-garis)}
+.sp-title{color:#fff;text-shadow:-3px -3px 0 #1D2B3A,3px -3px 0 #1D2B3A,-3px 3px 0 #1D2B3A,3px 3px 0 #1D2B3A,0 6px 0 #1D2B3A}
+.sp-btn{border:4px solid var(--ng-garis);text-shadow:-2px -2px 0 #1D2B3A,2px -2px 0 #1D2B3A,-2px 2px 0 #1D2B3A,2px 2px 0 #1D2B3A,0 3px 0 #1D2B3A;box-shadow:var(--ng-kilau-atas),0 6px 0 #1D2B3A}
+.sp-btn:active{box-shadow:var(--ng-kilau-atas),0 2px 0 #1D2B3A}
+.sp-ball.kartun{background-size:contain;color:transparent;filter:none}
+.sp-dragon,.sp-egg{filter:none}
+.kt .sp-egg{bottom:-6%}.kt .sp-egg img{width:1.55em}
+.kt .sp-dragon{top:-8%}.kt .sp-wiz{right:-12%}
+.ez::before,.ez-hero::before,.ez-pita .band::before{display:none}
+.ez-hero{border:4px solid #1D2B3A;background:#FFF8E7;box-shadow:0 5px 0 #1D2B3A}
+.ez-hero .len{filter:none}
+.ez-hero .len .bt,.ez-hero .len img{width:1em;height:1em;max-width:none;object-fit:contain}
+.ez-hero svg.ik{width:58px;height:58px}
+.ez-pita{--c-hi:#5B9AF5;--c:#2F7DF0;--c-lo:#2A6FD8;--c-tail-hi:#2A6FD8;--c-tail-lo:#1F5CB8;--c-edge:#1D2B3A}
+.ez-pita.kalah{--c-hi:#FF7A7A;--c:#E8454F;--c-lo:#C8323D;--c-tail-hi:#C8323D;--c-tail-lo:#A0242E;--c-edge:#1D2B3A}
+.ez-pita .tail{filter:drop-shadow(2px 0 0 #1D2B3A) drop-shadow(-2px 0 0 #1D2B3A) drop-shadow(0 2px 0 #1D2B3A) drop-shadow(0 -2px 0 #1D2B3A)}
+.ez-pita .band{border-width:4px;box-shadow:inset 0 4px 0 rgba(255,255,255,.4),0 5px 0 #1D2B3A}
+.ez-pita .band b{text-shadow:-2px -2px 0 #1D2B3A,2px -2px 0 #1D2B3A,-2px 2px 0 #1D2B3A,2px 2px 0 #1D2B3A,0 3px 0 #1D2B3A}
+.ez-bintang .star i{background:#1D2B3A;filter:none}
+.ez-bintang .star u{background:#FFD23F}
+.ez-bintang .star.off u{background:#B9C4D4}
+.ez-bintang .star.off i{background:#1D2B3A}
+.ez-rule{background:#1D2B3A;height:3px;border-bottom:0;border-radius:2px}
+.ez-plat,.ez-stat{border:3px solid #1D2B3A;background:#fff;box-shadow:0 3px 0 #1D2B3A}
+.ez-slot{border:3px solid #1D2B3A;background:#EAF0F6;box-shadow:none}
+.ez-slot img{height:28px}
+.ez-slot.off>*{filter:grayscale(1);opacity:.35}
+.bt,.ik{width:1.1em;height:1.1em;vertical-align:-.2em}
+.ez-stat .bt{width:1.25em;height:1.25em}
 </style>
 </head>
 <body>
@@ -259,7 +293,7 @@ body.noefek .ez-bintang.pop .star{animation:none}
 <div id="menu" class="overlay hidden">
   <div class="tgbar" id="setbar"></div>
   <div class="panel"><div class="cols"><div class="col">
-    <h1><img src="aset/naga-bayunara.webp" alt="" style="height:1.5em;width:auto;vertical-align:middle;margin-right:4px" onerror="this.replaceWith(document.createTextNode('🐲 '))">Naga Penjaga</h1>
+    <h1><img id="menuNaga" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" style="height:1.5em;width:auto;vertical-align:middle;margin-right:4px" onerror="this.replaceWith(document.createTextNode('🐲 '))">Naga Penjaga</h1>
     <p class="sub">Isi kotak di panel dengan peluru dan bola yang dibidik. 3 stage, 1 penyihir jahat!</p>
 
     <h3>1. Tingkat</h3>
@@ -286,7 +320,7 @@ body.noefek .ez-bintang.pop .star{animation:none}
       <button type="button" class="chip" data-v="frac">½ Pecahan</button>
     </div>
 
-    <button type="button" class="btn primary big" id="start">▶ Mulai Petualangan</button>
+    <button type="button" class="btn primary big" id="start">Mulai Petualangan</button>
     <p class="note">Arahkan (di HP: tahan jari) ke bola: kotak di panel mengikuti. Klik (di HP: lepas jari) untuk menembak; lepas di tempat kosong = batal. Ketuk naga: tukar peluru. Kamu menjaga 3 telur: salah jawab atau bola sampai di sarang membuat satu telur dicuri. Salah juga mempercepat jalur.</p>
   </div></div></div>
 </div>
@@ -297,7 +331,7 @@ body.noefek .ez-bintang.pop .star{animation:none}
     <div class="story-emoji" id="storyEmoji"></div>
     <div class="story-text" id="storyText"></div>
     <div class="dots" id="storyDots"></div>
-    <button type="button" class="btn primary big" id="storyNext" style="margin-top:8px">Lanjut ▶</button>
+    <button type="button" class="btn primary big" id="storyNext" style="margin-top:8px">Lanjut</button>
     <button type="button" class="link" id="storySkip">Lewati cerita</button>
   </div>
 </div>
@@ -318,7 +352,7 @@ body.noefek .ez-bintang.pop .star{animation:none}
       <div class="ez-tombol" id="ezTombol">
         <button type="button" class="btn primary" id="btnA"></button>
         <button type="button" class="btn" id="btnM">Main lagi</button>
-        <button type="button" class="btn khusus" id="btnR">📝 Lihat jawabanmu</button>
+        <button type="button" class="btn khusus" id="btnR">Lihat jawabanmu</button>
         <button type="button" class="btn pasif" id="btnB">Menu</button>
       </div>
     </div>
@@ -333,7 +367,7 @@ body.noefek .ez-bintang.pop .star{animation:none}
     <div id="rvList"></div>
     <div class="row">
       <button type="button" class="btn" id="rvAll">Lihat semua</button>
-      <button type="button" class="btn primary" id="rvBack">◀ Kembali</button>
+      <button type="button" class="btn primary" id="rvBack">Kembali</button>
     </div>
   </div>
 </div>
@@ -341,7 +375,7 @@ body.noefek .ez-bintang.pop .star{animation:none}
 <!-- JEDA: layout layar berganti saat bermain -->
 <div id="layoutpause" class="overlay hidden" style="z-index:30">
   <div class="panel" style="text-align:center">
-    <div class="lp-ico"><span id="lpPhone">📱</span> ↻</div>
+    <div class="lp-ico"><span id="lpPhone" class="hp"></span> ↻</div>
     <h2>Putar layar kembali</h2>
     <p class="sub" id="lpSub">ke posisi tegak</p>
     <p class="note">Permainan berhenti. Skor, telur, dan perisaimu aman. Di komputer: ubah ukuran jendela kembali.</p>
@@ -351,7 +385,7 @@ body.noefek .ez-bintang.pop .star{animation:none}
 <!-- PUTAR HP (hanya dipakai bila layout lebar dimatikan) -->
 <div id="rotate" class="overlay hidden" style="z-index:20">
   <div class="panel" style="text-align:center">
-    <div class="story-emoji" style="font-size:56px;min-height:0">📱↻</div>
+    <div class="story-emoji" style="font-size:56px;min-height:0"><span class="hp"></span> ↻</div>
     <h2>Putar HP ke posisi tegak</h2>
     <p class="sub">Game ini dimainkan dengan HP berdiri. Permainan lanjut otomatis.</p>
   </div>
@@ -360,12 +394,12 @@ body.noefek .ez-bintang.pop .star{animation:none}
 <!-- JEDA (menggantikan tombol ✕): lanjut, mulai ulang stage, ke menu, dan pengaturan -->
 <div id="quit" class="overlay hidden">
   <div class="panel">
-    <h2>⏸ Jeda</h2>
+    <h2>Jeda</h2>
     <p class="sub">Permainan berhenti sebentar.</p>
-    <button type="button" class="btn primary big" id="quitNo">▶ Lanjut main</button>
+    <button type="button" class="btn primary big" id="quitNo">Lanjut main</button>
     <div class="row">
-      <button type="button" class="btn" id="pauseRestart">↻ Mulai ulang</button>
-      <button type="button" class="btn" id="quitYes">🏠 Ke menu</button>
+      <button type="button" class="btn" id="pauseRestart">Mulai ulang</button>
+      <button type="button" class="btn" id="quitYes">Ke menu</button>
     </div>
     <h3>Suara dan gambar</h3>
     <div class="tgbar" id="pauseSet"></div>
@@ -497,7 +531,7 @@ var THEMES = [
 var STORY = [
   { e: '🐲🥚', a: ['naga-bayunara', 'telur-jingga'], t: 'Naga menjaga telur-telurnya.' },
   { e: '🧙⚡', a: ['morvax'], t: 'Penyihir Jahat ingin mencuri telur untuk menguasai dunia!' },
-  { e: '🔢💥', a: ['orb-hijau-1', 'orb-biru-2', 'orb-jingga-3'], t: 'Bantu naga! Cocokkan dua bola untuk meledakkan bola sihir.' }
+  { e: '🔢💥', a: ['orb-hijau-1', 'orb-biru-2', 'orb-jingga-3'], k: ['bola:n:3', 'bola:i:−2', 'bola:d:0,5', 'bola:f:3/4'], t: 'Bantu naga! Cocokkan dua bola untuk meledakkan bola sihir.' }
 ];
 
 /* =====================================================================
@@ -513,7 +547,7 @@ function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floo
 var canvas = $('c'), ctx = canvas.getContext('2d');
 var ASETIMG = {}, SILUET = null;
 function muatAset() {                       // gambar dimuat sekali; bila gagal atau belum siap, game memakai emoji (cadangan)
-  if (!ASET_AKTIF) return;
+  if (!ASET_AKTIF || KARTUN) return;        // gaya kartun: tidak ada gambar yang dimuat, semuanya digambar dengan kode
   var n = ['naga-bayunara', 'naga-esvara', 'naga-baranji', 'morvax', 'sarang-kosong'].concat(TELUR_SLOT);
   Object.keys(ORB_WARNA).forEach(function (k) { for (var v = 1; v <= 3; v++) n.push('orb-' + ORB_WARNA[k] + '-' + v); });
   n.forEach(function (nm) { var im = new Image(); im.onload = function () { im.siap = true; }; im.onerror = function () { im.siap = false; }; im.src = ASET_FOLDER + nm + '.webp'; ASETIMG[nm] = im; });
@@ -521,9 +555,173 @@ function muatAset() {                       // gambar dimuat sekali; bila gagal 
 function aset(nm) { var im = ASETIMG[nm]; return (ASET_AKTIF && im && im.siap && im.naturalWidth > 0) ? im : null; }
 function gayaBaru() { return ASET_AKTIF && !!GAYA_PETA[(G.stage || 1) - 1]; }   // stage yang sedang dimainkan memakai gaya baru?
 function siluetMorvax() {                    // Morvax gelap (pencuri telur di stage 1 dan 2): dibuat sekali dari gambar
+  if (gk()) { if (!SILUET) { var kc = document.createElement('canvas'); kc.width = 192; kc.height = 192; ktPenyihir(kc.getContext('2d'), 96, 96, 184, true); SILUET = kc; } return SILUET; }
   var im = aset('morvax'); if (!im) return null;
   if (!SILUET) { var c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight; var x = c.getContext('2d'); x.drawImage(im, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = 'rgba(38,12,70,.92)'; x.fillRect(0, 0, c.width, c.height); SILUET = c; }
   return SILUET;
+}
+/* =====================================================================
+   GAYA KARTUN GARIS TEBAL (cabang redesign-kartun): semuanya digambar dengan kode, tanpa gambar dan tanpa emoji.
+   Satu warna garis tepi (KT.garis). Tebal garis: bola 7% diameter, benda besar ±4 px, panel dan tombol 4 px.
+   KARTUN = false mengembalikan gaya sebelumnya (gambar WebP / emoji).
+   ===================================================================== */
+var KARTUN = true;
+var KT = {
+  garis: '#1D2B3A', krem: '#FFF8E7', kuning: '#FFD23F', kuningAtas: '#FFE680', kuningBawah: '#FFC21F',
+  jenis: {                                                  // jenis bilangan: warna atas, warna bawah, bentuk penanda di tepi bola
+    n: { t: '#5BD66F', b: '#2FA84A', m: 'lingkaran' }, i: { t: '#5B9AF5', b: '#2F7DF0', m: 'belah' },
+    d: { t: '#FFB45B', b: '#FF8A2A', m: 'segitiga' }, f: { t: '#B885F0', b: '#9B5DE5', m: 'persegi' }
+  },
+  naga: {                                                   // b = badan, p = perut dan moncong, s = sayap dan duri, h = tanduk
+    bayunara: { b: '#4CC36B', p: '#FFF1B8', s: '#8EE6A0', h: '#FFF1B8' },
+    esvara: { b: '#5BC0F0', p: '#E6F6FF', s: '#A5DDFB', h: '#FFFFFF' },
+    baranji: { b: '#FF6B3D', p: '#FFD23F', s: '#FFA34D', h: '#FFE08A' }
+  },
+  telur: { biru: ['#7FC8FF', '#2F7DF0'], hijau: ['#8BE08F', '#2FA84A'], jingga: ['#FFC46B', '#FF8A2A'] }
+};
+function gk() { return KARTUN && ASET_AKTIF; }
+function ktPenanda(c, x, y, s, bentuk, lw) {                 // penanda jenis bilangan: bentuk krem bergaris di tepi bola
+  var h = s / 2; c.save(); c.fillStyle = KT.krem; c.strokeStyle = KT.garis; c.lineWidth = lw; c.lineJoin = 'round'; c.beginPath();
+  if (bentuk === 'lingkaran') c.arc(x, y, h, 0, 6.2832);
+  else if (bentuk === 'belah') { c.moveTo(x, y - h * 1.15); c.lineTo(x + h * 1.15, y); c.lineTo(x, y + h * 1.15); c.lineTo(x - h * 1.15, y); c.closePath(); }
+  else if (bentuk === 'segitiga') { c.moveTo(x, y - h * 1.15); c.lineTo(x + h * 1.2, y + h * 0.9); c.lineTo(x - h * 1.2, y + h * 0.9); c.closePath(); }
+  else { c.rect(x - h, y - h, s, s); }
+  c.fill(); c.stroke(); c.restore();
+}
+function ktBola(c, x, y, r, text, dom, peluru) {              // bola angka kartun; peluru = kuning dengan angka gelap
+  var J = KT.jenis[dom || 'n'], d = r * 2, sw = d * 0.07, rr0 = r - sw / 2;
+  c.save(); c.lineJoin = 'round';
+  c.beginPath(); c.arc(x, y + d * 0.06, rr0, 0, 6.2832); c.fillStyle = 'rgba(29,43,58,.28)'; c.fill();     // bayangan padat di bawah
+  var g = c.createLinearGradient(0, y - r, 0, y + r); g.addColorStop(0, peluru ? KT.kuningAtas : J.t); g.addColorStop(1, peluru ? KT.kuningBawah : J.b);
+  c.beginPath(); c.arc(x, y, rr0, 0, 6.2832); c.fillStyle = g; c.fill(); c.lineWidth = sw; c.strokeStyle = KT.garis; c.stroke();
+  c.beginPath(); c.ellipse(x - r * 0.38, y - r * 0.5, r * 0.22, r * 0.11, -0.61, 0, 6.2832); c.fillStyle = 'rgba(255,255,255,.88)'; c.fill();     // kilau kiri atas
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  var warnaAngka = peluru ? KT.garis : '#fff';
+  if (text.indexOf('/') > 0) {
+    var p = text.split('/'), fz = Math.round(d * 0.3), lw2 = d * 0.34;
+    c.font = '900 ' + fz + 'px ' + FONT;
+    [[p[0], -fz * 0.3], [p[1], fz * 0.92]].forEach(function (q) {
+      if (!peluru) { c.lineWidth = d * 0.07; c.strokeStyle = KT.garis; c.strokeText(q[0], x, y + q[1]); }
+      c.fillStyle = warnaAngka; c.fillText(q[0], x, y + q[1]);
+    });
+    if (!peluru) { c.fillStyle = KT.garis; c.fillRect(x - lw2 / 2 - d * 0.03, y - fz * 0.02 - d * 0.03, lw2 + d * 0.06, Math.max(2, d * 0.07) + d * 0.06); }
+    c.fillStyle = warnaAngka; c.fillRect(x - lw2 / 2, y - fz * 0.02, lw2, Math.max(2, d * 0.07));
+  } else {
+    var fs = Math.round(d * (text.length >= 3 ? 0.40 : text.length === 2 ? 0.50 : 0.56));
+    c.font = '900 ' + fs + 'px ' + FONT;
+    if (!peluru) { c.lineWidth = d * 0.09; c.strokeStyle = KT.garis; c.strokeText(text, x, y + d * 0.02); }
+    c.fillStyle = warnaAngka; c.fillText(text, x, y + d * 0.02);
+  }
+  ktPenanda(c, x + r * 0.72, y + r * 0.72, Math.max(7, d * 0.27), J.m, Math.max(1.6, sw * 0.8));
+  c.restore();
+}
+function ktTelur(c, x, y, h, warna) {                         // telur bergaris: warna = nama di KT.telur
+  var P = KT.telur[warna] || KT.telur.jingga, s = h / 100;
+  c.save(); c.translate(x, y); c.scale(s, s); c.lineJoin = c.lineCap = 'round'; c.lineWidth = 6; c.strokeStyle = KT.garis;
+  c.beginPath(); c.moveTo(0, -50); c.bezierCurveTo(28, -50, 40, -10, 40, 14); c.bezierCurveTo(40, 36, 22, 50, 0, 50); c.bezierCurveTo(-22, 50, -40, 36, -40, 14); c.bezierCurveTo(-40, -10, -28, -50, 0, -50); c.closePath();
+  var g = c.createLinearGradient(0, -50, 0, 50); g.addColorStop(0, '#fff'); g.addColorStop(0.25, P[0]); g.addColorStop(1, P[0]);
+  c.fillStyle = P[0]; c.fill();
+  c.save(); c.clip(); c.beginPath(); c.moveTo(-44, 8); c.quadraticCurveTo(-22, -6, 0, 8); c.quadraticCurveTo(22, 22, 44, 8); c.lineWidth = 15; c.strokeStyle = P[1]; c.stroke();
+  c.fillStyle = P[1]; [[-18, 34, 5], [14, 36, 4], [24, -14, 4], [-22, -18, 3.5]].forEach(function (q) { c.beginPath(); c.arc(q[0], q[1], q[2], 0, 6.2832); c.fill(); }); c.restore();
+  c.beginPath(); c.moveTo(0, -50); c.bezierCurveTo(28, -50, 40, -10, 40, 14); c.bezierCurveTo(40, 36, 22, 50, 0, 50); c.bezierCurveTo(-22, 50, -40, 36, -40, 14); c.bezierCurveTo(-40, -10, -28, -50, 0, -50); c.closePath(); c.stroke();
+  c.beginPath(); c.ellipse(-14, -24, 6, 11, 0.5, 0, 6.2832); c.fillStyle = 'rgba(255,255,255,.8)'; c.fill();
+  c.restore();
+}
+function ktNaga(c, x, y, w, P) {                              // naga duduk, tampak depan, pusat di (x, y), lebar w
+  var s = w / 100; c.save(); c.translate(x - 50 * s, y - 46 * s); c.scale(s, s); c.lineJoin = c.lineCap = 'round'; c.lineWidth = 3.4; c.strokeStyle = KT.garis;
+  var isi = function (col) { c.fillStyle = col; c.fill(); c.stroke(); };
+  c.beginPath(); c.moveTo(70, 80); c.quadraticCurveTo(99, 84, 93, 60); c.quadraticCurveTo(90, 54, 84, 60); c.quadraticCurveTo(87, 72, 68, 70); c.closePath(); isi(P.b);                 // ekor
+  c.beginPath(); c.moveTo(84, 60); c.lineTo(95, 49); c.lineTo(98, 64); c.closePath(); isi(P.s);
+  [0, 1].forEach(function (k) {                                // sayap kiri dan kanan
+    var X = function (v) { return k ? 100 - v : v; };
+    c.beginPath(); c.moveTo(X(32), 60); c.lineTo(X(3), 48); c.lineTo(X(7), 20); c.lineTo(X(16), 31); c.lineTo(X(21), 12); c.lineTo(X(30), 33); c.lineTo(X(40), 52); c.closePath(); isi(P.s);
+  });
+  c.beginPath(); c.ellipse(50, 66, 27, 24, 0, 0, 6.2832); isi(P.b);                                               // badan
+  c.beginPath(); c.ellipse(50, 72, 15, 16, 0, 0, 6.2832); c.lineWidth = 2.6; isi(P.p); c.lineWidth = 3.4;          // perut
+  c.beginPath(); c.ellipse(36, 89, 10, 5.5, 0, 0, 6.2832); isi(P.b); c.beginPath(); c.ellipse(64, 89, 10, 5.5, 0, 0, 6.2832); isi(P.b);   // kaki
+  [0, 1].forEach(function (k) { var X = function (v) { return k ? 100 - v : v; }; c.beginPath(); c.moveTo(X(34), 22); c.lineTo(X(29), 4); c.lineTo(X(46), 16); c.closePath(); isi(P.h); });   // tanduk
+  c.beginPath(); c.arc(50, 36, 21, 0, 6.2832); isi(P.b);                                                           // kepala
+  c.beginPath(); c.ellipse(50, 45, 11.5, 8.5, 0, 0, 6.2832); c.lineWidth = 2.6; isi(P.p); c.lineWidth = 3.4;        // moncong
+  c.fillStyle = KT.garis; c.beginPath(); c.arc(46, 44, 1.5, 0, 6.2832); c.arc(54, 44, 1.5, 0, 6.2832); c.fill();
+  [[40, 33], [60, 33]].forEach(function (q) {                  // mata besar
+    c.beginPath(); c.ellipse(q[0], q[1], 6.6, 7.4, 0, 0, 6.2832); c.lineWidth = 2.6; isi('#fff');
+    c.fillStyle = KT.garis; c.beginPath(); c.arc(q[0] + 1, q[1] + 1.2, 3.6, 0, 6.2832); c.fill();
+    c.fillStyle = '#fff'; c.beginPath(); c.arc(q[0] + 2.2, q[1] - 0.4, 1.3, 0, 6.2832); c.fill();
+  });
+  c.fillStyle = 'rgba(255,110,140,.55)'; c.beginPath(); c.arc(30, 43, 4, 0, 6.2832); c.arc(70, 43, 4, 0, 6.2832); c.fill();   // pipi
+  c.lineWidth = 2.4; c.beginPath(); c.moveTo(44, 49.5); c.quadraticCurveTo(50, 53.5, 56, 49.5); c.stroke();
+  c.restore();
+}
+function ktNagaAtas(c, x, y, w, P, ang) {                      // naga penembak tampak dari atas: kepala menghadap arah bidik (ang = arah dalam radian), sayap terbentang, ekor di belakang
+  var s = w / 100; c.save(); c.translate(x, y); c.rotate(ang + Math.PI / 2); c.scale(s, s); c.lineJoin = c.lineCap = 'round'; c.lineWidth = 3.4; c.strokeStyle = KT.garis;
+  var isi = function (col) { c.fillStyle = col; c.fill(); c.stroke(); };
+  c.beginPath(); c.moveTo(-8, 28); c.quadraticCurveTo(-14, 52, 2, 62); c.quadraticCurveTo(15, 67, 24, 56); c.lineTo(15, 56); c.quadraticCurveTo(8, 58, 5, 48); c.quadraticCurveTo(8, 38, 8, 28); c.closePath(); isi(P.b);   // ekor melengkung
+  c.beginPath(); c.moveTo(14, 58); c.lineTo(28, 54); c.lineTo(20, 66); c.closePath(); isi(P.s);                    // ujung ekor
+  [-1, 1].forEach(function (k) {                                                                                    // sayap kiri dan kanan
+    c.beginPath(); c.moveTo(k * 12, -4); c.lineTo(k * 47, -26); c.lineTo(k * 46, -6); c.lineTo(k * 52, 8); c.lineTo(k * 37, 7); c.lineTo(k * 39, 22); c.lineTo(k * 20, 14); c.closePath(); isi(P.s);
+    c.lineWidth = 2; c.beginPath(); c.moveTo(k * 14, -2); c.lineTo(k * 46, -23); c.moveTo(k * 14, 2); c.lineTo(k * 49, 6); c.moveTo(k * 14, 6); c.lineTo(k * 37, 19); c.stroke(); c.lineWidth = 3.4;
+    c.beginPath(); c.ellipse(k * 17, -16, 5.5, 8, k * -0.5, 0, 6.2832); isi(P.b);                                  // kaki depan
+    c.beginPath(); c.ellipse(k * 17, 24, 6, 8.5, k * 0.5, 0, 6.2832); isi(P.b);                                    // kaki belakang
+  });
+  c.beginPath(); c.ellipse(0, 6, 15.5, 27, 0, 0, 6.2832); isi(P.b);                                                // badan
+  [[-8, 5.2], [3, 5], [13, 4.4], [22, 3.6]].forEach(function (q) { c.lineWidth = 2.4; c.beginPath(); c.moveTo(0, q[0] - q[1]); c.lineTo(q[1], q[0]); c.lineTo(0, q[0] + q[1]); c.lineTo(-q[1], q[0]); c.closePath(); isi(P.p); });   // duri punggung
+  c.lineWidth = 3.4;
+  [-1, 1].forEach(function (k) { c.beginPath(); c.moveTo(k * 7, -30); c.lineTo(k * 17, -25); c.lineTo(k * 9, -21); c.closePath(); isi(P.h); });   // tanduk
+  c.beginPath(); c.ellipse(0, -36, 13, 12.5, 0, 0, 6.2832); isi(P.b);                                              // kepala
+  c.beginPath(); c.ellipse(0, -46, 8.5, 8, 0, 0, 6.2832); c.lineWidth = 2.8; isi(P.p); c.lineWidth = 3.4;          // moncong
+  c.fillStyle = KT.garis; c.beginPath(); c.arc(-3, -49, 1.5, 0, 6.2832); c.arc(3, -49, 1.5, 0, 6.2832); c.fill();
+  [-1, 1].forEach(function (k) {                                                                                    // mata menatap ke depan
+    c.beginPath(); c.ellipse(k * 7, -37, 4.4, 5, 0, 0, 6.2832); c.lineWidth = 2.4; isi('#fff');
+    c.fillStyle = KT.garis; c.beginPath(); c.arc(k * 7, -38.4, 2.4, 0, 6.2832); c.fill();
+    c.fillStyle = '#fff'; c.beginPath(); c.arc(k * 7 + 0.9, -39.2, 0.9, 0, 6.2832); c.fill();
+  });
+  c.restore();
+}
+function ktSarang(c, x, y, w, depan) {                         // sarang ranting; depan = bibir depan (digambar setelah telur)
+  var s = w / 150; c.save(); c.translate(x, y); c.scale(s, s); c.lineJoin = c.lineCap = 'round';
+  if (!depan) {
+    c.beginPath(); c.ellipse(0, 22, 74, 36, 0, 0, 6.2832); c.lineWidth = 5; c.strokeStyle = KT.garis; c.fillStyle = '#8E5A2B'; c.fill(); c.stroke();
+    c.beginPath(); c.ellipse(0, 18, 58, 24, 0, 0, 6.2832); c.fillStyle = '#6B4220'; c.fill();
+  } else {
+    c.beginPath(); c.ellipse(0, 22, 69, 31, 0, 0.1 * Math.PI, 0.9 * Math.PI); c.lineWidth = 21; c.strokeStyle = KT.garis; c.stroke();
+    c.lineWidth = 13; c.strokeStyle = '#C98B4B'; c.stroke();
+    c.lineWidth = 2.6; c.strokeStyle = '#7A4A22';
+    for (var a = 0.16; a < 0.9; a += 0.1) { var ang = a * Math.PI; c.beginPath(); c.moveTo(Math.cos(ang) * 63, 22 + Math.sin(ang) * 25); c.lineTo(Math.cos(ang + 0.12) * 75, 22 + Math.sin(ang + 0.12) * 37); c.stroke(); }
+  }
+  c.restore();
+}
+function ktPenyihir(c, x, y, h, gelap) {                       // Morvax: topi miring terlalu besar, hidung bulat (tidak menakutkan); gelap = siluet pencuri
+  var s = h / 96; c.save(); c.translate(x - 48 * s, y - 48 * s); c.scale(s, s); c.lineJoin = c.lineCap = 'round'; c.lineWidth = 4; c.strokeStyle = KT.garis;
+  var isi = function (col) { c.fillStyle = gelap ? '#2B1A3E' : col; c.fill(); c.stroke(); };
+  c.beginPath(); c.moveTo(20, 88); c.quadraticCurveTo(48, 36, 76, 88); c.closePath(); isi('#5B3A8C');                  // jubah
+  c.beginPath(); c.arc(48, 52, 17, 0, 6.2832); isi('#F1C9A5');                                                      // wajah
+  c.beginPath(); c.moveTo(26, 46); c.quadraticCurveTo(52, 38, 74, 46); c.lineTo(78, 38); c.quadraticCurveTo(64, 0, 36, 14); c.quadraticCurveTo(66, 4, 80, 22); c.lineTo(86, 12); c.lineTo(72, 40); c.closePath(); isi('#7B52B5');   // topi terkulai
+  c.beginPath(); c.ellipse(50, 45, 31, 6.5, 0, 0, 6.2832); isi('#7B52B5');
+  c.fillStyle = gelap ? '#FFE680' : KT.garis; c.beginPath(); c.arc(41, 53, 3, 0, 6.2832); c.arc(55, 53, 3, 0, 6.2832); c.fill();
+  c.beginPath(); c.arc(48, 59, 4.2, 0, 6.2832); c.lineWidth = 2.2; isi('#F0A0A0');
+  c.lineWidth = 3; c.beginPath(); c.moveTo(42, 66); c.quadraticCurveTo(48, 70, 54, 66); c.stroke();
+  c.restore();
+}
+function ktJam(c, x, y, r, warna) {                            // ikon jam (pengganti emoji)
+  c.save(); c.lineJoin = c.lineCap = 'round'; c.strokeStyle = warna; c.lineWidth = Math.max(2, r * 0.22);
+  c.beginPath(); c.arc(x, y, r, 0, 6.2832); c.stroke(); c.beginPath(); c.moveTo(x, y - r * 0.55); c.lineTo(x, y); c.lineTo(x + r * 0.45, y + r * 0.25); c.stroke(); c.restore();
+}
+function ktPerisai(c, x, y, r, isi, tepi) {                    // ikon perisai (pengganti emoji)
+  c.save(); c.lineJoin = 'round'; c.beginPath(); c.moveTo(x - r, y - r * 0.8); c.lineTo(x + r, y - r * 0.8); c.lineTo(x + r, y + r * 0.1); c.quadraticCurveTo(x + r, y + r * 0.8, x, y + r); c.quadraticCurveTo(x - r, y + r * 0.8, x - r, y + r * 0.1); c.closePath();
+  c.fillStyle = isi; c.fill(); c.lineWidth = Math.max(1.6, r * 0.2); c.strokeStyle = tepi; c.stroke(); c.restore();
+}
+var KTURL = {};
+function seni(nama, px) {                                       // gambar kartun sebagai data-URL untuk bagian HTML (splash, cerita, layar akhir); disimpan agar dibuat sekali
+  var kunci = nama + '@' + px; if (KTURL[kunci]) return KTURL[kunci];
+  var c = document.createElement('canvas'), k = 3, w = px, h = px; c.width = w * k; c.height = h * k;
+  var x = c.getContext('2d'); x.scale(k, k);
+  var p = nama.split(/[-:]/), jenis = p[0];
+  if (jenis === 'naga') ktNaga(x, w / 2, h * 0.52, w * 0.96, KT.naga[p[1]] || KT.naga.bayunara);
+  else if (jenis === 'telur') ktTelur(x, w / 2, h / 2, h * 0.92, p[1]);
+  else if (nama === 'morvax' || jenis === 'penyihir') ktPenyihir(x, w / 2, h / 2, h * 0.96, false);
+  else if (jenis === 'sarang') { ktSarang(x, w / 2, h * 0.34, w * 0.9, false); [[-34, 15, 'biru'], [34, 15, 'hijau'], [0, -24, 'jingga']].forEach(function (e) { ktTelur(x, w / 2 + e[0] * w / 170, h * 0.34 + e[1] * w / 170, h * 0.38, e[2]); }); ktSarang(x, w / 2, h * 0.34, w * 0.9, true); }
+  else if (jenis === 'bola') { var q = nama.split(':'); ktBola(x, w / 2, h / 2, w * 0.4, q[2] || '', q[1] || 'n', false); }
+  return (KTURL[kunci] = c.toDataURL('image/png'));
 }
 function popTop() { return LAYOUT === 'lebar' ? 125 : 150; }   // tinggi tulisan melayang global ("Soal baru!", dll.)
 function popMin() { return LAYOUT === 'lebar' ? 110 : 170; }   // tulisan melayang tidak naik lebih tinggi dari ini (di bawah HUD)
@@ -811,8 +1009,13 @@ function updateIntro_old(dt) {
   if (G.introT > 4.4) endIntro();
 }
 function fmtTime(s) { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
-function starsText(n) { return n >= 3 ? '⭐⭐⭐' : n === 2 ? '⭐⭐' : '⭐'; }
+var KT_SVG = {                               // ikon bergaris untuk bagian HTML (pengganti emoji)
+  bintang: '<svg class="bt" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.3 6.8.7-5.1 4.6 1.5 6.8L12 17.3l-6.1 3.6 1.5-6.8-5.1-4.6 6.8-.7z" fill="#FFD23F" stroke="#1D2B3A" stroke-width="2" stroke-linejoin="round"/></svg>',
+  jam: '<svg class="ik" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8.5" fill="#FFF8E7" stroke="#1D2B3A" stroke-width="2.4"/><path d="M12 8v5.5l3.5 2" fill="none" stroke="#1D2B3A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 2.8h6" stroke="#1D2B3A" stroke-width="2.6" stroke-linecap="round"/></svg>'
+};
+function starsText(n) { if (gk()) return new Array(Math.max(1, Math.min(3, n)) + 1).join(KT_SVG.bintang); return n >= 3 ? '⭐⭐⭐' : n === 2 ? '⭐⭐' : '⭐'; }
 function ikonAset(nama, emoji) {            // gambar aset bila sudah dimuat, kalau tidak emoji cadangan
+  if (gk()) return '<img alt="" src="' + seni(nama, 160) + '">';           // gaya kartun: gambar dibuat dari kode
   return aset(nama) ? '<img alt="" src="' + ASET_FOLDER + nama + '.webp">' : emoji;
 }
 function endStage(win, why) {
@@ -826,14 +1029,14 @@ function endStage(win, why) {
   if (win) {
     stars = (G.eggs >= 2 && acc >= 0.8) ? 3 : (G.eggs >= 2 || acc >= 0.6) ? 2 : 1;
     G.stars[G.stage - 1] = stars; G.totalScore += G.score;
-    hero = nagaFile ? ikonAset(nagaFile, '🐲') : '🐲'; badge = '✨';
+    hero = nagaFile ? ikonAset(nagaFile, '🐲') : '🐲'; badge = gk() ? KT_SVG.bintang : '✨';
     if (G.stage < 3) {
       G.endKind = 'clear'; title = 'MENANG!';
       msg = 'Stage ' + G.stage + ' selesai! ' + (G.eggs === EGGS ? 'Ketiga telur selamat!' : G.eggs === 2 ? 'Dua telur selamat.' : 'Satu telur selamat.');
-      a = 'Stage berikutnya ▶'; rows.push(['Total', G.totalScore]); mShow = true;
+      a = 'Stage berikutnya'; rows.push(['Total', G.totalScore]); mShow = true;
       plates = [['Telur selamat', telur()], ['Skor stage', '<strong>' + G.score + '</strong>']];
     } else {
-      G.endKind = 'final'; title = 'MENANG!'; badge = '🎉';
+      G.endKind = 'final'; title = 'MENANG!'; badge = gk() ? KT_SVG.bintang : '🎉';
       msg = 'Penyihir Jahat kalah. Dunia aman berkat kamu!';
       var sum = 0; for (i = 0; i < 3; i++) sum += G.stars[i] || 0;
       stars = sum >= 8 ? 3 : sum >= 5 ? 2 : 1;
@@ -844,7 +1047,7 @@ function endStage(win, why) {
   } else {
     G.endKind = 'lose'; title = 'KALAH'; a = 'Coba lagi';
     msg = why === 'time' ? 'Waktu habis! Coba lagi, pasti bisa!' : 'Penyihir membawa kabur telurmu! Coba lagi, pasti bisa!';
-    hero = why === 'time' ? '⏰' : ikonAset('morvax', '🧙'); badge = '🥚';
+    hero = why === 'time' ? (gk() ? KT_SVG.jam : '⏰') : ikonAset('morvax', '🧙'); badge = gk() ? ikonAset('telur-jingga', '🥚') : '🥚';
     plates = [['Telur selamat', telur()], ['Skor stage', '<strong>' + G.score + '</strong>']];
   }
   $('ezPita').className = 'ez-pita' + (win ? '' : ' kalah');
@@ -969,12 +1172,17 @@ var TOGGLES = [
   { k: 'suara', ico: '🔊', t: 'Suara' },
   { k: 'efek', ico: '✨', t: 'Efek gambar' }
 ];
+var TOGGLE_SVG = {                           // ikon garis (pengganti emoji) untuk tombol pengaturan
+  musik: '<svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.6"/><circle cx="16.5" cy="16" r="2.6"/></svg>',
+  suara: '<svg viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+  efek: '<svg viewBox="0 0 24 24"><path d="M12 3l2.2 6.3L21 12l-6.8 2.7L12 21l-2.2-6.3L3 12l6.8-2.7z"/></svg>'
+};
 function buildToggles(box) {
   box.textContent = '';
   TOGGLES.forEach(function (d) {
     if (!AUDIO_AKTIF && d.k !== 'efek') return;
     var b = document.createElement('button'); b.type = 'button'; b.className = 'tg'; b.setAttribute('data-set', d.k);
-    [['tg-i', d.ico], ['tg-t', d.t], ['tg-s', '']].forEach(function (p) { var s = document.createElement('span'); s.className = p[0]; s.textContent = p[1]; b.appendChild(s); });
+    [['tg-i', d.ico], ['tg-t', d.t], ['tg-s', '']].forEach(function (p) { var s = document.createElement('span'); s.className = p[0]; if (p[0] === 'tg-i' && KARTUN && ASET_AKTIF) s.innerHTML = TOGGLE_SVG[d.k]; else s.textContent = p[1]; b.appendChild(s); });
     box.appendChild(b);
   });
 }
@@ -1159,7 +1367,7 @@ function resolveHit(s, ball) {
     G.hits++;
     if (!G.shield && ++G.okStreak >= SHIELD_AT) {
       G.shield = true; G.okStreak = 0; var sp = nestPos();
-      popup(sp.x, Math.max(popMin(),sp.y - 120), '🛡 Perisai siap!', '#ffe58a', { size: 26, rate: 0.7 });
+      popup(sp.x, Math.max(popMin(),sp.y - 120), 'Perisai siap!', '#ffe58a', { size: 26, rate: 0.7 });
     }
     removePair(nb, partner);
   }
@@ -1417,6 +1625,140 @@ function titikKristal(A, dekat) {                    // tempat kristal: pojok ko
   for (i = 0; i < 4; i++) { var x = 40 + A.rnd() * (W - 80), y = 40 + A.rnd() * (H - 80); if (!dekat(x, y, A.gw / 2 + 50)) out.push([x, y, 20]); }
   return out;
 }
+function ktBlob(g, bulat, warna, hi, tebal) {         // gugusan lingkaran bergaris: garis luar dulu, lalu isi, supaya garis dalam tidak terlihat
+  bulat.forEach(function (q) { g.fillStyle = KT.garis; g.beginPath(); g.arc(q[0], q[1], q[2] + tebal, 0, 6.2832); g.fill(); });
+  bulat.forEach(function (q) { g.fillStyle = warna; g.beginPath(); g.arc(q[0], q[1], q[2], 0, 6.2832); g.fill(); });
+  if (hi) bulat.forEach(function (q) { g.fillStyle = hi; g.beginPath(); g.arc(q[0] - q[2] * 0.3, q[1] - q[2] * 0.35, q[2] * 0.45, 0, 6.2832); g.fill(); });
+}
+function buildBgKartunHutan(g) {                      // Hutan (stage 1) gaya kartun: tanah hijau rata, jalur tanah bertepi gelap, pohon dan semak bergaris
+  var A = bgAlat(g, 91), rnd = A.rnd, dekat = A.dekat, stroke = A.stroke, gw = A.gw, i, k, x, y, r;
+  var grd = g.createLinearGradient(0, 0, 0, H); grd.addColorStop(0, '#93D86C'); grd.addColorStop(1, '#68B84C');
+  g.fillStyle = grd; g.fillRect(0, 0, W, H);
+  for (i = 0; i < 46; i++) { x = rnd() * W; y = rnd() * H; r = 22 + rnd() * 44; g.fillStyle = rnd() < 0.5 ? 'rgba(255,255,255,.07)' : 'rgba(30,110,50,.10)'; g.beginPath(); g.ellipse(x, y, r * 1.3, r * 0.75, 0, 0, 6.2832); g.fill(); }   // petak rumput rata
+  stroke(gw + 12, KT.garis);                           // jalur: tepi gelap, dasar tanah, tengah lebih terang, putus-putus
+  stroke(gw, '#D9A066');
+  stroke(gw - 28, '#EDC38E');
+  g.setLineDash([9, 17]); stroke(3, 'rgba(255,255,255,.55)'); g.setLineDash([]);
+  for (i = 0; i < 90; i++) {                           // rumput kecil
+    x = rnd() * W; y = rnd() * H; if (dekat(x, y, gw / 2 + 16)) continue;
+    g.strokeStyle = '#3E9440'; g.lineWidth = 3; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x - 5, y); g.lineTo(x - 7, y - 9); g.moveTo(x, y); g.lineTo(x, y - 12); g.moveTo(x + 5, y); g.lineTo(x + 7, y - 9); g.stroke();
+  }
+  for (i = 0; i < 34; i++) {                           // bunga bergaris
+    x = rnd() * W; y = rnd() * H; if (dekat(x, y, gw / 2 + 18)) continue;
+    var fc = ['#FF9EC7', '#FFFFFF', '#FFE27A', '#C9A7FF'][Math.floor(rnd() * 4)];
+    ktBlob(g, [[x - 5, y, 4], [x + 5, y, 4], [x, y - 5, 4], [x, y + 5, 4]], fc, null, 1.8);
+    g.fillStyle = KT.kuning; g.strokeStyle = KT.garis; g.lineWidth = 2; g.beginPath(); g.arc(x, y, 3.4, 0, 6.2832); g.fill(); g.stroke();
+  }
+  var batu = function (px, py, s) {
+    g.fillStyle = KT.garis; g.beginPath(); g.ellipse(px, py + 2, s * 1.2 + 3, s * 0.85 + 3, 0, 0, 6.2832); g.fill();
+    g.fillStyle = '#A9B4BE'; g.beginPath(); g.ellipse(px, py, s * 1.2, s * 0.85, 0, 0, 6.2832); g.fill();
+    g.fillStyle = 'rgba(255,255,255,.55)'; g.beginPath(); g.ellipse(px - s * 0.35, py - s * 0.3, s * 0.45, s * 0.22, -0.4, 0, 6.2832); g.fill();
+  };
+  for (i = 0; i < 14; i++) { x = rnd() * W; y = rnd() * H; if (!dekat(x, y, gw / 2 + 30)) batu(x, y, 8 + rnd() * 7); }
+  var semak = function (px, py, s) { ktBlob(g, [[px - s * 0.7, py + s * 0.2, s * 0.65], [px + s * 0.7, py + s * 0.2, s * 0.65], [px, py - s * 0.2, s * 0.8]], '#3FAE55', '#74D98A', 3); };
+  var pohon = function (px, py, s) {
+    g.fillStyle = 'rgba(30,70,40,.28)'; g.beginPath(); g.ellipse(px + s * 0.1, py + s * 0.55, s * 0.9, s * 0.25, 0, 0, 6.2832); g.fill();
+    g.fillStyle = KT.garis; g.fillRect(px - s * 0.17 - 3, py + s * 0.05, s * 0.34 + 6, s * 0.6 + 3);
+    g.fillStyle = '#B87A45'; g.fillRect(px - s * 0.17, py + s * 0.08, s * 0.34, s * 0.55);
+    ktBlob(g, [[px - s * 0.5, py - s * 0.05, s * 0.55], [px + s * 0.5, py - s * 0.05, s * 0.55], [px, py - s * 0.5, s * 0.7]], '#2F9A4A', '#5FD27A', 4);
+  };
+  titikKristal(A, dekat).forEach(function (p, q) { if (q % 2) semak(p[0], p[1], 15 + p[2] * 0.25); else batu(p[0], p[1], 10); });
+  for (i = 0; i < 7; i++) { x = 30 + rnd() * (W - 60); y = 70 + rnd() * (H - 140); if (!dekat(x, y, gw / 2 + 40) && !(LAYOUT === 'lebar' && y > H - 80 && x < 420)) semak(x, y, 14 + rnd() * 6); }
+  for (i = 0; i < 14; i++) {                           // pohon besar menutup tepi peta
+    var kiri = rnd() < 0.5; x = kiri ? -2 + rnd() * 26 : W - 24 + rnd() * 26; y = 60 + rnd() * (H - 60); r = 36 + rnd() * 16;
+    if (dekat(x, y, gw / 2 + r * 0.9 + 8)) continue; pohon(x, y, r);
+  }
+  var pbg = (LAYOUT === 'lebar') ? 'linear-gradient(180deg,#93D86C 0%,#68B84C 100%)' : '';
+  document.documentElement.style.background = pbg; document.body.style.background = pbg;
+}
+function ktPoligon(g, pts, warna, tebal) {            // poligon bergaris bersudut bulat
+  g.beginPath(); pts.forEach(function (p, i) { if (i) g.lineTo(p[0], p[1]); else g.moveTo(p[0], p[1]); }); g.closePath();
+  g.lineJoin = 'round'; g.lineWidth = tebal; g.strokeStyle = KT.garis; g.fillStyle = warna; g.fill(); g.stroke();
+}
+function buildBgKartunSalju(g) {                      // Gunung Bersalju (stage 2) gaya kartun: salju rata, jalur es bertepi gelap, cemara bersalju, kristal es
+  var A = bgAlat(g, 137), rnd = A.rnd, dekat = A.dekat, stroke = A.stroke, gw = A.gw, i, k, x, y, r;
+  var grd = g.createLinearGradient(0, 0, 0, H); grd.addColorStop(0, '#EAF6FF'); grd.addColorStop(1, '#BFE0F5');
+  g.fillStyle = grd; g.fillRect(0, 0, W, H);
+  for (i = 0; i < 46; i++) { x = rnd() * W; y = rnd() * H; r = 22 + rnd() * 44; g.fillStyle = rnd() < 0.5 ? 'rgba(255,255,255,.55)' : 'rgba(110,160,215,.14)'; g.beginPath(); g.ellipse(x, y, r * 1.3, r * 0.7, 0, 0, 6.2832); g.fill(); }
+  stroke(gw + 12, KT.garis); stroke(gw, '#CFE9FF'); stroke(gw - 28, '#F7FCFF');
+  g.setLineDash([9, 17]); stroke(3, 'rgba(91,192,240,.7)'); g.setLineDash([]);
+  for (i = 0; i < 90; i++) {                           // serpihan salju
+    x = rnd() * W; y = rnd() * H; if (dekat(x, y, gw / 2 + 14)) continue;
+    g.fillStyle = '#fff'; g.strokeStyle = 'rgba(91,150,205,.55)'; g.lineWidth = 1.4; g.beginPath(); g.arc(x, y, 2 + rnd() * 2.2, 0, 6.2832); g.fill(); g.stroke();
+  }
+  var gundukan = function (px, py, s) { ktBlob(g, [[px - s * 0.55, py + s * 0.15, s * 0.5], [px + s * 0.55, py + s * 0.15, s * 0.5], [px, py - s * 0.1, s * 0.65]], '#FFFFFF', null, 3); };
+  var batu = function (px, py, s) {
+    g.fillStyle = KT.garis; g.beginPath(); g.ellipse(px, py + 2, s * 1.2 + 3, s * 0.85 + 3, 0, 0, 6.2832); g.fill();
+    g.fillStyle = '#9AA8BD'; g.beginPath(); g.ellipse(px, py, s * 1.2, s * 0.85, 0, 0, 6.2832); g.fill();
+    g.fillStyle = '#fff'; g.beginPath(); g.ellipse(px - s * 0.1, py - s * 0.35, s * 0.9, s * 0.42, -0.1, 0, 6.2832); g.fill();
+  };
+  for (i = 0; i < 14; i++) { x = rnd() * W; y = rnd() * H; if (!dekat(x, y, gw / 2 + 30)) batu(x, y, 8 + rnd() * 7); }
+  var kristal = function (px, py, s) {                 // kristal es bergaris
+    [[-0.55, 0.15, 0.55], [0, 0, 0.85], [0.5, 0.2, 0.6]].forEach(function (q) {
+      var hx = px + q[0] * s, hy = py + q[1] * s, hh = q[2] * s * 1.5, hw = q[2] * s * 0.42;
+      ktPoligon(g, [[hx, hy - hh], [hx + hw, hy - hh * 0.35], [hx + hw * 0.8, hy + hh * 0.15], [hx - hw * 0.8, hy + hh * 0.15], [hx - hw, hy - hh * 0.35]], '#8ED8F8', 3);
+      g.fillStyle = 'rgba(255,255,255,.7)'; g.beginPath(); g.ellipse(hx - hw * 0.35, hy - hh * 0.45, hw * 0.18, hh * 0.22, 0, 0, 6.2832); g.fill();
+    });
+  };
+  titikKristal(A, dekat).forEach(function (p, q) { if (q % 2) gundukan(p[0], p[1], 15 + p[2] * 0.25); else kristal(p[0], p[1], p[2] * 0.9); });
+  var cemara = function (px, py, s) {
+    g.fillStyle = 'rgba(60,100,150,.25)'; g.beginPath(); g.ellipse(px + s * 0.1, py + s * 0.5, s * 0.8, s * 0.2, 0, 0, 6.2832); g.fill();
+    g.fillStyle = KT.garis; g.fillRect(px - s * 0.12 - 3, py + s * 0.12, s * 0.24 + 6, s * 0.4 + 3); g.fillStyle = '#B87A45'; g.fillRect(px - s * 0.12, py + s * 0.14, s * 0.24, s * 0.36);
+    for (var l = 0; l < 3; l++) {
+      var yy = py + s * 0.2 - l * s * 0.5, ww = s * (0.75 - l * 0.17), tp = yy - s * 0.65;
+      ktPoligon(g, [[px, tp], [px + ww, yy], [px - ww, yy]], '#2E8C8C', 3.5);
+      ktPoligon(g, [[px, tp], [px + ww * 0.55, yy - s * 0.3], [px + ww * 0.2, yy - s * 0.22], [px - ww * 0.15, yy - s * 0.3], [px - ww * 0.55, yy - s * 0.3]], '#FFFFFF', 2.5);
+    }
+  };
+  for (i = 0; i < 6; i++) { x = 30 + rnd() * (W - 60); y = 80 + rnd() * (H - 140); if (!dekat(x, y, gw / 2 + 44) && !(LAYOUT === 'lebar' && y > H - 80 && x < 420)) cemara(x, y, 20 + rnd() * 6); }
+  for (i = 0; i < 14; i++) {
+    var kiri = rnd() < 0.5; x = kiri ? -2 + rnd() * 26 : W - 24 + rnd() * 26; y = 70 + rnd() * (H - 70); r = 34 + rnd() * 14;
+    if (dekat(x, y, gw / 2 + r * 0.9 + 8)) continue; cemara(x, y, r);
+  }
+  var pbg = (LAYOUT === 'lebar') ? 'linear-gradient(180deg,#EAF6FF 0%,#BFE0F5 100%)' : '';
+  document.documentElement.style.background = pbg; document.body.style.background = pbg;
+}
+function buildBgKartunApi(g) {                        // Gunung Berapi (stage 3) gaya kartun: batu ungu gelap, sungai lava bertepi menyala, batu obsidian, kristal api
+  var A = bgAlat(g, 211), rnd = A.rnd, dekat = A.dekat, stroke = A.stroke, gw = A.gw, i, k, x, y, r;
+  var grd = g.createLinearGradient(0, 0, 0, H); grd.addColorStop(0, '#68394F'); grd.addColorStop(1, '#3E2232');
+  g.fillStyle = grd; g.fillRect(0, 0, W, H);
+  for (i = 0; i < 46; i++) { x = rnd() * W; y = rnd() * H; r = 22 + rnd() * 44; g.fillStyle = rnd() < 0.5 ? 'rgba(255,255,255,.05)' : 'rgba(0,0,0,.16)'; g.beginPath(); g.ellipse(x, y, r * 1.3, r * 0.75, 0, 0, 6.2832); g.fill(); }
+  stroke(gw + 12, KT.garis); stroke(gw + 5, '#FF8A2A'); stroke(gw - 3, '#8E2F2A'); stroke(gw - 28, '#C04A2E');
+  g.setLineDash([9, 17]); stroke(3, 'rgba(255,210,63,.75)'); g.setLineDash([]);
+  for (i = 0; i < 18; i++) {                           // retakan membara
+    x = rnd() * W; y = rnd() * H; if (dekat(x, y, gw / 2 + 24)) continue;
+    var px = x, py = y, ang = rnd() * 6.2832, pts = [[px, py]]; for (k = 0; k < 3; k++) { ang += rnd() * 1.6 - 0.8; px += Math.cos(ang) * (12 + rnd() * 14); py += Math.sin(ang) * (12 + rnd() * 14); pts.push([px, py]); }
+    [[6, KT.garis], [2.6, '#FF9A2E']].forEach(function (L) { g.lineCap = 'round'; g.strokeStyle = L[1]; g.lineWidth = L[0]; g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (var q = 1; q < pts.length; q++) g.lineTo(pts[q][0], pts[q][1]); g.stroke(); });
+  }
+  var batu = function (px, py, s) {
+    g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(px + 3, py + s * 0.55, s * 1.1, s * 0.35, 0, 0, 6.2832); g.fill();
+    ktPoligon(g, [[px - s, py + s * 0.35], [px - s * 0.7, py - s * 0.5], [px - s * 0.1, py - s * 0.85], [px + s * 0.6, py - s * 0.45], [px + s, py + s * 0.35]], '#3A2330', 3.5);
+    g.strokeStyle = '#FF8A2A'; g.lineWidth = 2.6; g.lineCap = 'round'; g.beginPath(); g.moveTo(px + s * 0.6, py - s * 0.4); g.lineTo(px + s * 0.92, py + s * 0.28); g.stroke();
+  };
+  for (i = 0; i < 12; i++) { x = rnd() * W; y = rnd() * H; if (!dekat(x, y, gw / 2 + 30)) batu(x, y, 8 + rnd() * 8); }
+  for (i = 0; i < 12; i++) {                           // kubangan lava kecil
+    x = rnd() * W; y = rnd() * H; if (dekat(x, y, gw / 2 + 34)) continue; r = 9 + rnd() * 9;
+    g.fillStyle = KT.garis; g.beginPath(); g.ellipse(x, y, r * 1.1 + 3, r * 0.65 + 3, 0, 0, 6.2832); g.fill();
+    g.fillStyle = '#FF7A26'; g.beginPath(); g.ellipse(x, y, r * 1.1, r * 0.65, 0, 0, 6.2832); g.fill();
+    g.fillStyle = '#FFD23F'; g.beginPath(); g.ellipse(x - r * 0.15, y - r * 0.05, r * 0.5, r * 0.22, 0, 0, 6.2832); g.fill();
+  }
+  for (i = 0; i < 40; i++) { x = rnd() * W; y = rnd() * H; if (dekat(x, y, gw / 2 + 6)) continue; g.fillStyle = '#FFB347'; g.strokeStyle = KT.garis; g.lineWidth = 1.2; g.beginPath(); g.arc(x, y, 1.8 + rnd() * 1.8, 0, 6.2832); g.fill(); g.stroke(); }   // bara
+  var kristal = function (px, py, s) {
+    [[-0.55, 0.15, 0.55], [0, 0, 0.85], [0.5, 0.2, 0.6]].forEach(function (q) {
+      var hx = px + q[0] * s, hy = py + q[1] * s, hh = q[2] * s * 1.5, hw = q[2] * s * 0.42;
+      ktPoligon(g, [[hx, hy - hh], [hx + hw, hy - hh * 0.35], [hx + hw * 0.8, hy + hh * 0.15], [hx - hw * 0.8, hy + hh * 0.15], [hx - hw, hy - hh * 0.35]], '#FF8A2A', 3);
+      g.fillStyle = 'rgba(255,230,150,.85)'; g.beginPath(); g.ellipse(hx - hw * 0.35, hy - hh * 0.45, hw * 0.18, hh * 0.22, 0, 0, 6.2832); g.fill();
+    });
+  };
+  titikKristal(A, dekat).forEach(function (p, q) { if (q % 2) batu(p[0], p[1], 12); else kristal(p[0], p[1], p[2] * 0.9); });
+  for (i = 0; i < 14; i++) {                           // batu besar menutup tepi peta
+    var kiri = rnd() < 0.5; x = kiri ? -2 + rnd() * 24 : W - 22 + rnd() * 24; y = 70 + rnd() * (H - 70); r = 26 + rnd() * 16;
+    if (dekat(x, y, gw / 2 + r + 6)) continue; batu(x, y, r);
+  }
+  var pbg = (LAYOUT === 'lebar') ? 'linear-gradient(180deg,#68394F 0%,#3E2232 100%)' : '';
+  document.documentElement.style.background = pbg; document.body.style.background = pbg;
+}
 function buildBgSalju(g) {                           // Gunung Bersalju: salju, parit es, cemara bersalju, kristal es
   var A = bgAlat(g, 137), rnd = A.rnd, dekat = A.dekat, stroke = A.stroke, gw = A.gw, i, k, x, y, r;
   var grd = g.createLinearGradient(0, 0, 0, H); grd.addColorStop(0, '#e9f3fb'); grd.addColorStop(0.5, '#bdd5ec'); grd.addColorStop(1, '#85a9cf');
@@ -1521,6 +1863,7 @@ function buildBg() {
   var T = THEMES[CUR - 1];
   bg = document.createElement('canvas'); bg.width = W * 2; bg.height = H * 2;
   var g = bg.getContext('2d'); g.scale(2, 2);
+  if (gk()) { [buildBgKartunHutan, buildBgKartunSalju, buildBgKartunApi][CUR - 1](g); return; }   // gaya kartun garis tebal: Hutan, Salju, Berapi
   if (ASET_AKTIF && GAYA_PETA[CUR - 1]) { [buildBgHutan, buildBgSalju, buildBgApi][CUR - 1](g); return; }   // gaya baru: Hutan Misterius, Gunung Bersalju, Gunung Berapi
   var grd = g.createLinearGradient(0, 0, 0, H);
   grd.addColorStop(0, T.top); grd.addColorStop(0.6, T.mid); grd.addColorStop(1, T.bot);
@@ -1551,6 +1894,7 @@ function drawFrac(text, x, y, fs, tc) {      // pecahan bersusun: pembilang, gar
   ctx.fillRect(x - w / 2, y - fs * 0.02, w, Math.max(2, fs * 0.1));
 }
 function drawNumBall(x, y, r, text, c1, c2, tc, dom, ring) {
+  if (gk()) { ktBola(ctx, x, y, r, text, dom, !!ring); return; }          // gaya kartun garis tebal
   var imo = (dom && gayaBaru()) ? aset('orb-' + ORB_WARNA[dom] + '-' + ((text.charCodeAt(0) + text.length) % 3 + 1)) : null;
   if (imo) {                                // gaya baru: gambar orb + cakram putih datar di tengah supaya angka terbaca
     var so = r * 2.2, ho = so * imo.naturalHeight / imo.naturalWidth;
@@ -1580,7 +1924,8 @@ var EGG_SLOT = [[-34, 15], [34, 15], [0, -24]];   // posisi 3 telur di sarang
 function eggHidden(i) { for (var k = 0; k < G.gains.length; k++) if (G.gains[k].slot === i) return true; return false; }
 function drawNest(ex, ey, near) {            // 3 telur di sarang (+ perisai saat masa perlindungan)
   var i, sh = near ? Math.sin(G.time * 40) * 3 : 0, nb = gayaBaru();
-  if (nb) {                                 // gaya baru: gambar sarang (cadangan: lingkaran seperti dulu)
+  if (gk()) ktSarang(ctx, ex, ey, 150, false);
+  else if (nb) {                            // gaya baru: gambar sarang (cadangan: lingkaran seperti dulu)
     var imN = aset('sarang-kosong');
     if (imN) { var nw = 178, nh = nw * imN.naturalHeight / imN.naturalWidth; ctx.drawImage(imN, ex - nw / 2, ey - nh / 2 + 8, nw, nh); }
     else { var TT = THEMES[CUR - 1]; ctx.fillStyle = TT.nest1; ctx.beginPath(); ctx.arc(ex, ey, 62, 0, 6.2832); ctx.fill(); ctx.fillStyle = TT.nest2; ctx.beginPath(); ctx.arc(ex, ey, 50, 0, 6.2832); ctx.fill(); }
@@ -1599,14 +1944,17 @@ function drawNest(ex, ey, near) {            // 3 telur di sarang (+ perisai saa
     var sl0 = nb ? siluetMorvax() : null;
     if (sl0) { var mh0 = 118, mw0 = mh0 * sl0.width / sl0.height; ctx.drawImage(sl0, ex - mw0 / 2, ey - mh0 / 2, mw0, mh0); }
     else { ctx.font = '84px ' + EMOJI; ctx.fillText('🧙', ex, ey); }
+    if (gk()) ktSarang(ctx, ex, ey, 150, true);
     return;
   }
   ctx.font = '42px ' + EMOJI;
   for (i = 0; i < EGGS; i++) if (i < G.eggs && !eggHidden(i)) {
+    if (gk()) { ktTelur(ctx, ex + EGG_SLOT[i][0] + sh, ey + EGG_SLOT[i][1], 56, TELUR_SLOT[i].slice(6)); continue; }
     var ie = nb ? aset(TELUR_SLOT[i]) : null;
     if (ie) { var ke = 0.95; ctx.drawImage(ie, ex + EGG_SLOT[i][0] + sh - ie.naturalWidth * ke / 2, ey + EGG_SLOT[i][1] - ie.naturalHeight * ke / 2, ie.naturalWidth * ke, ie.naturalHeight * ke); }
     else ctx.fillText('🥚', ex + EGG_SLOT[i][0] + sh, ey + EGG_SLOT[i][1]);
   }
+  if (gk()) ktSarang(ctx, ex, ey, 150, true);
 }
 function drawSteals() {                      // penyihir menghisap telur dengan energi jahat
   var np = nestPos(), i, k;
@@ -1637,7 +1985,8 @@ function drawSteals() {                      // penyihir menghisap telur dengan 
     if (T < 0.25) ex += Math.sin(T * 120) * 3;      // telur bergetar sebelum terhisap
     if (p < 1) {
       ctx.globalAlpha = 1 - 0.6 * p; var ie2 = gayaBaru() ? aset(TELUR_SLOT[s.slot]) : null;
-      if (ie2) { var k2 = 0.95 * (1 - 0.65 * p); ctx.drawImage(ie2, ex - ie2.naturalWidth * k2 / 2, ey - ie2.naturalHeight * k2 / 2, ie2.naturalWidth * k2, ie2.naturalHeight * k2); }
+      if (gk()) ktTelur(ctx, ex, ey, 56 * (1 - 0.65 * p), TELUR_SLOT[s.slot].slice(6));
+      else if (ie2) { var k2 = 0.95 * (1 - 0.65 * p); ctx.drawImage(ie2, ex - ie2.naturalWidth * k2 / 2, ey - ie2.naturalHeight * k2 / 2, ie2.naturalWidth * k2, ie2.naturalHeight * k2); }
       else { ctx.font = Math.round(42 * (1 - 0.65 * p)) + 'px ' + EMOJI; ctx.fillText('🥚', ex, ey); }
     }
     else {
@@ -1657,19 +2006,22 @@ function drawGains() {                       // telur naga terbang ke sarang
     ctx.globalAlpha = 0.35 * (1 - T); ctx.fillStyle = '#ffe58a'; ctx.beginPath(); ctx.arc(x, y, 34 + 14 * T, 0, 6.2832); ctx.fill();
     ctx.globalAlpha = 1; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     var ig = gayaBaru() ? aset(TELUR_SLOT[g.slot >= 0 ? g.slot : 2]) : null;
-    if (ig) { var kg = 0.8 + 0.2 * e; ctx.drawImage(ig, x - ig.naturalWidth * kg / 2, y - ig.naturalHeight * kg / 2, ig.naturalWidth * kg, ig.naturalHeight * kg); }
+    if (gk()) ktTelur(ctx, x, y, 46 + 10 * e, TELUR_SLOT[g.slot >= 0 ? g.slot : 2].slice(6));
+    else if (ig) { var kg = 0.8 + 0.2 * e; ctx.drawImage(ig, x - ig.naturalWidth * kg / 2, y - ig.naturalHeight * kg / 2, ig.naturalWidth * kg, ig.naturalHeight * kg); }
     else { ctx.font = Math.round(34 + 8 * e) + 'px ' + EMOJI; ctx.fillText('🥚', x, y); }
     ctx.restore();
   }
 }
 function drawEggMark(x, y) {                // tanda telur naga: cincin emas + lencana hadiah
   var pulse = 2 * Math.sin(G.time * 6), full = G.eggs >= EGGS, label = full ? '+' + EGG_BONUS : '+1';
-  ctx.beginPath(); ctx.arc(x, y, CFG.R + 5 + pulse, 0, 6.2832); ctx.lineWidth = 5; ctx.strokeStyle = '#ffd54a'; ctx.stroke();
-  ctx.beginPath(); ctx.arc(x, y, CFG.R + 11 + pulse, 0, 6.2832); ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,229,138,.6)'; ctx.stroke();
+  var kk = gk();
+  ctx.beginPath(); ctx.arc(x, y, CFG.R + 5 + pulse, 0, 6.2832); ctx.lineWidth = 5; ctx.strokeStyle = kk ? KT.kuning : '#ffd54a'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(x, y, CFG.R + 11 + pulse, 0, 6.2832); ctx.lineWidth = 2; ctx.strokeStyle = kk ? KT.garis : 'rgba(255,229,138,.6)'; ctx.stroke();
   var bw = full ? 72 : 54, by = y - CFG.R - 22;
-  rr(x - bw / 2, by - 12, bw, 24, 12); ctx.fillStyle = '#fff4c2'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#b8801a'; ctx.stroke();
-  ctx.fillStyle = '#4a2b00'; ctx.font = 'bold 16px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('🥚' + label, x, by + 1);
+  rr(x - bw / 2, by - 12, bw, 24, 12); ctx.fillStyle = kk ? KT.krem : '#fff4c2'; ctx.fill(); ctx.lineWidth = kk ? 3 : 2; ctx.strokeStyle = kk ? KT.garis : '#b8801a'; ctx.stroke();
+  ctx.fillStyle = kk ? KT.garis : '#4a2b00'; ctx.font = (kk ? '900 ' : 'bold ') + '16px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  if (kk) { ktTelur(ctx, x - bw / 2 + 13, by, 18, 'jingga'); ctx.fillText(label, x + 8, by + 1); }
+  else ctx.fillText('🥚' + label, x, by + 1);
 }
 function drawSwapMark() {                    // tanda dua bola akan bertukar: cincin mengecil + garis putus + panah ⇄
   var s = G.swap, ax = s.a.x + s.a.ox, ay = s.a.y + s.a.oy, bx = s.b.x + s.b.ox, by = s.b.y + s.b.oy;
@@ -1802,7 +2154,7 @@ function updateIntro(dt) {
 }
 function drawIntro() {
   var T = G.introT, st = G.tourStep, d = G.intro, cx = W / 2, g = tourGeo(), cy = g.cy, R = 34;
-  ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = gk() ? 'rgba(29,43,58,.66)' : 'rgba(0,0,0,0.55)'; ctx.fillRect(0, 0, W, H);
   var fix = FIXON() && G.key.c !== undefined;
   var e = st >= 2 ? 1 : (st === 1 ? Math.min(1, T / 1.0) : 0); e = e * e * (3 - 2 * e);
   var gap = 150 * (1 - e);
@@ -1823,17 +2175,23 @@ function drawIntro() {
     var sc = 0.85 + 0.15 * Math.min(1, T / 0.25);
     ctx.save(); ctx.translate(cx, cy - 95 - (lines.length - 1) * 28); ctx.scale(sc, sc);
     ctx.font = 'bold ' + (lines.length > 1 ? 38 : 44) + 'px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.lineWidth = 7; ctx.strokeStyle = 'rgba(0,0,0,.65)';
+    ctx.lineWidth = 7; ctx.strokeStyle = gk() ? KT.garis : 'rgba(0,0,0,.65)';
     lines.forEach(function (ln, li) { ctx.strokeText(ln, 0, li * 56); ctx.fillStyle = '#9be37a'; ctx.fillText(ln, 0, li * 56); });
     ctx.restore();
   }
   var cap = introCaption(st);
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = 'bold 30px ' + FONT; ctx.lineWidth = 7; ctx.strokeStyle = 'rgba(0,0,0,.7)';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = 'bold 30px ' + FONT; ctx.lineWidth = 7; ctx.strokeStyle = gk() ? KT.garis : 'rgba(0,0,0,.7)';
   cap.forEach(function (ln, li) { ctx.strokeText(ln, cx, cy + 100 + li * 40); ctx.fillStyle = '#fff'; ctx.fillText(ln, cx, cy + 100 + li * 40); });
   var y = g.y, last = st === TOUR_N - 1;
   ctx.font = '18px ' + FONT; ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.fillText((st + 1) + ' / ' + TOUR_N, cx, y - g.cnt);
-  rr(g.x, y, BTN.w, g.h, 28); ctx.fillStyle = '#ffd54a'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#b8801a'; ctx.stroke();
-  ctx.fillStyle = '#4a2b00'; ctx.font = 'bold 34px ' + FONT; ctx.fillText(last ? 'Mulai main!' : 'Lanjut ▶', cx, y + g.h / 2 + 2);
+  if (gk()) {                                    // tombol kartun: jingga bergaris tebal dengan bayangan padat
+    rr(g.x, y + 6, BTN.w, g.h, 28); ctx.fillStyle = KT.garis; ctx.fill();
+    rr(g.x, y, BTN.w, g.h, 28); var tg = ctx.createLinearGradient(0, y, 0, y + g.h); tg.addColorStop(0, '#FFA24D'); tg.addColorStop(1, '#FF8A2A'); ctx.fillStyle = tg; ctx.fill(); ctx.lineWidth = 4.5; ctx.strokeStyle = KT.garis; ctx.stroke();
+    ctx.font = '900 34px ' + FONT; teksGaris(last ? 'Mulai main!' : 'Lanjut', cx, y + g.h / 2 + 2, 7);
+  } else {
+    rr(g.x, y, BTN.w, g.h, 28); ctx.fillStyle = '#ffd54a'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#b8801a'; ctx.stroke();
+    ctx.fillStyle = '#4a2b00'; ctx.font = 'bold 34px ' + FONT; ctx.fillText(last ? 'Mulai main!' : 'Lanjut', cx, y + g.h / 2 + 2);
+  }
   ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = '20px ' + FONT; ctx.fillText('Lewati tur', cx, g.skipY);
   ctx.textBaseline = 'alphabetic';
 }
@@ -1874,7 +2232,7 @@ function hintLines() {                   // dua baris untuk layout lebar
   return ['Arahkan ke bola · klik untuk menembak', 'Klik naga untuk menukar peluru'];
 }
 function drawLivePanel(cx) {
-  var K = G.key, op = K.op, dm = OPDOM[K.op], hc = DOMCOL[dm], sym = SYM[op], nb = gayaBaru(), tx = nb ? GAYA.teks : '#4a2b00';
+  var K = G.key, op = K.op, dm = OPDOM[K.op], hc = DOMCOL[dm], sym = SYM[op], nb = gayaBaru(), kk = gk(), tx = kk ? KT.garis : nb ? GAYA.teks : '#4a2b00';
   var ORBISI = { n: '#7cc61e', i: '#3aa0ea', d: '#f56a14', f: '#8a35d8' }, ORBTEPI = { n: '#4f8a0e', i: '#1a5fb0', d: '#b33a04', f: '#4a0e86' };
   var fix = FIXON() && K.c !== undefined, by = 54, R = 20, PW = 336;
   var s = null, x = null, auto = false;
@@ -1886,11 +2244,13 @@ function drawLivePanel(cx) {
   }
   var ok = !!(x && !x.bad && s && matches(s.val, x.val, op, K.k));
   ctx.textAlign = 'center';
+  if (kk) { rr(cx - PW / 2, 18, PW, 96, 28); ctx.fillStyle = KT.garis; ctx.fill(); }      // bayangan padat di bawah panel
   rr(cx - PW / 2, 12, PW, 96, nb ? 28 : 18);
-  if (nb) { var pg = ctx.createLinearGradient(0, 12, 0, 108); pg.addColorStop(0, GAYA.panelAtas); pg.addColorStop(1, GAYA.panelBawah); ctx.fillStyle = pg; } else ctx.fillStyle = 'rgba(255,229,138,.96)';
+  if (kk) ctx.fillStyle = KT.krem;
+  else if (nb) { var pg = ctx.createLinearGradient(0, 12, 0, 108); pg.addColorStop(0, GAYA.panelAtas); pg.addColorStop(1, GAYA.panelBawah); ctx.fillStyle = pg; } else ctx.fillStyle = 'rgba(255,229,138,.96)';
   ctx.fill();
-  ctx.lineWidth = 3; ctx.strokeStyle = nb ? GAYA.tepi : '#b8801a';
-  if (G.mode === 'intro') { ctx.lineWidth = 5 + 2 * Math.sin(G.introT * 8); ctx.strokeStyle = '#fff'; }
+  ctx.lineWidth = kk ? 4 : 3; ctx.strokeStyle = kk ? KT.garis : nb ? GAYA.tepi : '#b8801a';
+  if (G.mode === 'intro') { ctx.lineWidth = 5 + 2 * Math.sin(G.introT * 8); ctx.strokeStyle = kk ? KT.kuning : '#fff'; }
   ctx.stroke();
   var tail = fix ? [sym, fmtP(K.c, dm), '=', fmt(K.T, dm)] : ['=', fmt(K.k, dm)];
   ctx.font = 'bold 32px ' + FONT;
@@ -1902,12 +2262,12 @@ function drawLivePanel(cx) {
   var verdict = !!((SEL.ver || auto) && x);
   rr(x0, by - 29, slotW, 58, 16);
   ctx.fillStyle = verdict ? ((x.bad || !ok) ? 'rgba(255,138,128,.75)' : 'rgba(155,227,122,.8)') : 'rgba(255,255,255,.6)'; ctx.fill();
-  ctx.setLineDash([6, 6]); ctx.lineWidth = 3; ctx.strokeStyle = nb ? ORBTEPI[dm] : hc[1]; ctx.stroke(); ctx.setLineDash([]);
+  ctx.setLineDash([6, 6]); ctx.lineWidth = 3; ctx.strokeStyle = kk ? KT.garis : nb ? ORBTEPI[dm] : hc[1]; ctx.stroke(); ctx.setLineDash([]);
   var ys = ['#ffe58a', '#f0a21a', '#4a2b00'];
   var chip = function (tok, px, shooter) {
     if (!tok) {
-      ctx.beginPath(); ctx.arc(px, by, R, 0, 6.2832); ctx.fillStyle = nb ? ORBISI[dm] : hc[0]; ctx.globalAlpha = 0.8; ctx.fill(); ctx.globalAlpha = 1;
-      ctx.setLineDash([5, 5]); ctx.lineWidth = 3; ctx.strokeStyle = nb ? ORBTEPI[dm] : hc[1]; ctx.stroke(); ctx.setLineDash([]);
+      ctx.beginPath(); ctx.arc(px, by, R, 0, 6.2832); ctx.fillStyle = kk ? KT.jenis[dm].t : nb ? ORBISI[dm] : hc[0]; ctx.globalAlpha = kk ? 0.5 : 0.8; ctx.fill(); ctx.globalAlpha = 1;
+      ctx.setLineDash([5, 5]); ctx.lineWidth = 3; ctx.strokeStyle = kk ? KT.garis : nb ? ORBTEPI[dm] : hc[1]; ctx.stroke(); ctx.setLineDash([]);
     } else {
       var cc = shooter ? ys : DOMCOL[tok.dom || 'n'];
       drawNumBall(px, by, R, fmt(tok.val, tok.dom), cc[0], cc[1], cc[2], tok.dom || 'n', !!shooter);
@@ -1983,42 +2343,52 @@ function syncSegs() { }
 
 var CLOSE = { x: 556, y: 40 };
 function drawHUD() {
-  var cx = W / 2, st = STAGES[G.stage - 1];
+  var cx = W / 2, st = STAGES[G.stage - 1], hk = gk(), htc = hk ? KT.garis : '#fff';
   CLOSE.x = W - 44;
   if (st.boss || LAYOUT === 'lebar' || gayaBaru()) {      // stage 3 (ikon penyihir besar) dan semua stage di layout lebar (jalur lewat tepat di bawah HUD): teks HUD diberi latar gelap tembus pandang
     var bu = fsz(15) / 15, pb = (G.mode === 'play' ? 38 + 70 * bu + 14 : 38 + 46 * bu + 10), lb = 110 + (fsz(13) - 13) * 0.6 + 12;
     ctx.fillStyle = gayaBaru() ? GAYA.hud : 'rgba(14,4,28,.55)'; var rh = gayaBaru() ? 20 : 12;
-    rr(6, 12, 156, pb - 12, rh); ctx.fill();
-    rr(W - 146, 72, 140, lb - 72, rh); ctx.fill();
+    if (hk) {                                                       // kapsul krem bergaris tebal dengan bayangan padat
+      [[6, 12, 156, pb - 12], [W - 146, 72, 140, lb - 72]].forEach(function (q) {
+        rr(q[0], q[1] + 4, q[2], q[3], 18); ctx.fillStyle = KT.garis; ctx.fill();
+        rr(q[0], q[1], q[2], q[3], 18); ctx.fillStyle = KT.krem; ctx.fill(); ctx.lineWidth = 3.5; ctx.strokeStyle = KT.garis; ctx.stroke();
+      });
+    } else {
+      rr(6, 12, 156, pb - 12, rh); ctx.fill();
+      rr(W - 146, 72, 140, lb - 72, rh); ctx.fill();
+    }
   }
   ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-  ctx.fillStyle = '#fff'; ctx.font = 'bold 22px ' + FONT;
+  ctx.fillStyle = htc; ctx.font = (hk ? '900 ' : 'bold ') + '22px ' + FONT;
   ctx.fillText('Skor ' + (G.totalScore + ((G.mode === 'end' && !G.lost) ? 0 : G.score)), 20, 38);   // setelah menang, skor stage sudah masuk ke skor total
   var u = fsz(15) / 15, ry2 = 38 + 24 * u, ry3 = 38 + 46 * u, ry4 = 38 + 70 * u;   // di layar kecil teks dan jarak barisnya ikut membesar
-  ctx.font = fsz(15) + 'px ' + FONT; ctx.fillStyle = '#ffffff'; ctx.globalAlpha = 0.85;
+  ctx.font = (hk ? '800 ' : '') + fsz(15) + 'px ' + FONT; ctx.fillStyle = hk ? KT.garis : '#ffffff'; ctx.globalAlpha = hk ? 1 : 0.85;
   ctx.fillText('Sisa bola ' + G.balls.length, 20, ry2);
   ctx.fillText('Stage ' + G.stage + ' / 3', 20, ry3);
   ctx.globalAlpha = 1;
   if (G.mode === 'play') {                  // kemajuan perisai: 5 titik, penuh = perisai siap
-    ctx.font = fsz(16) + 'px ' + EMOJI; ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle';
-    ctx.fillText('🛡', 20, ry4);
+    ctx.font = fsz(16) + 'px ' + EMOJI; ctx.fillStyle = htc; ctx.textBaseline = 'middle';
+    if (hk) ktPerisai(ctx, 28, ry4, 9, G.shield ? KT.kuning : '#9DB8E6', KT.garis); else ctx.fillText('🛡', 20, ry4);
     var dx0 = 20 + 30 * u, dsp = u > 1 ? 13.5 : 15;      // titik dirapatkan di layar kecil supaya "Siap!" tidak menabrak ikon penyihir di stage 3
     for (var si = 0; si < SHIELD_AT; si++) {
       ctx.beginPath(); ctx.arc(dx0 + si * dsp, ry4, 5, 0, 6.2832);
-      if (G.shield || si < G.okStreak) { ctx.fillStyle = G.shield ? '#ffd54a' : '#9be37a'; ctx.fill(); }
-      else { ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.stroke(); }
+      if (G.shield || si < G.okStreak) { ctx.fillStyle = G.shield ? (hk ? KT.kuning : '#ffd54a') : (hk ? '#2FA84A' : '#9be37a'); ctx.fill(); if (hk) { ctx.lineWidth = 2; ctx.strokeStyle = KT.garis; ctx.stroke(); } }
+      else { ctx.lineWidth = 2; ctx.strokeStyle = hk ? KT.garis : 'rgba(255,255,255,.55)'; ctx.stroke(); }
     }
-    if (G.shield) { ctx.font = 'bold ' + Math.min(fsz(14), 15) + 'px ' + FONT; ctx.fillStyle = '#ffd54a'; ctx.fillText('Siap!', dx0 + SHIELD_AT * dsp, ry4); }
+    if (G.shield) { ctx.font = (hk ? '900 ' : 'bold ') + Math.min(fsz(14), 15) + 'px ' + FONT; ctx.fillStyle = hk ? '#B86A00' : '#ffd54a'; ctx.fillText('Siap!', dx0 + SHIELD_AT * dsp, ry4); }
     ctx.textBaseline = 'alphabetic';
   }
-  ctx.textAlign = 'right'; ctx.fillStyle = '#fff';
-  ctx.font = 'bold ' + (G.timed ? 20 : fsz(15)) + 'px ' + FONT;
-  ctx.fillText(G.timed ? '⏱ ' + fmtTime(TIME_LIMIT - G.time) : '∞ Tanpa waktu', W - 20, 90);
-  ctx.font = fsz(13) + 'px ' + FONT; ctx.globalAlpha = 0.8;
+  ctx.textAlign = 'right'; ctx.fillStyle = htc;
+  ctx.font = (hk ? '900 ' : 'bold ') + (G.timed ? 20 : fsz(15)) + 'px ' + FONT;
+  if (hk && G.timed) { var tt = fmtTime(TIME_LIMIT - G.time); ctx.fillText(tt, W - 20, 90); ktJam(ctx, W - 20 - ctx.measureText(tt).width - 16, 83, 8, KT.garis); }
+  else ctx.fillText(G.timed ? '⏱ ' + fmtTime(TIME_LIMIT - G.time) : '∞ Tanpa waktu', W - 20, 90);
+  ctx.font = (hk ? '800 ' : '') + fsz(13) + 'px ' + FONT; ctx.globalAlpha = hk ? 1 : 0.8;
   ctx.fillText('Laju ×' + G.speedMul.toFixed(2), W - 20, 110 + (fsz(13) - 13) * 0.6); ctx.globalAlpha = 1;
   var cr = Math.max(22, 17 / SCALE), bw = cr * 0.26, bh = cr * 0.86;     // tombol jeda (⏸) di tempat tombol ✕ dulu; di layar kecil ikut membesar
-  ctx.beginPath(); ctx.arc(CLOSE.x, CLOSE.y, cr, 0, 6.2832); ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fill();
-  ctx.fillStyle = '#fff';
+  if (hk) { ctx.beginPath(); ctx.arc(CLOSE.x, CLOSE.y + 4, cr, 0, 6.2832); ctx.fillStyle = KT.garis; ctx.fill(); }
+  ctx.beginPath(); ctx.arc(CLOSE.x, CLOSE.y, cr, 0, 6.2832); ctx.fillStyle = hk ? KT.krem : 'rgba(0,0,0,.35)'; ctx.fill();
+  if (hk) { ctx.lineWidth = 3.5; ctx.strokeStyle = KT.garis; ctx.stroke(); }
+  ctx.fillStyle = htc;
   rr(CLOSE.x - bw * 1.45, CLOSE.y - bh / 2, bw, bh, bw * 0.3); ctx.fill();
   rr(CLOSE.x + bw * 0.45, CLOSE.y - bh / 2, bw, bh, bw * 0.3); ctx.fill();
   if (G.key && SEL.live) drawLivePanel(cx); // v7: panel hidup (kotak diisi peluru dan bola yang dibidik)
@@ -2048,7 +2418,8 @@ function drawHUD() {
     var ratio = Math.max(0, Math.min(1, G.balls.length / Math.max(1, G.totalN)));
     ctx.font = '20px ' + EMOJI; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     var imH = gayaBaru() ? aset('morvax') : null;
-    if (imH) { var hh = 30, hw = hh * imH.naturalWidth / imH.naturalHeight; ctx.drawImage(imH, cx - 128 - hw / 2, 128 - hh / 2, hw, hh); } else ctx.fillText('🧙', cx - 128, 128);
+    if (gk()) ktPenyihir(ctx, cx - 128, 128, 30, false);
+    else if (imH) { var hh = 30, hw = hh * imH.naturalWidth / imH.naturalHeight; ctx.drawImage(imH, cx - 128 - hw / 2, 128 - hh / 2, hw, hh); } else ctx.fillText('🧙', cx - 128, 128);
     rr(cx - 108, 121, 216, 14, 7); ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fill();
     if (ratio > 0) { rr(cx - 108, 121, Math.max(14, 216 * ratio), 14, 7); ctx.fillStyle = '#e0457b'; ctx.fill(); }
     ctx.textBaseline = 'alphabetic';
@@ -2059,10 +2430,12 @@ function drawHUD() {
     if (gayaBaru()) { ctx.shadowColor = 'rgba(10,20,55,.85)'; ctx.shadowBlur = 4; ctx.shadowOffsetY = 1; }   // peta terang (salju): teks petunjuk tetap terbaca
     if (LAYOUT === 'lebar') {               // layout lebar: dua baris di kiri-bawah supaya tidak menabrak naga di tengah-bawah
       var hl = hintLines();
-      ctx.textAlign = 'left'; ctx.font = fitFont(hl[1].length > hl[0].length ? hl[1] : hl[0], fsz(13), 380) + 'px ' + FONT;
-      ctx.fillText(hl[0], 20, H - 40); ctx.fillText(hl[1], 20, H - 18);
+      ctx.textAlign = 'left'; ctx.font = (gk() ? '800 ' : '') + fitFont(hl[1].length > hl[0].length ? hl[1] : hl[0], fsz(13), 380) + 'px ' + FONT;
+      if (gk()) { var hw2 = Math.max(ctx.measureText(hl[0]).width, ctx.measureText(hl[1]).width) + 24; rr(10, H - 62, hw2, 54, 16); ctx.fillStyle = KT.krem; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = KT.garis; ctx.stroke(); ctx.fillStyle = KT.garis; ctx.shadowColor = 'transparent'; }
+      ctx.fillText(hl[0], 22, H - 40); ctx.fillText(hl[1], 22, H - 18);
     } else {
-      ctx.textAlign = 'center'; ctx.font = fitFont(hint, fsz(13), W - 24) + 'px ' + FONT;
+      ctx.textAlign = 'center'; ctx.font = (gk() ? '800 ' : '') + fitFont(hint, fsz(13), W - 40) + 'px ' + FONT;
+      if (gk()) { var hw1 = ctx.measureText(hint).width + 24; rr(cx - hw1 / 2, H - 42, hw1, 30, 15); ctx.fillStyle = KT.krem; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = KT.garis; ctx.stroke(); ctx.fillStyle = KT.garis; ctx.shadowColor = 'transparent'; }
       ctx.fillText(hint, cx, H - 20);
     }
     ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
@@ -2092,26 +2465,36 @@ function drawIntro_old() {
   ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = fsz(14) + 'px ' + FONT; ctx.fillText('Ketuk untuk melewati', cx, H - 20);
 }
 function kapsul(x, y, w, h, atas, bawah, tepi) {     // label kapsul bergradasi (gaya baru)
-  rr(x, y, w, h, h / 2); var gk = ctx.createLinearGradient(0, y, 0, y + h); gk.addColorStop(0, atas); gk.addColorStop(1, bawah);
-  ctx.fillStyle = gk; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = tepi; ctx.stroke();
-  rr(x + h * 0.4, y + 3, w - h * 0.8, h * 0.3, h * 0.15); ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.fill();
+  var kar = KARTUN && ASET_AKTIF;
+  if (kar) { rr(x, y + 5, w, h, h / 2); ctx.fillStyle = KT.garis; ctx.fill(); }          // bayangan padat
+  rr(x, y, w, h, h / 2); var gl = ctx.createLinearGradient(0, y, 0, y + h); gl.addColorStop(0, atas); gl.addColorStop(1, bawah);
+  ctx.fillStyle = gl; ctx.fill(); ctx.lineWidth = kar ? 4 : 3; ctx.strokeStyle = kar ? KT.garis : tepi; ctx.stroke();
+  rr(x + h * 0.4, y + 4, w - h * 0.8, h * 0.28, h * 0.14); ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.fill();
+}
+function teksGaris(t, x, y, lw) {                    // teks putih bertepi gelap (gaya kartun)
+  ctx.lineJoin = 'round'; ctx.lineWidth = lw; ctx.strokeStyle = KT.garis; ctx.strokeText(t, x, y); ctx.fillStyle = '#fff'; ctx.fillText(t, x, y);
 }
 function drawBannerBaru(T, st, cx, cy, a) {
-  ctx.fillStyle = 'rgba(14,22,60,' + (0.64 * a) + ')'; ctx.fillRect(0, 0, W, H);
+  var kar = gk();
+  ctx.fillStyle = kar ? 'rgba(29,43,58,' + (0.68 * a) + ')' : 'rgba(14,22,60,' + (0.64 * a) + ')'; ctx.fillRect(0, 0, W, H);
   ctx.globalAlpha = a; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   var t1 = 'Stage ' + G.stage + ' / 3'; ctx.font = '800 22px ' + FONT; var w1 = ctx.measureText(t1).width + 40;
-  kapsul(cx - w1 / 2, cy - 112, w1, 40, '#7561bd', '#5e4ba1', '#3a2a70'); ctx.fillStyle = '#fff'; ctx.fillText(t1, cx, cy - 91);
+  kapsul(cx - w1 / 2, cy - 112, w1, 40, '#7561bd', '#5e4ba1', '#3a2a70'); if (kar) teksGaris(t1, cx, cy - 91, 5); else { ctx.fillStyle = '#fff'; ctx.fillText(t1, cx, cy - 91); }
   ctx.font = '900 46px ' + FONT; var w2 = Math.min(W - 30, ctx.measureText(st.name).width + 90);
-  kapsul(cx - w2 / 2, cy - 48, w2, 80, '#3b78c4', '#2b62a4', '#173d70');
-  ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(23,61,112,.9)'; ctx.strokeText(st.name, cx, cy - 6); ctx.fillStyle = '#fff'; ctx.fillText(st.name, cx, cy - 6);
+  kapsul(cx - w2 / 2, cy - 48, w2, 80, kar ? '#5B9AF5' : '#3b78c4', kar ? '#2F7DF0' : '#2b62a4', '#173d70');
+  if (kar) teksGaris(st.name, cx, cy - 6, 8);
+  else { ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(23,61,112,.9)'; ctx.strokeText(st.name, cx, cy - 6); ctx.fillStyle = '#fff'; ctx.fillText(st.name, cx, cy - 6); }
   var ng = st.naga;
   if (ng) {
-    var t3 = ng.nama + ' · ' + ng.jenis; ctx.font = '800 22px ' + FONT; var w3 = ctx.measureText(t3).width + 44;
-    kapsul(cx - w3 / 2, cy + 48, w3, 40, ng.warna, ng.warna, 'rgba(255,255,255,.75)'); ctx.fillStyle = '#fff'; ctx.fillText(t3, cx, cy + 69);
+    var t3 = ng.nama + ' · ' + ng.jenis; ctx.font = '800 22px ' + FONT; var w3 = ctx.measureText(t3).width + 44, kn = kar ? KT.naga[ng.berkas.slice(5)] : null;
+    kapsul(cx - w3 / 2, cy + 48, w3, 40, kn ? kn.b : ng.warna, kn ? kn.b : ng.warna, 'rgba(255,255,255,.75)');
+    if (kar) teksGaris(t3, cx, cy + 69, 5); else { ctx.fillStyle = '#fff'; ctx.fillText(t3, cx, cy + 69); }
   }
-  ctx.font = '700 22px ' + FONT; ctx.fillStyle = '#eaf1ff'; ctx.fillText(st.story, cx, cy + 118);
+  ctx.font = '700 22px ' + FONT; ctx.fillStyle = kar ? KT.krem : '#eaf1ff';
+  if (kar) { ctx.font = '800 22px ' + FONT; teksGaris(st.story, cx, cy + 118, 5); } else ctx.fillText(st.story, cx, cy + 118);
   var im = (ng && aset(ng.berkas)) || null, ih = LAYOUT === 'lebar' ? 120 : 170;
-  if (im) { var iw = ih * im.naturalWidth / im.naturalHeight; ctx.drawImage(im, cx - iw / 2, cy + 142, iw, ih); }
+  if (kar && ng) ktNaga(ctx, cx, cy + 142 + ih * 0.5, ih * 1.05, KT.naga[ng.berkas.slice(5)]);
+  else if (im) { var iw = ih * im.naturalWidth / im.naturalHeight; ctx.drawImage(im, cx - iw / 2, cy + 142, iw, ih); }
   else { ctx.font = '72px ' + EMOJI; ctx.fillText(st.boss ? '🧙' : '🥚', cx, cy + 200); }
   ctx.globalAlpha = 1;
   ctx.textBaseline = 'alphabetic'; ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = fsz(14) + 'px ' + FONT;
@@ -2148,7 +2531,8 @@ function render() {
   if (st.boss) {                            // penyihir bos di awal jalur
     var bp = bossPos(), pulse = (PREF.efek && G.bossPulse > 0) ? 1 + 0.25 * Math.sin(G.bossPulse * 14) : 1;
     var imB = gayaBaru() ? aset('morvax') : null;
-    if (imB) { var bh = 130 * pulse, bw = bh * imB.naturalWidth / imB.naturalHeight; ctx.drawImage(imB, bp.x - bw / 2, bp.y - bh / 2, bw, bh); }
+    if (gk()) ktPenyihir(ctx, bp.x, bp.y, 130 * pulse, false);
+    else if (imB) { var bh = 130 * pulse, bw = bh * imB.naturalWidth / imB.naturalHeight; ctx.drawImage(imB, bp.x - bw / 2, bp.y - bh / 2, bw, bh); }
     else { ctx.font = Math.round(84 * pulse) + 'px ' + EMOJI; ctx.fillText('🧙', bp.x, bp.y); }
   }
   for (i = G.balls.length - 1; i >= 0; i--) {
@@ -2165,7 +2549,7 @@ function render() {
       var hb = G.balls[i];
       if (hb.vis > 110 && mt(G.ammo, hb) && reachable(hb)) {
         ctx.beginPath(); ctx.arc(hb.x + hb.ox, hb.y + hb.oy, CFG.R + 8 + pr, 0, 6.2832);
-        ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.stroke();
+        if (gk()) { ctx.lineWidth = 8; ctx.strokeStyle = KT.garis; ctx.stroke(); } ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.stroke();
       }
     }
   }
@@ -2174,15 +2558,16 @@ function render() {
     if (hov) {                              // bola yang diketuk: diberi cincin, peluru menembus ke bola ini
       var hx = hov.x + hov.ox, hy = hov.y + hov.oy, hl = Math.hypot(hx - DRAGON.x, hy - DRAGON.y) || 1;
       d = { x: (hx - DRAGON.x) / hl, y: (hy - DRAGON.y) / hl }; reach = Math.max(120, hl - CFG.R - 6);
-      ctx.beginPath(); ctx.arc(hx, hy, CFG.R + 6, 0, 6.2832); ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.stroke();
+      ctx.beginPath(); ctx.arc(hx, hy, CFG.R + 6, 0, 6.2832); if (gk()) { ctx.lineWidth = 8; ctx.strokeStyle = KT.garis; ctx.stroke(); } ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.stroke();
     }
-    ctx.strokeStyle = hov ? 'rgba(255,255,255,.6)' : 'rgba(255,255,255,.35)'; ctx.lineWidth = 3; ctx.setLineDash([4, 12]); ctx.lineCap = 'round';
+    ctx.strokeStyle = gk() ? (hov ? 'rgba(29,43,58,.75)' : 'rgba(29,43,58,.45)') : hov ? 'rgba(255,255,255,.6)' : 'rgba(255,255,255,.35)'; ctx.lineWidth = gk() ? 4 : 3; ctx.setLineDash([4, 12]); ctx.lineCap = 'round';
     ctx.beginPath(); ctx.moveTo(DRAGON.x + d.x * 100, DRAGON.y + d.y * 100); ctx.lineTo(DRAGON.x + d.x * reach, DRAGON.y + d.y * reach); ctx.stroke(); ctx.setLineDash([]);
   }
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   var rs = (PREF.efek && G.roar > 0) ? 1 + 0.14 * Math.abs(Math.sin(G.roar * 14)) : 1;     // Efek gambar mati: naga tidak membesar dan bergetar, tulisan GRAAWR tetap
   var ngd = STAGES[G.stage - 1].naga, imD = (gayaBaru() && ngd) ? aset(ngd.berkas) : null, shx = (PREF.efek && G.roar > 0) ? Math.sin(G.roar * 70) * 3 : 0;
-  if (imD) { var dw = 176 * rs, dh = dw * imD.naturalHeight / imD.naturalWidth; ctx.drawImage(imD, DRAGON.x + shx - dw / 2, DRAGON.y - dh * 0.54, dw, dh); }
+  if (gk() && ngd) { var ad = (G.mode === 'play') ? aimDir(G.aim.x, G.aim.y) : { x: 0, y: -1 }; ktNagaAtas(ctx, DRAGON.x + shx, DRAGON.y, 142 * rs, KT.naga[ngd.berkas.slice(5)], Math.atan2(ad.y, ad.x)); }   // naga penembak tampak dari atas, menghadap arah bidik
+  else if (imD) { var dw = 176 * rs, dh = dw * imD.naturalHeight / imD.naturalWidth; ctx.drawImage(imD, DRAGON.x + shx - dw / 2, DRAGON.y - dh * 0.54, dw, dh); }
   else { ctx.font = Math.round(112 * rs) + 'px ' + EMOJI; ctx.fillText('🐲', DRAGON.x + shx, DRAGON.y); }
   if (G.roar > 0) {
     ctx.save(); ctx.globalAlpha = Math.min(1, G.roar * 1.5); ctx.font = 'bold 34px ' + FONT;
@@ -2196,19 +2581,21 @@ function render() {
     drawToken(G.next, DRAGON.x + 100, DRAGON.y + 36, 19);
     ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = fsz(12) + 'px ' + FONT; ctx.textBaseline = 'alphabetic';
     if (gayaBaru()) { ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.shadowColor = 'rgba(10,20,55,.85)'; ctx.shadowBlur = 4; ctx.shadowOffsetY = 1; }
-    ctx.fillText('berikut', DRAGON.x + 100, DRAGON.y + 72);
+    if (gk()) { ctx.shadowColor = 'transparent'; ctx.font = '900 ' + fsz(12) + 'px ' + FONT; teksGaris('berikut', DRAGON.x + 100, DRAGON.y + 72, 4); }      // putih bertepi gelap: terbaca di peta terang maupun gelap
+    else ctx.fillText('berikut', DRAGON.x + 100, DRAGON.y + 72);
     ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
   }
   for (i = 0; i < G.shots.length; i++) drawToken(G.shots[i].tok, G.shots[i].x, G.shots[i].y, CFG.shotR);
   for (i = 0; i < G.parts.length; i++) {
     var p = G.parts[i]; ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.c;
     ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+    if (gk()) { ctx.lineWidth = 1.8; ctx.strokeStyle = KT.garis; ctx.stroke(); }      // percikan bergaris
   }
   ctx.globalAlpha = 1;
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   for (i = 0; i < G.pops.length; i++) {
     var q = G.pops[i]; ctx.globalAlpha = Math.max(0, Math.min(1, q.life * 1.5));
-    ctx.font = 'bold ' + q.size + 'px ' + FONT; ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(0,0,0,.65)';
+    ctx.font = (gk() ? '900 ' : 'bold ') + q.size + 'px ' + FONT; ctx.lineWidth = gk() ? 7 : 6; ctx.lineJoin = 'round'; ctx.strokeStyle = gk() ? KT.garis : 'rgba(0,0,0,.65)';
     var qw = ctx.measureText(q.t).width, qx = Math.max(qw / 2 + 8, Math.min(W - qw / 2 - 8, q.x));
     ctx.strokeText(q.t, qx, q.y); ctx.fillStyle = q.c; ctx.fillText(q.t, qx, q.y);
   }
@@ -2343,10 +2730,11 @@ var storyIdx = 0;
 function renderStory() {
   var s = STORY[storyIdx];
   var gam = (ASET_AKTIF && s.a && s.a.every(function (n) { return aset(n); })) ? s.a.map(function (n) { return '<img alt="" src="' + ASET_FOLDER + n + '.webp">'; }).join('') : null;   // gambar karakter (cadangan: emoji)
-  if (gam) $('storyEmoji').innerHTML = gam; else $('storyEmoji').textContent = s.e;
+  if (gk()) $('storyEmoji').innerHTML = (s.k || s.a).map(function (n) { return '<img alt="" src="' + seni(n, s.k ? 110 : 200) + '">'; }).join('');   // gaya kartun: gambar dari kode
+  else if (gam) $('storyEmoji').innerHTML = gam; else $('storyEmoji').textContent = s.e;
   $('storyText').textContent = s.t;
   $('storyDots').innerHTML = STORY.map(function (_, i) { return '<span class="dot' + (i === storyIdx ? ' on' : '') + '"></span>'; }).join('');
-  $('storyNext').textContent = storyIdx < STORY.length - 1 ? 'Lanjut ▶' : 'Mulai! ▶';
+  $('storyNext').textContent = storyIdx < STORY.length - 1 ? 'Lanjut' : 'Mulai!';
 }
 var storyAt = 0;                            // waktu cerita mulai tampil: ketukan ganda pada "Mulai" tidak boleh melewati slide
 function storyBusy() { return performance.now() - storyAt < 450; }
@@ -2413,8 +2801,10 @@ function buildSplash() {                    // layar sambutan dibangun dari SPLA
   sp.style.setProperty('--sp-wiz', SPLASH.penyihirGoyang + 's');
   sp.style.setProperty('--sp-pulse', SPLASH.tombolDenyut + 's');
   $('spTitle').textContent = SPLASH.judul; $('spGo').textContent = SPLASH.tombol;
+  if (gk()) { SPLASH_ART = { naga: seni('naga:bayunara', 320), telur: seni('sarang-3-telur', 320), penyihir: seni('morvax', 200), kilau: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.3 6.8.7-5.1 4.6 1.5 6.8L12 17.3l-6.1 3.6 1.5-6.8-5.1-4.6 6.8-.7z" fill="#FFD23F" stroke="#1D2B3A" stroke-width="2" stroke-linejoin="round"/></svg>') }; }
   fillArt($('spDragon'), SPLASH_ART.naga, SPLASH_EMOJI.naga); fillArt($('spEgg'), SPLASH_ART.telur, SPLASH_EMOJI.telur);
   fillArt($('spWiz'), SPLASH_ART.penyihir, SPLASH_EMOJI.penyihir); fillArt($('spSpark'), SPLASH_ART.kilau, SPLASH_EMOJI.kilau);
+  if ($('menuNaga')) $('menuNaga').src = gk() ? seni('naga:bayunara', 64) : 'aset/naga-bayunara.webp';
   box.textContent = '';
   for (i = 0; i < n; i++) {                 // bola bergantian di tepi kiri dan kanan, tersebar dari atas ke bawah
     var s = SPLASH.ukuranBola, sz = Math.round(s[0] + Math.random() * (s[1] - s[0])), dur = SPLASH.bolaMelayang, side = i % 2, row = Math.floor(i / 2);
@@ -2425,9 +2815,11 @@ function buildSplash() {                    // layar sambutan dibangun dari SPLA
       'background:radial-gradient(circle at 35% 30%,#fff9 0,' + c + ' 45%,' + c + ' 100%);background-color:' + c + ';' +
       'animation-duration:' + d.toFixed(1) + 's;animation-delay:-' + (Math.random() * d).toFixed(1) + 's;--amp:' + Math.round(10 + Math.random() * 14) + 'px';
     box.appendChild(b);
-    if (ASET_AKTIF) (function (el, q) { var wn = ORB_WARNA[['n', 'i', 'd', 'f'][q % 4]], url = ASET_FOLDER + 'orb-' + wn + '-' + (1 + q % 3) + '.webp', t = new Image(); t.onload = function () { el.style.backgroundImage = 'url(' + url + ')'; el.style.backgroundColor = 'transparent'; el.classList.add('orb'); }; t.src = url; })(b, i);   // gambar orb (cadangan: bola warna dari kode)
+    if (gk()) { var jn = ['n', 'i', 'd', 'f'][i % 4], tx2 = String(pick(SPLASH.angka)); b.textContent = ''; b.style.backgroundImage = 'url(' + seni('bola:' + jn + ':' + (jn === 'f' ? '1/2' : jn === 'd' ? '0,' + (1 + i % 9) : jn === 'i' ? '−' + (1 + i % 9) : tx2), 96) + ')'; b.style.backgroundColor = 'transparent'; b.style.filter = 'none'; b.classList.add('kartun'); }
+    else if (ASET_AKTIF) (function (el, q) { var wn = ORB_WARNA[['n', 'i', 'd', 'f'][q % 4]], url = ASET_FOLDER + 'orb-' + wn + '-' + (1 + q % 3) + '.webp', t = new Image(); t.onload = function () { el.style.backgroundImage = 'url(' + url + ')'; el.style.backgroundColor = 'transparent'; el.classList.add('orb'); }; t.src = url; })(b, i);   // gambar orb (cadangan: bola warna dari kode)
   }
 }
+if (gk()) document.body.classList.add('kt');
 muatAset(); buildSplash(); buildToggles($('setbar')); buildToggles($('pauseSet')); applyPrefs();
 
 window.addEventListener('resize', resize);
