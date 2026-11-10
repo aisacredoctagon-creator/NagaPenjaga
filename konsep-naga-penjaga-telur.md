@@ -1,10 +1,10 @@
 # Konsep Game Naga Penjaga Telur
 
-Tanggal: 8 November 2026 (diperbarui 9 November 2026, versi 2.6 dengan layout lebar, layar sambutan, suara, dan menu Jeda)
+Tanggal: 8 November 2026 (diperbarui 10 November 2026: mekanik "Rakit Persamaan" (v7) digabung dengan layout lebar, layar sambutan, suara, dan menu Jeda)
 
 ## Ringkasan
 
-Naga Penjaga Telur adalah game matematika di browser untuk anak usia 6–14 tahun: pemain menembakkan bola angka agar dua bola yang dihitung hasilnya sama dengan angka di panel, lalu keduanya meledak. Versi 2 sudah bisa dimainkan penuh dari menu sampai layar tamat, dengan 3 stage dan satu bos.
+Naga Penjaga Telur adalah game matematika di browser untuk anak usia 6–14 tahun: pemain membidik bola di jalur dan menembakkan bola angka dari naga; peluru dan bola yang dibidik mengisi kotak persamaan di panel, dan bila persamaannya benar keduanya meledak. Versi ini sudah bisa dimainkan penuh dari menu sampai layar tamat, dengan 3 stage dan satu bos. Sejak 10 November 2026 cara bermainnya adalah "Rakit Persamaan" (v7), karena atasan menilai konsep awal membingungkan.
 
 - **Tujuan:** melatih tambah, kurang, kali, dan bagi lewat permainan, bukan lewat kuis yang ditempelkan.
 - **Bentuk:** satu halaman web (HTML5), responsif di laptop, PC, Android, dan iPhone lewat browser. Ada dua layout yang berganti otomatis menurut bentuk layar: tegak (HP berdiri, tablet tegak) dan lebar (laptop, PC, HP mendatar).
@@ -27,17 +27,18 @@ Cerita tampil sebagai 3 slide bergambar dengan teks pendek, dan bisa dilewati ka
 
 Tiap stage menjaga 3 telur di sarang; di stage 3 pemain mengalahkan penyihirnya langsung.
 
-## Cara bermain (konsep "Pasangan Ajaib")
+## Cara bermain (konsep "Rakit Persamaan", v7)
 
-Bola-bola angka bergerak pelan di sepanjang jalur menuju telur. Di panel atas tertulis persamaan dengan dua lingkaran kosong, misalnya ◯ + ◯ = 10. Pemain menembak bola dari naga ke bola di jalur; jika bola tembakan dan bola yang kena, saat dihitung, sama dengan angka di panel, keduanya meledak.
+Bola-bola angka bergerak pelan di jalur menuju telur. Di panel atas ada kotak persamaan yang hidup: peluru naga (bola kuning) mengisi satu kotak, dan bola di jalur yang sedang dibidik mengisi kotak satunya. Pemain merakit persamaan yang benar, lalu menembak.
 
-1. **Bidik dan tembak:** ketuk bola yang dituju. Peluru sihir menembus bola lain dan menempel di bola itu, jadi bola yang tertutup tetap bisa dijawab; bola yang disentuh kursor diberi cincin. Mengetuk tempat kosong menembak lurus ke arah itu.
-2. **Cocok:** dua bola dihitung (misalnya 4 + 6 = 10), keduanya meledak, bola di sekitarnya merapat; jika hasil rantai bertemu pasangan baru, meledak berantai.
-3. **Tidak cocok:** bola menempel di rantai, jalur berjalan sedikit lebih cepat, dan satu telur dicuri penyihir.
-4. **Tukar bola:** ketuk naga untuk menukar dengan bola berikutnya (ditampilkan kecil di samping naga).
-5. **Menang:** semua bola di jalur habis selagi masih ada telur. **Kalah:** ketiga telur dicuri, atau waktu habis (jika memakai waktu).
+1. **Stage 1, tanpa angka tetap:** panel berbentuk ◯ + ◯ = 10. Peluru dan bola yang dibidik harus menghasilkan angka di kanan, misalnya 4 + 6 = 10.
+2. **Stage 2 dan 3, dengan angka tetap:** panel berbentuk ◯ + ◯ + 2 = 8. Dua bola digabung dulu (misalnya 3 + 3 = 6), lalu dihitung dengan angka tetap (6 + 2 = 8). Mekanik, panel, dan tur sama untuk semua operasi dan semua stage; yang berbeda hanya angkanya.
+3. **Bidik:** di komputer, arahkan mouse ke bola (panel berubah mengikuti bola itu) lalu klik untuk menembak. Di HP atau tablet, tahan jari pada bola; di dekat jari muncul gelembung yang menunjukkan bola yang dibidik (pindah ke samping di dekat tepi atas supaya tidak tertutup tangan). Lepas untuk menembak; lepas di tempat kosong membatalkan tembakan. Ketuk naga untuk menukar peluru dengan bola berikutnya. Peluru sihir menembus bola lain dan menempel di bola yang dibidik, jadi bola yang tertutup tetap bisa dijawab.
+4. **Cocok:** persamaan benar, kedua bola meledak, bola di sekitarnya merapat; jika hasil rantai bertemu pasangan baru, meledak berantai.
+5. **Tidak cocok:** bola menempel di rantai, jalur berjalan sedikit lebih cepat, dan satu telur dicuri penyihir (kecuali ada perisai).
+6. **Menang:** semua bola di jalur habis selagi masih ada telur. **Kalah:** ketiga telur dicuri, atau waktu habis (jika memakai waktu).
 
-Angka di panel (angka kunci) berganti setiap 3 pasangan yang berhasil. Game memastikan selalu ada bola yang bisa dicocokkan, supaya pemain tidak buntu: sekitar 70% bola tembakan dibuat berpasangan dan 30% sebagai pengecoh, tetapi minimal satu dari peluru dan bola penukar (ketuk naga) selalu punya pasangan.
+Hasil sementara tidak lagi tampil otomatis. Tur singkat di awal stage 1 dan 2 (3 langkah, tombol "Lanjut", bisa dilewati lewat "Lewati tur", sekali per permainan; ulang stage tidak mengulang tur) memperagakan cara menjawab. Di tingkat Mudah, setelah 2 kesalahan berturut-turut, hasil sementara (misalnya 3 + 3 = 6) muncul di panel sebagai bantuan. Angka di panel berganti setiap 3 pasangan yang berhasil. Game menjaga agar tidak buntu: bola baru (termasuk bola mantra bos) hanya dibuat jika punya pasangan di salah satu angka panel stage itu, sekitar 70% bola tembakan dibuat berpasangan dan 30% sebagai pengecoh, dan minimal satu dari peluru dan bola penukar (ketuk naga) selalu punya pasangan.
 
 ## Telur, bola telur naga, dan bola tertukar
 
@@ -55,11 +56,11 @@ Setiap stage punya latar, jalur berkelok, dan jumlah bola sendiri; stage 2 dan 3
 
 | Stage | Latar | Jumlah bola (Mudah / Menantang) | Laju relatif | Yang baru |
 | --- | --- | --- | --- | --- |
-| 1. Hutan Hijau | Hijau, pohon dan jamur | 22 / 26 | ×1,00 | Peragaan 4 detik tanpa kata di awal |
+| 1. Hutan Hijau | Hijau, pohon dan jamur | 22 / 26 | ×1,00 | Tur 3 langkah dengan tombol "Lanjut" di awal |
 | 2. Gunung Bersalju | Biru es, salju, pohon cemara, boneka salju, dan penguin | 24 / 29 | ×1,08 | Jalur miring berkelok seperti jalan setapak gunung, warna jalur putih salju |
-| 3. Gunung Api | Ungu gelap, lava dan kelelawar | 24 / 29, lalu bertambah | ×1,05 | Penyihir bos dengan bar nyawa |
+| 3. Gunung Api | Ungu gelap, lava dan kelelawar | 26 / 31, lalu bertambah | ×1,15 | Penyihir bos dengan bar nyawa; lebih banyak bola dan lebih cepat dari stage 2 (v7) |
 
-Bos di stage 3: penyihir berdiri di awal jalur. Bar nyawanya menunjukkan sisa bola dibanding jumlah awal. Setiap 30 detik ia merapal mantra: angka di panel berganti, 1 bola ditambahkan di ujung rantai, dan muncul tulisan "Mantra baru!". Pemain menang dengan menghabiskan semua bola. Karena ikon penyihir besar bisa menumpuk dengan tulisan di pojok layar, di stage 3 tulisan itu diberi latar gelap tembus pandang supaya tetap terbaca.
+Bos di stage 3: penyihir berdiri di awal jalur. Bar nyawanya menunjukkan sisa bola dibanding jumlah awal. Setiap 22 detik (sebelumnya 30) ia merapal mantra: angka di panel berganti, 1 bola ditambahkan di ujung rantai, dan muncul tulisan "Mantra baru!". Pemain menang dengan menghabiskan semua bola. Karena ikon penyihir besar bisa menumpuk dengan tulisan di pojok layar, di stage 3 tulisan itu diberi latar gelap tembus pandang supaya tetap terbaca.
 
 Jumlah bola dasar dan laju dasar di tabel dikali pengali stage; angka persisnya ada di bagian rincian pengembangan.
 
@@ -109,7 +110,7 @@ Angka di panel diambil dari daftar berikut, menurut operasi dan tingkat:
 | --- | --- | --- |
 | Tambah | 7, 8, 9, 10, 10, 11, 12 | 14, 16, 18, 20, 22, 25 |
 | Kurang | 1, 2, 3, 4, 5 | 3, 4, 5, 6, 7, 8, 9 |
-| Kali | 6, 8, 12, 18, 24 | 24, 30, 36, 48, 60, 72 |
+| Kali | 6, 8, 10, 12, 14, 15, 18, 20, 21, 24 | 12, 24, 30, 36, 42, 48, 60, 66, 72 |
 | Bagi | 2, 3, 4 | 2, 3, 4, 5, 6 |
 
 Angka bola di jalur dibatasi 1–9 di Mudah; di Menantang sampai 12 (kali dan bagi) atau 15 (tambah dan kurang). Bola tembakan kadang lebih besar, karena dipilih sebagai pasangan bola yang ada di jalur. Untuk kurang dan bagi, yang dihitung adalah angka besar terhadap angka kecil, sehingga urutan bola tidak berpengaruh.
@@ -147,7 +148,7 @@ Setelah stage selesai atau saat kalah ("justru saat kalah anak butuh belajar"), 
 Prototipe awal membingungkan karena "angka kunci" tidak jelas. Empat perbaikan disetujui dan sudah dipasang:
 
 1. **Panel persamaan bergambar:** ◯ + ◯ = 10 menunjukkan bahwa dua bola harus dijumlahkan menjadi 10.
-2. **Peragaan 4 detik tanpa kata** di awal stage 1, supaya tidak perlu membaca aturan.
+2. **Peragaan 4 detik tanpa kata** di awal stage 1, supaya tidak perlu membaca aturan (diganti tur 3 langkah di v7, lihat pembaruan di bawah).
 3. **Persamaan sebagai umpan balik:** setelah menembak, tampil persamaan nyata (misalnya 4 + 6 = 10), sehingga anak melihat kenapa cocok atau tidak.
 4. **Bantuan berkedip di tingkat Mudah** setelah 2 salah berturut-turut.
 
@@ -156,6 +157,8 @@ Prinsip yang dipakai: sedikit teks, banyak isyarat gambar, dan contoh. Anak usia
 Perlindungan salah ketuk dan layar kecil: tombol ⏸ di pojok kanan atas membuka menu Jeda (Lanjut main, Mulai ulang, Ke menu) dan menjeda permainan; area ketuknya minimal sekitar 48 piksel. HP yang dipegang mendatar memakai layout lebar, dan menu serta layar lain dipadatkan di layar pendek supaya muat tanpa digulir. Bila layar diputar saat bermain, game berhenti dan meminta layar dikembalikan (lihat bagian Layout tegak dan lebar). Teks kecil di dalam game ikut membesar di layar kecil (minimal sekitar 11 piksel).
 
 Catatan: belum ada uji dengan anak sungguhan.
+
+**Pembaruan 10 November 2026.** Setelah presentasi, atasan menilai konsep masih membingungkan di awal: panel ◯ + ◯ = 10 dan "menembak bola ke bola lain, hasil dihitung dari dua bola" tidak dipahami. Dari tiga mekanik hasil kurasi dipilih "Rakit Persamaan" (panel hidup). Pengaruhnya pada empat perbaikan di atas: peragaan 4 detik diganti tur 3 langkah dengan tombol "Lanjut" (dua baris pendek per langkah, bisa dilewati, sekali per permainan di stage 1 dan 2); persamaan tampil sebagai panel yang berubah mengikuti bola yang dibidik, jadi anak melihatnya sebelum menembak; hasil sementara hanya muncul sebagai bantuan setelah 2 kesalahan berturut-turut di Mudah. Ukuran berhasil: orang baru paham dalam ±30 detik tanpa dijelaskan. Ini belum diuji ke siapa pun, dan teks tur belum dicek guru atau anak.
 
 ## Status dan hasil uji
 
@@ -183,7 +186,11 @@ Di Mudah (stage 1 / 2 / 3) dengan salah 15%: sebelum telur 10 / 10 / 10, sesudah
 
 Telur sisa rata-rata pada Menantang stage 3 dengan salah 25%: 1,0. Perisai terutama menolong pemain yang cukup baik; robot yang sangat sering salah tetap kesulitan.
 
-**Uji otomatis (9 November 2026).** Halaman uji memainkan game sungguhan di browser: 95 uji mencakup angka dan hitungan, tabel stage, tembak dan kesalahan, perisai, telur, tukar posisi, bos, layar tinjauan, jalur, menu dan cerita, layout tegak dan lebar (pemilihan layout, batas ganda 5%, aturan jalur lebar, jeda dan pulih saat layar berganti, 300 kali ubah ukuran cepat, dan layar pendek), serta 18 uji untuk layar sambutan, pengaturan, menu Jeda, dan suara (lihat di bawah). Hasilnya: 88 lulus, 0 gagal, 5 hanya berupa angka, dan 2 uji animasi yang hanya jalan bila halaman uji dibuka di tab terdepan.
+**Uji otomatis (9 November 2026).** Halaman uji memainkan game sungguhan di browser: 102 uji mencakup angka dan hitungan, tabel stage, tembak dan kesalahan, perisai, telur, tukar posisi, bos, layar tinjauan, jalur, menu dan cerita, layout tegak dan lebar (pemilihan layout, batas ganda 5%, aturan jalur lebar, jeda dan pulih saat layar berganti, 300 kali ubah ukuran cepat, dan layar pendek), , serta 18 uji untuk layar sambutan, pengaturan, menu Jeda, dan suara dan 7 uji untuk mekanik v7 (lihat di bawah). Hasilnya: 95 lulus, 0 gagal, 5 hanya berupa angka, dan 2 uji animasi yang hanya jalan bila halaman uji dibuka di tab terdepan.
+
+**Uji mekanik v7 (7 uji).** Panel hidup benar untuk 7 hitungan × 2 tingkat × 3 stage (168 panel: stage 1 tanpa angka tetap; stage 2–3 dengan angka tetap c dan hasil T yang cocok dengan rumusnya); tur 3 langkah di stage 1 dan 2 saja, sekali per permainan, dengan "Lewati tur" dan ketukan di luar tombol yang tidak melakukan apa pun; tombol tur di tengah, di dalam dunia, dan tidak menimpa teks di 6 ukuran layar (tegak dan lebar, tombol ≥ 44 piksel layar); bidik sentuhan (tahan, lepas di atas bola menembak, lepas di tempat kosong atau pointercancel membatalkan, mouse menembak saat klik, ketuk ⏸ tidak mulai membidik); persamaan dua langkah dan catatan tinjauan untuk + − × ÷; panel digambar tanpa pengecualian di semua stage dan kedua layout; dan teks menu cara bidik. Uji lama yang berubah karena v7 diperbarui (daftar kali, jumlah bola dan laju stage 3, mantra tiap 22 detik, bola tanpa pasangan); rekaman layout tegak hanya berubah di jumlah bola dan laju stage 3 (disengaja), jalur, naga, sarang, dan latar tidak berubah.
+
+**Prototipe Rakit Persamaan (v4–v7, 10 November 2026).** Semua uji memakai robot, bukan anak. Pada v6, empat masalah diuji lebih dulu: (1) Kali tetap sulit karena bola tanpa pasangan (Kali Mudah bola 5 dan 7, 22% bola; Kali Menantang 25–33%); (2) jari menutupi bola di HP kecil (bola tampak sekitar 5 mm di layar 360 piksel, di bawah target sentuh 7–10 mm); (3) tur 6,2 detik terlalu singkat untuk dibaca anak kelas 1; (4) stage 3 belum lebih sulit dari stage 2 (laju ×1,05 di bawah ×1,08). Perbaikan v7 (disetujui Ibnu): daftar kunci Kali diperluas dan bola baru hanya dibuat bila punya pasangan, gelembung penunjuk di dekat jari, tur 3 langkah dengan tombol "Lanjut", dan stage 3 lebih sulit (bola ×1,2, laju ×1,15, mantra bos tiap 22 detik). Pengukuran di prototipe v7 sebelum digabung: robot yang menembak tiap 1 detik menang 126 dari 126 percobaan (7 hitungan × 2 tingkat × 3 stage × 3 jalur) tanpa bola tanpa pasangan; robot yang salah 20% (tembak tiap 1,5 detik, 12 percobaan, + − ×): stage 3 v7 sedikit lebih sulit dari stage 2 (Menantang stage 3: menang 9 dari 12, bola total 32,5; stage 2: 11 dari 12, 29,0). Robot menyelesaikan stage dalam sekitar 40 detik, jauh lebih cepat dari anak; angka stage 3 adalah tebakan awal yang perlu dicoba pada anak. Setelah digabung dengan layout lebar, suara, dan menu Jeda, seluruh uji otomatis dijalankan ulang (lihat di atas); uji robot di semua stage, tingkat, dan kedua layout tidak menemukan bola tanpa pasangan, saat buntu, atau peluru basi.
 
 **Uji layar sambutan, pengaturan, Jeda, dan suara (18 uji).** Layar sambutan tampil pertama dengan isi yang benar dan tanpa tombol suara; alur sambutan → menu → cerita → stage 1 tanpa jalan kembali; ketukan ganda tidak menekan tombol menu; tombol pengaturan tersimpan dan terbaca lagi setelah halaman dimuat ulang, sinkron antara menu dan menu Jeda; Efek gambar mati menghentikan percikan dan gerak splash; Efek gambar bawaan mati saat perangkat meminta gerak dikurangi; menu Jeda berisi tepat tombol yang disepakati; Mulai ulang mengembalikan stage yang sama (jalur sama, telur penuh, skor stage 0, skor total tetap) dan Ke menu langsung; tombol ⏸ digambar di tempat ✕ (dicek per piksel); efek suara terpasang di tempat yang benar (tembak, ledak, salah, telur dicuri, menang, kalah); tidak ada AudioContext sebelum ketukan pertama, lagu berganti menu ↔ main, volume turun saat Jeda; tab disembunyikan menghentikan suara; `AUDIO_AKTIF = false` mematikan semuanya. Bunyi diukur di konteks suara tanpa speaker: kedua lagu dan keenam efek menghasilkan bunyi (tidak senyap), tidak meluap (puncak musik sekitar 0,11 dan 0,15 dari penuh; puncak efek 0,11 sampai 0,25), dan pelan. Tata letak diperiksa di 10 ukuran (360×740, 390×844, 768×1024, 1366×768, 1280×720, 1024×576, 844×390, 667×375, 800×360, 932×430): layar sambutan penuh layar tanpa saling menimpa dan kolom ≤ 480 piksel; tombol pengaturan di pojok kanan atas tanpa menimpa kotak menu; menu Jeda muat tanpa digulir. Semua ini hanya mengukur perilaku dan angka; telinga manusia belum menilai suara. Pemain robot yang selalu membidik pasangan benar (4 atau 6 detik per tembakan) memainkan ratusan permainan di semua stage dan tingkat, di kedua layout, serta satu permainan penuh stage 1 sampai 3 di masing-masing layout; hasilnya tidak ada bola tanpa pasangan, tidak ada saat tanpa peluru yang berguna, tidak ada peluru yang jenisnya tidak cocok dengan panel, dan tidak ada galat halaman. Karena robot ini selalu memilih jawaban benar, ia tidak mengukur kesulitan untuk anak. Layout tegak terbukti tidak berubah oleh penambahan layout lebar: panjang jalur, posisi naga dan sarang, bos, jumlah bola, laju, isi latar, dan bola pertama sama dengan rekaman sebelumnya (18 perbandingan, 0 beda).
 
@@ -221,12 +228,23 @@ Angka pengaturan utama:
 | Waktu per stage | 300 detik | batas waktu jika memilih dengan waktu |
 | Bola dasar | 22 Mudah, 26 Menantang | dikali pengali stage |
 | Laju dasar | 8 Mudah, 9 Menantang | piksel per detik, dikali pengali stage |
-| Pengali stage 1 / 2 / 3 | bola 1,0 / 1,1 / 1,1; laju 1,0 / 1,08 / 1,05 | menaikkan kesulitan tiap stage |
+| Pengali stage 1 / 2 / 3 | bola 1,0 / 1,1 / 1,2; laju 1,0 / 1,08 / 1,15 (v7) | menaikkan kesulitan tiap stage |
 | Ganti angka kunci | tiap 3 pasangan | variasi soal |
 | Percepatan per salah | 7%, maksimum ×1,8 | kesalahan membuat jalur lebih cepat |
-| Mantra bos | tiap 30 detik, +1 bola | tekanan di stage 3 |
+| Mantra bos | tiap 22 detik, +1 bola (v7) | tekanan di stage 3 |
 
 Penjaga agar tidak buntu: sekitar 70% bola tembakan dibuat sebagai pasangan bola yang bisa dijangkau, game memilih angka kunci yang punya minimal 2 bola cocok, angka bola yang tidak punya pasangan tidak pernah dibuat, dan setiap frame game memeriksa bahwa salah satu dari 2 bola siap tembak (peluru atau penukar) berguna, dengan cadangan yang pasti punya pasangan. Jika angka panel berganti sendiri, kedua bola siap tembak dibuat ulang supaya sejenis dengan panel. Tiap bola dan peluru membawa tanda jenis bilangan; desimal disimpan sebagai bilangan bulat satuan 0,1 dan pecahan sebagai pembilang, supaya tidak ada galat pembulatan. Pengaturan baru di Bagian 1: penyebut pecahan per stage, batas bola bulat dan desimal per tingkat, angka panel jenis baru, dan faktor perlambatan jika jenis dicampur.
+
+**Panel hidup dan angka kunci turunan (v7).** Aturan pasangan lama tidak berubah: dua bola harus cocok dengan angka kunci k. Panel menurunkan angka yang tampil dari k dan angka tetap c: tambah T = k + c, kurang T = k − c (angka besar dikurangi angka kecil), kali T = k × c, bagi T = k ÷ c; bilangan bulat, desimal, dan pecahan memakai T = k + c. Stage 1 tidak punya c, jadi panel menampilkan k. Angka tetap aktif hanya di stage 2 dan 3 (fungsi `FIXON`) dan besarnya naik per stage (fungsi `assignFix`). Untuk kurang dan bagi di stage 2–3, bola tembakan dibatasi (18 di Mudah, 30 di Menantang) supaya tidak terlalu besar. Bola baru, termasuk bola mantra bos, diundi ulang sampai punya pasangan di salah satu angka kunci stage itu (fungsi `solvable`). Daftar angka kunci turunan stage 2 dan 3 (`FIXK`):
+
+| Operasi | Mudah | Menantang |
+| --- | --- | --- |
+| Tambah | 6, 7, 8, 9, 10 | 12, 14, 16, 18, 20 |
+| Kurang | 3, 4, 5, 6 | 5, 6, 7, 8, 9 |
+| Kali | 6, 8, 10, 12, 14, 15, 18 | 12, 18, 24, 30, 42, 66 |
+| Bagi | 2, 3, 4, 6 | 2, 3, 4, 6, 8 |
+
+**Tur dan bidik sentuhan (v7).** Tur 3 langkah ada di `G.tourSeen` (sekali per permainan per stage 1 dan 2), digambar oleh `drawIntro` dan ditangani `tourTap`; posisi tombolnya dihitung `tourGeo` supaya muat di layout tegak maupun lebar (tombol ≥ 44 piksel layar). Bidik sentuhan memakai pointer events: tekan menandai `G.holding`, lepas di atas bola menembak, lepas di tempat kosong atau `pointercancel` membatalkan. Gelembung penunjuk (`drawAimBubble`) muncul hanya untuk sentuhan. Tombol uji dalam game (⚙, `DEV`) dimatikan.
 
 Pengaturan telur di Bagian 1: EGGS = 3, PROTECT_T = 2 detik, NEST_PUSH = 216 (4 jarak bola), NEST_SLOW_T = 4 detik, NEST_SLOW = 0,5, EGG_BONUS = 500, EGG_AT = 0,5 (pertengahan stage), SWAP_EVERY (Mudah 14–20, Menantang 8–14 detik), SWAP_WARN = 1,5 detik, SHIELD_AT = 5 jawaban benar berturut-turut.
 
@@ -243,6 +261,7 @@ Batasan saat ini:
 - Belum diuji di HP asli, Safari iPhone, dan sentuhan sungguhan; hanya simulasi dan tangkapan layar ukuran HP.
 - Suara hanya diukur otomatis (bunyi ada, tidak meluap, pelan) dan dicek urutan serta pemicunya; enak atau tidaknya di telinga, kenyaringan di speaker HP, dan perilaku Safari iPhone (izin suara, suara berhenti saat layar dikunci) belum didengar langsung. Volume dan nada bisa disetel di `AUDIO` dan `TRACKS`/`SFX`; `AUDIO_AKTIF = false` mematikan semuanya.
 - Gambar layar sambutan masih emoji sementara (satu tempat penggantian: `SPLASH_ART`).
+- Batasan v7: jarak gelembung penunjuk (sekitar 10 mm dari jari) belum diuji di HP asli; teks tur belum dicek guru atau anak, dan ukuran berhasil "paham dalam ±30 detik" belum diuji; angka ×1,2, ×1,15, dan mantra 22 detik di stage 3 adalah tebakan awal; daftar kunci kali lebih panjang (muncul misalnya 21 dan 66) dan perlu dicek guru apakah wajar untuk anak; bilangan negatif untuk usia 6–8 menunggu cek guru; stage 3 di layout lebar masih satu jalur.
 - Gambar masih emoji sementara; belum ada gambar resmi karakter dan aturan merek.
 - Pecahan hanya berpenyebut sama, tidak disederhanakan (2/4 tetap 2/4), dan belum ada pecahan campuran; jenis baru belum diuji pada anak. Di Mudah penyebut kini 3, 4, 5 (stage 1 memakai ⅓ dan ⅔).
 - Layout lebar memakai dunia tetap 1000×600, jadi di layar yang lebih lebar dari rasio 1,67 (misalnya HP mendatar) ada pita kosong di sisi dan bola tampak muncul dari tepi dunia, bukan tepi layar; di layar 4:3 pitanya ada di atas dan bawah. Stage 2 lebar hanya miring sekitar 2,5°.
