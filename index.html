@@ -426,7 +426,17 @@ body.noefek .ez-bintang.pop .star{animation:none}
     </div>
     <h3>Suara dan gambar</h3>
     <div class="tgbar" id="pauseSet"></div>
-    <p class="note">Mulai ulang: stage ini diulang dari awal, skor total tetap. Ke menu: kemajuan permainan ini hilang.</p>
+  </div>
+</div>
+<!-- KONFIRMASI (di atas menu Jeda): muncul sebelum "Ke menu" atau "Mulai ulang" dijalankan -->
+<div id="konfirm" class="overlay hidden" style="z-index:7" role="dialog" aria-modal="true" aria-labelledby="kfJudul">
+  <div class="panel">
+    <h2 id="kfJudul"></h2>
+    <p class="sub" id="kfIsi"></p>
+    <div class="row" style="margin-top:18px;flex-direction:column-reverse">
+      <button type="button" class="btn pasif" id="kfBatal">Batal</button>
+      <button type="button" class="btn primary" id="kfYa"></button>
+    </div>
   </div>
 </div>
 
@@ -2810,7 +2820,7 @@ function toLogical(e) {
   return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H };
 }
 function showMenu() {
-  G.mode = 'menu'; G.paused = false; G.holding = false; TOOLS.open = false; $('quit').classList.add('hidden');
+  G.mode = 'menu'; G.paused = false; G.holding = false; TOOLS.open = false; $('quit').classList.add('hidden'); $('konfirm').classList.add('hidden');
   $('end').classList.add('hidden'); $('review').classList.add('hidden'); $('story').classList.add('hidden'); $('menu').classList.remove('hidden');
   setStage(1);
   resize();                                // layout bisa saja berganti selama bermain: samakan dengan bentuk layar sekarang
@@ -2916,10 +2926,20 @@ $('btnB').addEventListener('click', showMenu);
 $('btnM').addEventListener('click', function () {          // Main lagi (setelah menang): ulang stage ini dari awal, jalur sama; skor dan bintang stage ini tidak dihitung dua kali
   $('end').classList.add('hidden'); G.totalScore -= G.score; G.stars[G.stage - 1] = undefined; startStage(G.stage);
 });
-$('quitYes').addEventListener('click', showMenu);       // Ke menu: tanpa pertanyaan lagi (kemajuan hilang, sudah tertulis di menu Jeda)
-$('pauseRestart').addEventListener('click', function () {   // Mulai ulang: stage ini dari awal, jalur sama, telur penuh, skor stage 0, skor total tetap
-  $('quit').classList.add('hidden'); G.paused = false; G.holding = false;
-  startStage(G.stage); resize();
+var aksiKonfirmasi = null;
+function tanyaKonfirmasi(judul, isi, labelYa, aksi) {      // modal konfirmasi di atas menu Jeda; aksi dijalankan hanya bila pemain menekan tombol "Ya"
+  $('kfJudul').textContent = judul; $('kfIsi').textContent = isi; $('kfYa').textContent = labelYa; aksiKonfirmasi = aksi;
+  $('konfirm').classList.remove('hidden');
+}
+function tutupKonfirmasi() { aksiKonfirmasi = null; $('konfirm').classList.add('hidden'); }
+$('kfBatal').addEventListener('click', tutupKonfirmasi);       // Batal: kembali ke menu Jeda, permainan tetap berhenti
+$('kfYa').addEventListener('click', function () { var a = aksiKonfirmasi; tutupKonfirmasi(); if (a) a(); });
+$('quitYes').addEventListener('click', function () {            // Ke menu: kemajuan hilang, jadi minta konfirmasi dulu
+  tanyaKonfirmasi('Kembali ke menu?', 'Skor dan kemajuan permainan ini akan hilang.', 'Ya, ke menu', showMenu);
+});
+function mulaiUlangStage() { $('quit').classList.add('hidden'); G.paused = false; G.holding = false; startStage(G.stage); resize(); }   // stage ini dari awal, jalur sama, telur penuh, skor stage 0, skor total tetap
+$('pauseRestart').addEventListener('click', function () {       // Mulai ulang: skor stage hilang, jadi minta konfirmasi dulu
+  tanyaKonfirmasi('Mulai ulang stage?', 'Stage ini diulang dari awal. Skor stage ini hilang, skor total tetap.', 'Ya, mulai ulang', mulaiUlangStage);
 });
 $('quitNo').addEventListener('click', function () { $('quit').classList.add('hidden'); G.paused = false; G.cool = Math.max(G.cool, 0.35); });
 var rvShowAll = false;
