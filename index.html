@@ -839,6 +839,7 @@ function keysFor(op) {                      // pilihan angka panel untuk pilihan
 function jmlDigit(v, dom) { var a = Math.abs(v); if (dom === 'd') a = Math.floor(a / 10); return String(Math.max(1, a)).length; }
 function pasangDigit(op) {                  // pasangan jumlah digit [suku A, suku B] untuk pilihan hitungan ini di stage dan tingkat sekarang
   var mu = G.level === 'mudah', t = (mu ? [[1, 1], [2, 1], [2, 2]] : [[2, 2], [3, 2], [3, 3]])[(G.stage || 1) - 1];
+  if (op === 'dec') t = [Math.min(t[0], 2), Math.min(t[1], 2)];             // desimal: maksimal 2 angka di bagian bulat (supaya angka tetap terbaca di HP kecil)
   return (op === '*' || op === '/') ? [Math.max(t[0], t[1]), 1] : t;
 }
 function digitOk(d1, d2, op) { var p = pasangDigit(op); return (d1 === p[0] && d2 === p[1]) || (d1 === p[1] && d2 === p[0]); }
@@ -1039,6 +1040,17 @@ function makeBall() {
   return { dom: dom, val: val, vis: 0, x: 0, y: 0, ox: 0, oy: 0 };
 }
 function newGame() { G.tourSeen = {}; G.totalScore = 0; G.stars = []; G.routePick = []; startStage(1); }
+function ballForKey(op, k) {                // nilai bola yang punya pasangan sah untuk angka panel k (null bila tidak bisa)
+  if (op === 'frac') return null;
+  var dom = OPDOM[op], ds = digitSet(op), i, x, ps;
+  for (i = 0; i < 40; i++) { x = randDigit(dom, pick(ds), op); ps = partners(x, op, k); if (ps.length) return pick(ps); }
+  return null;
+}
+function seedBola() {                       // awal stage hanya 2 bola terlihat: sebagian bola berikutnya dibuat berpasangan dengan angka panel pertama, supaya pemain punya beberapa pilihan
+  var K = G.key; if (!K || K.op === 'frac') return;
+  var dom = OPDOM[K.op], i, y;
+  for (i = 2; i < Math.min(G.balls.length, 8); i += 2) { if (G.balls[i].dom !== dom) continue; y = ballForKey(K.op, K.k); if (y !== null) G.balls[i].val = y; }
+}
 function startStage(i) {
   G.stage = i;
   if (G.routePick[i] === undefined) G.routePick[i] = Math.floor(Math.random() * 3);   // acak sekali per permainan; ulang stage = jalur sama
@@ -1068,7 +1080,7 @@ function startStage(i) {
     if (b.vis > -CFG.D) { var p = posAt(b.vis); b.x = p.x; b.y = p.y; }
     G.balls.push(b);
   }
-  G.key = null; G.key = pickKey(); reloadAmmo();
+  G.key = null; G.key = pickKey(); seedBola(); reloadAmmo();
   G.mode = 'banner'; G.bannerT = 0;
 }
 function endBanner() {
@@ -2254,8 +2266,9 @@ function drawIntro() {
   var gap = 150 * (1 - e);
   if (st < 2 || (st === 2 && T < 0.25)) {
     var dc = DOMCOL[d.dom || 'n']; ctx.globalAlpha = Math.min(1, T / 0.4 + 0.4);
-    drawNumBall(cx - R - gap, cy, R, fmt(d.a, d.dom), '#ffe58a', '#f0a21a', '#4a2b00', d.dom || 'n', true);
-    drawNumBall(cx + R + gap, cy, R, fmt(d.b, d.dom), dc[0], dc[1], dc[2], d.dom || 'n');
+    var bF = G.key && G.key.form === 'B';                // bentuk B (stage 2): peluru di kanan, sama dengan panel
+    drawNumBall(cx - R - gap, cy, R, fmt(bF ? d.b : d.a, d.dom), bF ? dc[0] : '#ffe58a', bF ? dc[1] : '#f0a21a', bF ? dc[2] : '#4a2b00', d.dom || 'n', !bF);
+    drawNumBall(cx + R + gap, cy, R, fmt(bF ? d.a : d.b, d.dom), bF ? '#ffe58a' : dc[0], bF ? '#f0a21a' : dc[1], bF ? '#4a2b00' : dc[2], d.dom || 'n', bF);
     ctx.globalAlpha = 1;
   }
   if (st === 0 && fix && G.tailBox) {            // sorot angka tetap di panel
