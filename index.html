@@ -248,6 +248,9 @@ body.noefek .ez-bintang.pop .star{animation:none}
 /* ---- Penyesuaian gaya kartun garis tebal: garis #1D2B3A, bayangan padat, tanpa kilau lembut ---- */
 .story-emoji{display:flex;justify-content:center;align-items:center;gap:6px}
 .story-emoji img{height:1.15em;width:auto;max-width:none;min-width:0;flex:0 1 auto;filter:none}
+.story-emoji .ex{display:flex;align-items:center;justify-content:center;gap:6px;font-size:36px;font-weight:900;color:var(--ng-teks);white-space:nowrap}
+.story-emoji .ex img{height:62px;width:auto;max-width:none;flex:none}
+.story-emoji .ex b{font-weight:900}
 .sp-hill{border-top:4px solid var(--ng-garis)}
 .sp-title{color:#fff;text-shadow:-3px -3px 0 #1D2B3A,3px -3px 0 #1D2B3A,-3px 3px 0 #1D2B3A,3px 3px 0 #1D2B3A,0 6px 0 #1D2B3A}
 .sp-btn{border:4px solid var(--ng-garis);text-shadow:-2px -2px 0 #1D2B3A,2px -2px 0 #1D2B3A,-2px 2px 0 #1D2B3A,2px 2px 0 #1D2B3A,0 3px 0 #1D2B3A;box-shadow:var(--ng-kilau-atas),0 6px 0 #1D2B3A}
@@ -2856,19 +2859,41 @@ $('ops').addEventListener('click', function (e) {
   b.classList.toggle('sel', on);
 });
 
-var storyIdx = 0;
+var storyIdx = 0, storyTimer = null, storyEx = 0;
+var CONTOH = {                               // contoh soal di layar cerita ketiga, satu per pilihan hitungan: bola A, bola B, hasil, simbol, jenis bilangan, kalimat
+  '+':  { a: '3', b: '4', h: '7', s: '+', dom: 'n', t: 'Cocokkan dua bola yang jika ditambah hasilnya sama dengan angka di panel.' },
+  '-':  { a: '9', b: '4', h: '5', s: '−', dom: 'n', t: 'Cocokkan dua bola yang selisihnya sama dengan angka di panel.' },
+  '*':  { a: '3', b: '4', h: '12', s: '×', dom: 'n', t: 'Cocokkan dua bola yang jika dikalikan hasilnya sama dengan angka di panel.' },
+  '/':  { a: '12', b: '3', h: '4', s: '÷', dom: 'n', t: 'Cocokkan dua bola yang jika dibagi hasilnya sama dengan angka di panel.' },
+  int:  { a: '−2', b: '5', h: '3', s: '+', dom: 'i', t: 'Cocokkan dua bilangan bulat yang jumlahnya sama dengan angka di panel.' },
+  dec:  { a: '1,5', b: '2,3', h: '3,8', s: '+', dom: 'd', t: 'Cocokkan dua bilangan desimal yang jumlahnya sama dengan angka di panel.' },
+  frac: { a: '1/4', b: '2/4', h: '3/4', s: '+', dom: 'f', t: 'Cocokkan dua pecahan yang jumlahnya sama dengan angka di panel.' }
+};
+function contohTerpilih() { return Object.keys(CONTOH).filter(function (k) { return SEL.ops[k]; }); }   // hitungan yang dipilih pemain di menu
+function tampilContoh() {                    // isi layar cerita ketiga dengan contoh hitungan yang dipilih (bergantian tiap 2 detik bila lebih dari satu)
+  var ks = contohTerpilih(); if (!ks.length) ks = ['+'];
+  var op = ks[storyEx % ks.length], c = CONTOH[op];
+  var bola = function (t) { return '<img alt="" src="' + seni('bola:' + c.dom + ':' + t, 120) + '">'; };
+  $('storyEmoji').innerHTML = '<div class="ex" data-op="' + op + '">' + bola(c.a) + '<b>' + c.s + '</b>' + bola(c.b) + '<b>= ' + c.h + '</b></div>';
+  $('storyText').textContent = c.t; $('storyText').style.minHeight = '124px';      // tinggi tetap 4 baris: panel tidak bergeser saat contoh bergantian
+}
+function hentikanContoh() { if (storyTimer) { clearInterval(storyTimer); storyTimer = null; } }
 function renderStory() {
-  var s = STORY[storyIdx];
+  var s = STORY[storyIdx]; hentikanContoh(); $('storyText').style.minHeight = '';
   var gam = (ASET_AKTIF && s.a && s.a.every(function (n) { return aset(n); })) ? s.a.map(function (n) { return '<img alt="" src="' + ASET_FOLDER + n + '.webp">'; }).join('') : null;   // gambar karakter (cadangan: emoji)
   if (gk()) $('storyEmoji').innerHTML = (s.k || s.a).map(function (n) { return '<img alt="" src="' + seni(n, s.k ? 110 : 200) + '">'; }).join('');   // gaya kartun: gambar dari kode
   else if (gam) $('storyEmoji').innerHTML = gam; else $('storyEmoji').textContent = s.e;
   $('storyText').textContent = s.t;
   $('storyDots').innerHTML = STORY.map(function (_, i) { return '<span class="dot' + (i === storyIdx ? ' on' : '') + '"></span>'; }).join('');
   $('storyNext').textContent = storyIdx < STORY.length - 1 ? 'Lanjut' : 'Mulai!';
+  if (storyIdx === STORY.length - 1 && gk()) {                 // slide terakhir: contoh sesuai hitungan yang dipilih
+    storyEx = 0; tampilContoh();
+    if (contohTerpilih().length > 1) storyTimer = setInterval(function () { storyEx++; tampilContoh(); }, 2000);
+  }
 }
 var storyAt = 0;                            // waktu cerita mulai tampil: ketukan ganda pada "Mulai" tidak boleh melewati slide
 function storyBusy() { return performance.now() - storyAt < 450; }
-function beginGame() { $('story').classList.add('hidden'); newGame(); }
+function beginGame() { hentikanContoh(); $('story').classList.add('hidden'); newGame(); }
 var menuAt = 0;                             // waktu menu muncul dari layar sambutan: ketukan ganda pada "Mulai Main" tidak boleh langsung menekan tombol di menu
 $('spGo').addEventListener('click', function () {
   if (G.mode !== 'splash') return;
