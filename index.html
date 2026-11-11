@@ -464,7 +464,7 @@ var KEYS_PER_ROUND = 3;         // angka di panel berganti setiap 3 pasangan
 var MISTAKE_SPEEDUP = 0.07;     // tiap kesalahan: jalur +7% lebih cepat
 var MAX_SPEEDUP = 1.8;
 var STAGE3_N = 1.2, STAGE3_V = 1.15;   // v7: stage 3 lebih banyak bola dan lebih cepat dari stage 2 (1,1 dan 1,08)
-var BOSS_EVERY = 22;            // detik: penyihir (stage 3) merapal mantra
+var ANGIN = { peringatan: 1, lama: 2.5, kali: 5, maks: 3, jedaMin: 20, jedaAcak: 15, awalMin: 20, awalAcak: 15 };   // kemampuan boss stage 3 "Angin Kencang": peringatan 1 detik, lalu barisan bola maju 5x lebih cepat selama 2,5 detik; maksimal 3 kali per stage; jeda minimal 20 detik (jedaMin + acak 0–15) setelah angin selesai; angin pertama 20–35 detik setelah stage dimulai
 var EGGS = 3;                   // telur (nyawa) di sarang tiap stage
 var PROTECT_T = 2;              // detik perlindungan setelah telur hilang (tidak ada telur lain yang hilang)
 var NEST_PUSH = 216;            // bola sampai sarang: jalur mundur sejauh ini (216 = 4 jarak bola)
@@ -475,7 +475,6 @@ var SWAP_WARN = 1.5;            // lama tanda sebelum dua bola bertukar (detik)
 var EGG_BONUS = 500;            // telur naga saat telur sudah 3/3: tambah skor sebesar ini
 var EGG_AT = 0.5;               // bola telur naga muncul saat sekian bagian bola awal sudah habis (0,5 = pertengahan stage)
 var STEAL_T = 1.5, GAIN_T = 0.9; // lama animasi telur dicuri / telur bertambah (detik)
-var BOSS_ADDS = 1;              // jumlah bola tambahan tiap mantra
 
 /* ---- Layar sambutan: tulisan, ukuran, dan kecepatan gerak ---- */
 var SPLASH = {
@@ -627,7 +626,7 @@ function ktBola(c, x, y, r, text, dom, peluru) {              // bola angka kart
     if (!peluru) { c.fillStyle = KT.garis; c.fillRect(x - lw2 / 2 - d * 0.03, y - fz * 0.02 - d * 0.03, lw2 + d * 0.06, Math.max(2, d * 0.07) + d * 0.06); }
     c.fillStyle = warnaAngka; c.fillRect(x - lw2 / 2, y - fz * 0.02, lw2, Math.max(2, d * 0.07));
   } else {
-    var fs = Math.round(d * (text.length >= 3 ? 0.40 : text.length === 2 ? 0.50 : 0.56));
+    var fs = Math.round(d * (text.length >= 5 ? 0.27 : text.length === 4 ? 0.33 : text.length === 3 ? 0.40 : text.length === 2 ? 0.50 : 0.56));
     c.font = '900 ' + fs + 'px ' + FONT;
     if (!peluru) { c.lineWidth = d * 0.09; c.strokeStyle = KT.garis; c.strokeText(text, x, y + d * 0.02); }
     c.fillStyle = warnaAngka; c.fillText(text, x, y + d * 0.02);
@@ -831,23 +830,69 @@ function keysFor(op) {                      // pilihan angka panel untuk pilihan
   if (op === 'frac') { var D = G.fd; return [D - 1, D, D + 1]; }
   return KEYS_NEW[op] ? KEYS_NEW[op][G.level] : KEYS[op][G.level];
 }
-function nClear(v) {                        // apakah bola angka biasa ini punya pasangan di salah satu angka panel? (hanya ×: 5 dan 7 tidak punya)
-  return G.ops.some(function (op) {
-    return OPDOM[op] === 'n' && keysFor(op).some(function (k) { return partners(v, op, k).length > 0; });
-  });
+/* ---- v8: semua stage berbentuk dua suku (peluru dan bola); jumlah angka (digit) mengikuti tingkat dan stage ----
+   Mudah:    stage 1 = 1 angka dengan 1 angka; stage 2 = 2 angka dengan 1 angka (urutan bebas); stage 3 = 2 angka dengan 2 angka.
+   Menantang: stage 1 = 2 dengan 2; stage 2 = 3 dengan 2; stage 3 = 3 dengan 3.
+   Kali dan Bagi: hanya satu suku yang mengikuti tabel, suku lainnya selalu 1 angka (2–9). Bagi: hasil harus bilangan bulat.
+   Kurang: tidak negatif (hasil >= 1). Bilangan bulat: digit dari nilai tanpa tanda, boleh negatif. Desimal: digit dari bagian bulat, satu angka di belakang koma.
+   Pecahan: tidak ikut tabel (angka dan penyebut seperti sebelumnya). */
+function jmlDigit(v, dom) { var a = Math.abs(v); if (dom === 'd') a = Math.floor(a / 10); return String(Math.max(1, a)).length; }
+function pasangDigit(op) {                  // pasangan jumlah digit [suku A, suku B] untuk pilihan hitungan ini di stage dan tingkat sekarang
+  var mu = G.level === 'mudah', t = (mu ? [[1, 1], [2, 1], [2, 2]] : [[2, 2], [3, 2], [3, 3]])[(G.stage || 1) - 1];
+  return (op === '*' || op === '/') ? [Math.max(t[0], t[1]), 1] : t;
 }
-function domList(dom) {                     // semua angka bola yang mungkin untuk jenis ini
-  var r = [], i;
-  if (dom === 'i') { for (i = -INT_MAX[G.level]; i <= INT_MAX[G.level]; i++) if (i) r.push(i); }
-  else if (dom === 'd') { for (i = 1; i <= DEC_MAX[G.level]; i++) r.push(i); }
-  else if (dom === 'f') { for (i = 1; i < G.fd; i++) r.push(i); }
-  else {
-    for (i = 1; i <= G.M; i++) if (nClear(i)) r.push(i);      // buang angka yang tidak mungkin dipasangkan, supaya tidak ada bola buntu
-    if (!r.length) for (i = 1; i <= G.M; i++) r.push(i);
+function digitOk(d1, d2, op) { var p = pasangDigit(op); return (d1 === p[0] && d2 === p[1]) || (d1 === p[1] && d2 === p[0]); }
+function digitSet(op) { var p = pasangDigit(op); return p[0] === p[1] ? [p[0]] : [p[0], p[1]]; }
+function randDigit(dom, d, op) {            // nilai acak dengan d angka
+  var lo = d === 1 ? 1 : Math.pow(10, d - 1), hi = Math.pow(10, d) - 1;
+  if ((op === '*' || op === '/') && d === 1) lo = 2;
+  var v = ri(lo, hi);
+  if (dom === 'i' && Math.random() < 0.5) v = -v;
+  else if (dom === 'd') v = v * 10 + ri(0, 9);
+  return v;
+}
+function domList(dom) {                     // pecahan: semua pembilang yang mungkin (jenis lain memakai randVal)
+  var r = [], i; for (i = 1; i < G.fd; i++) r.push(i); return r;
+}
+function randVal(dom, op) {                 // angka acak untuk bola/peluru jenis ini; op = pilihan hitungan yang jadi acuan digit
+  if (dom === 'f') return pick(domList(dom));
+  var ops = G.ops.filter(function (q) { return OPDOM[q] === dom; }); if (!ops.length) ops = [op || '+'];
+  var o = op && OPDOM[op] === dom ? op : pick(ops);
+  return randDigit(dom, pick(digitSet(o)), o);
+}
+function usable(op, B) {                    // apakah bola bernilai B bisa punya pasangan untuk pilihan hitungan ini?
+  var dom = OPDOM[op]; if (op === 'frac') return B >= 1 && B < G.fd;
+  if (digitSet(op).indexOf(jmlDigit(B, dom)) < 0) return false;
+  if ((op === '*' || op === '/') && Math.abs(B) < 2) return false;
+  if (op === '/') {                          // yang dibagi harus punya pembagi 2–9; pembagi 1 angka selalu bisa (kecuali 1 angka dengan 1 angka)
+    var D = pasangDigit(op)[0], x;
+    if (D === 1) { if (B * 2 <= 9) return true; for (x = 2; x * 2 <= B; x++) if (B % x === 0) return true; return false; }   // 1 angka dengan 1 angka: 5 dan 7 tidak punya pasangan
+    if (jmlDigit(B, dom) === D) { for (x = 2; x <= 9; x++) if (B % x === 0) return true; return false; }
   }
-  return r;
+  return true;
 }
-function randVal(dom) { return pick(domList(dom)); }
+function keyFrom(B, op) {                   // angka panel (hasil) dari bola B dan satu pasangan acak yang sah; null bila tidak bisa
+  var dom = OPDOM[op], d = jmlDigit(B, dom), opts = digitSet(op).filter(function (dx) { return digitOk(d, dx, op); }), x, k, i;
+  if (!opts.length) return null;
+  var dx = pick(opts);
+  if (op === '+' || op === 'int' || op === 'dec') { x = randDigit(dom, dx, op); k = B + x; if (op === 'int' && k === 0) return null; return k; }
+  if (op === '-') { x = randDigit(dom, dx, op); k = Math.abs(B - x); return k >= 1 ? k : null; }
+  if (op === '*') { x = randDigit(dom, dx, op); return B * x; }
+  if (op === '/') {
+    var D = pasangDigit(op)[0], dv = [];
+    if (D === 1) {                           // 1 angka dengan 1 angka: B sebagai pembagi (hasil mengikuti) atau yang dibagi
+      for (i = 2; i <= 9; i++) { if (B * i <= 9) dv.push(i); }
+      var ds = []; for (i = 2; i < B; i++) if (B % i === 0 && B / i >= 2) ds.push(B / i);
+      if (dv.length && (!ds.length || Math.random() < 0.5)) return pick(dv);
+      return ds.length ? pick(ds) : null;
+    }
+    if (d === D) { for (i = 2; i <= 9; i++) if (B % i === 0) dv.push(i); return dv.length ? B / pick(dv) : null; }   // B yang dibagi: pembagi 1 angka
+    var lo = Math.pow(10, D - 1), hi = Math.pow(10, D) - 1, ks = [];       // B pembagi 1 angka: yang dibagi punya D angka
+    for (i = Math.ceil(lo / B); i <= Math.floor(hi / B); i++) if (i >= 2) ks.push(i);
+    return ks.length ? pick(ks) : null;
+  }
+  return null;
+}
 function mt(x, y) {                         // dua bola/peluru cocok? (harus sejenis dengan panel)
   return !!G.key && x.dom === y.dom && x.dom === OPDOM[G.key.op] && matches(x.val, y.val, G.key.op, G.key.k);
 }
@@ -861,15 +906,24 @@ function matches(a, b, op, key) {          // apakah dua bola cocok dengan angka
   }
   return false;
 }
-function partners0(B, op, key) {            // angka pasangan yang cocok untuk bola bernilai B
-  var res = [];
-  if (op === '+') { var x = key - B; if (x >= 1) res.push(x); }
-  else if (op === '-') { res.push(B + key); if (B - key >= 1) res.push(B - key); }
-  else if (op === '*') { if (key % B === 0 && key / B <= maxNum('*')) res.push(key / B); }
-  else if (op === '/') { res.push(B * key); if (B % key === 0 && B / key >= 1) res.push(B / key); }
-  else if (op === 'int') { var xi = key - B; if (xi !== 0 && Math.abs(xi) <= INT_MAX[G.level]) res.push(xi); }
-  else if (op === 'dec') { var xd = key - B; if (xd >= 1 && xd <= DEC_MAX[G.level]) res.push(xd); }
-  else if (op === 'frac') { var xf = key - B; if (xf >= 1 && xf < G.fd) res.push(xf); }
+function partners0(B, op, key) {            // angka pasangan yang cocok untuk bola bernilai B (hasil sama dengan key dan jumlah digit sesuai tabel)
+  var res = [], dom = OPDOM[op], c = [], i;
+  if (op === 'frac') { var xf = key - B; if (xf >= 1 && xf < G.fd) res.push(xf); return res; }
+  if (op === '+' || op === 'int' || op === 'dec') c.push(key - B);
+  else if (op === '-') { c.push(B + key); c.push(B - key); }
+  else if (op === '*') { if (B !== 0 && key % B === 0) c.push(key / B); }
+  else if (op === '/') { c.push(B * key); if (key !== 0 && B % key === 0) c.push(B / key); }
+  var dB = jmlDigit(B, dom);
+  for (i = 0; i < c.length; i++) {
+    var x = c[i];
+    if (!isFinite(x) || x !== Math.floor(x) || res.indexOf(x) >= 0) continue;
+    if (op === 'int') { if (x === 0) continue; }
+    else if (op === 'dec') { if (x < 1) continue; }
+    else if (x < 1) continue;
+    if ((op === '*' || op === '/') && x < 2) continue;
+    if (!digitOk(dB, jmlDigit(x, dom), op)) continue;
+    res.push(x);
+  }
   return res;
 }
 function pairEq(a, b, op, dom) {          // tulisan persamaan untuk umpan balik
@@ -899,20 +953,34 @@ function useful(tok) {                     // apakah peluru ini bisa dipakai pad
   return t.some(function (b) { return mt(tok, b); });
 }
 function pickKey0() {
-  var vis = targets(), best = null, bestC = 0, ops = shuffle(G.ops.slice());
-  for (var oi = 0; oi < ops.length; oi++) {
-    var op = ops[oi], list = shuffle(keysFor(op).slice());
-    if (G.key && G.key.op === op && list.length > 1) list = list.filter(function (k) { return k !== G.key.k; });
-    for (var i = 0; i < list.length; i++) {
-      var c = 0;
-      for (var j = 0; j < vis.length; j++) if (vis[j].dom === OPDOM[op] && partners(vis[j].val, op, list[i]).length) c++;
-      if (c >= 2) return { op: op, k: list[i] };
-      if (c > bestC) { bestC = c; best = { op: op, k: list[i] }; }
+  var vis = targets(), best = null, bestC = 0, ops = shuffle(G.ops.slice()), oi, i, j;
+  for (oi = 0; oi < ops.length; oi++) {
+    var op = ops[oi], dom = OPDOM[op];
+    if (op === 'frac') {                                     // pecahan: angka panel dari daftar kecil (tidak ikut tabel digit)
+      var list = shuffle(keysFor(op).slice());
+      if (G.key && G.key.op === op && list.length > 1) list = list.filter(function (k) { return k !== G.key.k; });
+      for (i = 0; i < list.length; i++) {
+        var cf = 0; for (j = 0; j < vis.length; j++) if (vis[j].dom === dom && partners(vis[j].val, op, list[i]).length) cf++;
+        if (cf >= 2) return { op: op, k: list[i], form: pickForm() };
+        if (cf > bestC) { bestC = cf; best = { op: op, k: list[i], form: pickForm() }; }
+      }
+      continue;
+    }
+    var cand = shuffle(vis.filter(function (b) { return b.dom === dom; }));          // angka panel dibuat dari bola yang terlihat + satu pasangan acak yang sah
+    for (i = 0; i < 30 && cand.length; i++) {
+      var B = cand[i % cand.length], k = keyFrom(B.val, op);
+      if (k === null || (G.key && G.key.op === op && G.key.k === k)) continue;
+      var c = 0; for (j = 0; j < vis.length; j++) if (vis[j].dom === dom && partners(vis[j].val, op, k).length) c++;
+      if (c >= 2) return { op: op, k: k, form: pickForm() };
+      if (c > bestC) { bestC = c; best = { op: op, k: k, form: pickForm() }; }
     }
   }
   if (best) return best;
-  return { op: ops[0], k: pick(keysFor(ops[0])) };
+  var o0 = ops[0]; if (o0 === 'frac') return { op: o0, k: pick(keysFor(o0)), form: pickForm() };
+  var bb = vis.filter(function (b) { return b.dom === OPDOM[o0]; })[0], kk = bb ? keyFrom(bb.val, o0) : null;
+  return { op: o0, k: kk !== null ? kk : 10, form: pickForm() };
 }
+function pickForm() { var s = G.stage || 1; return s === 1 ? 'A' : s === 2 ? 'B' : (Math.random() < 0.5 ? 'A' : 'B'); }   // A: peluru di kiri, kotak kosong di kanan; B: kotak kosong di kiri, peluru di kanan; stage 3 bergantian acak
 function genAmmo() {
   var vis = targets();
   var ok = vis.filter(function (b) { return b.dom === OPDOM[G.key.op] && partners(b.val, G.key.op, G.key.k).length; });
@@ -925,7 +993,7 @@ function genAmmo() {
     var b = pick(ok);
     return { t: 'n', dom: b.dom, val: pick(partners(b.val, G.key.op, G.key.k)) };
   }
-  var dm = OPDOM[G.key.op]; return { t: 'n', dom: dm, val: randVal(dm) };
+  var dm = OPDOM[G.key.op]; return { t: 'n', dom: dm, val: randVal(dm, G.key.op) };
 }
 function reloadAmmo() {                    // buat ulang peluru dan penukar; ulangi bila angka panel berganti saat membuatnya
   for (var i = 0; i < 4; i++) { G.staleAmmo = false; G.ammo = genAmmo(); G.next = genAmmo(); if (!G.staleAmmo) break; }
@@ -964,7 +1032,7 @@ function setStage(i) {                     // pasang jalur, naga, dan latar untu
   DRAGON.y = rt.dragon.abs ? rt.dragon.y : (rt.dragon.bottom ? H - 128 : rt.dragon.y + PATH_DY);
   buildBg();
 }
-function solvable(dom, val) { return G.ops.some(function (op) { return OPDOM[op] === dom && keysFor(op).some(function (k) { return partners(val, op, k).length > 0; }); }); }
+function solvable(dom, val) { return G.ops.some(function (op) { return OPDOM[op] === dom && usable(op, val); }); }
 function makeBall() {
   var dom = pick(G.doms), val = randVal(dom), n = 0;
   while (n++ < 40 && !solvable(dom, val)) val = randVal(dom);   // v7: bola tanpa pasangan tidak dibuat
@@ -986,7 +1054,7 @@ function startStage(i) {
   G.shots = []; G.parts = []; G.pops = []; G.verdict = null; G.pairs = [];
   G.time = 0; G.cool = 0; G.score = 0; G.combo = 0; G.bestCombo = 0;
   G.fired = 0; G.hits = 0; G.mistakes = 0; G.speedMul = 1; G.keyMatches = 0; G.wrongStreak = 0;
-  G.lost = false; G.chk = 0; G.bossT = 0; G.bossPulse = 0;
+  G.lost = false; G.chk = 0; G.bossT = 0; G.bossPulse = 0; G.angin = { n: 0, fase: 0, t: 0, tunggu: ANGIN.awalMin + Math.random() * ANGIN.awalAcak };   // fase: 0 diam, 1 peringatan, 2 angin aktif
   G.swap = null; G.swapT = swapDelay();
   G.shield = false; G.okStreak = 0; G.log = [];
   G.eggs = EGGS; G.eggPhase = 0; G.pairsDone = 0; G.protT = 0; G.slowT = 0; G.steals = []; G.gains = []; G.roar = 0; G.eggBonus = 0;
@@ -1009,12 +1077,12 @@ function endBanner() {
   if (G.stage <= 2 && !G.tourSeen[G.stage]) { G.tourSeen[G.stage] = true; G.intro = makeDemo(); G.introT = 0; G.introBurst = false; G.tourStep = 0; G.mode = 'intro'; }   // v7: tur 3 langkah di stage 1 dan 2, sekali per permainan
   else { G.mode = 'play'; G.cool = 0.35; }
 }
-function makeDemo() {                      // contoh dua bola untuk peragaan di stage 1
-  var op = G.key.op, k = G.key.k, dom = OPDOM[op];
-  var as = shuffle(dom === 'n' ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] : domList(dom));
-  for (var i = 0; i < as.length; i++) {
-    var ps = partners(as[i], op, k).filter(function (x) { return dom !== 'n' || x <= 20; });
-    if (ps.length) return { a: as[i], b: ps[0], op: op, k: k, dom: dom };
+function makeDemo() {                      // contoh dua bola untuk peragaan: bola terlihat dengan pasangannya (peluru) untuk angka panel sekarang
+  var op = G.key.op, k = G.key.k, dom = OPDOM[op], i, ps;
+  for (i = 0; i < G.balls.length; i++) {
+    var b = G.balls[i]; if (b.dom !== dom) continue;
+    ps = partners(b.val, op, k);
+    if (ps.length) return { a: ps[0], b: b.val, op: op, k: k, dom: dom };
   }
   return { a: 3, b: 7, op: '+', k: 10, dom: 'n' };
 }
@@ -1440,6 +1508,7 @@ function updateChain(dt) {
   var v = G.vBase * G.speedMul;
   if (G.balls[0].vis < 150) v *= 5;        // bola habis di depan: percepat bola berikutnya
   if (G.slowT > 0) v *= NEST_SLOW;         // setelah telur dicuri: jalur melambat sebentar
+  if (G.angin && G.angin.fase === 2) v *= ANGIN.kali;   // Angin Kencang: barisan maju lebih cepat
   G.tailS += v * dt;
   var k = 1 - Math.exp(-dt * 16), dk = Math.exp(-dt * 12);
   for (var i = 0; i < n; i++) {
@@ -1472,16 +1541,18 @@ function updateFx(dt) {
   }
 }
 function bossPos() { return { x: W / 2, y: 205 }; }   // boss di tengah layar, tepat di bawah bar darah (bar di y 121–135; boss tinggi 130 jadi bagian atasnya di y 140); tidak lagi mengikuti posisi di data jalur
-function bossCast() {                      // mantra penyihir: angka panel berganti, bola bertambah
-  var bp = bossPos();
-  G.bossPulse = 0.8;
-  burst(bp.x, bp.y, '#d9b3ff', 18);
-  for (var i = 0; i < BOSS_ADDS; i++) {
-    G.tailS -= CFG.D;
-    var b = makeBall(); b.vis = G.tailS; G.balls.push(b); G.totalN++;
+function updateAngin(dt) {                  // Angin Kencang: tunggu -> peringatan 1 detik -> angin aktif 2,5 detik -> jeda; maksimal 3 kali per stage
+  var A = G.angin; if (!A) return;
+  if (A.fase === 0) {
+    if (A.n < ANGIN.maks) {
+      A.tunggu -= dt;
+      if (A.tunggu <= 0) { A.fase = 1; A.t = 0; G.bossPulse = ANGIN.peringatan; var bp = bossPos(); burst(bp.x, bp.y, '#bfe6ff', 14); popup(W / 2, popTop(), 'Angin kencang datang!', '#bfe6ff', { size: 28, rate: 0.7 }); }
+    }
+  } else if (A.fase === 1) {
+    A.t += dt; if (A.t >= ANGIN.peringatan) { A.fase = 2; A.t = 0; A.n++; }
+  } else {
+    A.t += dt; if (A.t >= ANGIN.lama) { A.fase = 0; A.t = 0; A.tunggu = ANGIN.jedaMin + Math.random() * ANGIN.jedaAcak; }
   }
-  G.key = pickKey(); G.keyMatches = 0; reloadAmmo();
-  popup(W / 2, popTop(),'Mantra baru!', '#d9b3ff', { size: 30, rate: 0.6 });
 }
 function update(dt) {
   G.time += dt; if (G.cool > 0) G.cool -= dt;
@@ -1498,8 +1569,7 @@ function update(dt) {
     if (!G.eggPhase && G.key && G.pairsDone * 2 >= G.totalN * EGG_AT) trySpawnEgg();
   }
   if (STAGES[G.stage - 1].boss && G.balls.length) {
-    G.bossT += dt;
-    if (G.bossT >= BOSS_EVERY) { G.bossT = 0; bossCast(); }
+    updateAngin(dt);
   }
   if (G.balls.length && G.balls[0].vis >= PL - 30) { nestHit(); if (G.mode !== 'play') return; }
   if (G.ammo) ensureUseful();              // dicek setiap frame (setelah semua perubahan bola), tanpa jeda
@@ -2095,7 +2165,7 @@ function applyPreset(k) {
   SEL.live = q.live; SEL.fix = q.fix; SEL.mid = q.mid; SEL.ver = q.ver;
   if (G.mode === 'play' && fixChanged) { G.key = pickKey(); G.keyMatches = 0; reloadAmmo(); popup(W / 2, 150, 'Soal baru!', '#fff'); }
 }
-function FIXON() { return !!(SEL.live && SEL.fix && (G.stage || 1) >= 2); }   // angka tetap hanya di stage 2 dan 3
+function FIXON() { return false; }   // v8: angka tetap di panel (mis. "+ 4") dihapus; semua stage berbentuk dua suku seperti stage 1
 function partners(B, op, key) {
   var r = partners0(B, op, key);
   if (FIXON() && (op === '/' || op === '-')) { var cap = G.level === 'mudah' ? 18 : 30; r = r.filter(function (v) { return v <= cap; }); }
@@ -2297,9 +2367,11 @@ function drawLivePanel(cx) {
       drawNumBall(px, by, R, fmt(tok.val, tok.dom), cc[0], cc[1], cc[2], tok.dom || 'n', !!shooter);
     }
   };
-  var swp = !!(x && !x.bad && s && (op === '-' || op === '/') && s.val < x.val);   // kurang/bagi: yang besar di depan
+  var bForm = (K.form || (G.stage === 2 ? 'B' : 'A')) === 'B';               // bentuk A: peluru di kiri, kotak kosong (bola) di kanan; bentuk B: kotak di kiri, peluru di kanan
+  var tokL = bForm ? x : s, tokR = bForm ? s : x, shL = !bForm, shR = bForm;
+  if (x && !x.bad && s && (op === '-' || op === '/') && tokL && tokR && tokL.val < tokR.val) { var tt0 = tokL; tokL = tokR; tokR = tt0; shL = !shL; shR = !shR; }   // kurang/bagi: yang besar di depan (hasil tidak negatif)
   var cxL = x0 + 10 + R, opx = x0 + 10 + 2 * R + 6 + 13, cxR = x0 + 10 + 2 * R + 6 + 26 + 6 + R;
-  chip(swp ? x : s, cxL, !swp); chip(swp ? s : x, cxR, swp);
+  chip(tokL, cxL, shL); chip(tokR, cxR, shR);
   ctx.fillStyle = tx; ctx.textBaseline = 'middle'; ctx.textAlign = 'center'; ctx.font = 'bold 32px ' + FONT;
   ctx.fillText(sym, opx, by + 2);
   var px = x0 + slotW + 12;
@@ -2527,6 +2599,23 @@ function drawBannerBaru(T, st, cx, cy, a) {
   ctx.textBaseline = 'alphabetic'; ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = fsz(14) + 'px ' + FONT;
   ctx.fillText('Ketuk untuk lanjut', cx, H - 20);
 }
+function drawAngin(lapis) {           // lapis 0 = garis angin (digambar di belakang bola), 1 = tulisan (di atas)
+                       // Angin Kencang: peringatan (garis angin samar + tulisan berkedip) lalu angin aktif (garis angin tebal bergerak)
+  var A = G.angin; if (!A || A.fase === 0 || G.mode !== 'play') return;
+  var aktif = A.fase === 2, kedip = aktif ? 1 : 0.5 + 0.5 * Math.sin(G.time * 16), i, n = aktif ? 18 : 9;
+  ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (i = 0; lapis === 0 && i < n; i++) {
+    var y = 130 + ((i * 131 + 47) % (H - 260)), len = 80 + (i * 37) % 90, sp = (aktif ? 1500 : 500) * (0.7 + (i % 5) * 0.12);
+    var x = ((G.time * sp + i * 173) % (W + 320)) - 160, a = aktif ? 0.8 : 0.35 * kedip;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.bezierCurveTo(x + len * 0.35, y - 12, x + len * 0.7, y + 12, x + len, y - 4);
+    ctx.lineWidth = 9; ctx.strokeStyle = 'rgba(29,43,58,' + (a * 0.55) + ')'; ctx.stroke();
+    ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(255,255,255,' + a + ')'; ctx.stroke();
+  }
+  if (lapis !== 1) { ctx.restore(); return; }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = '900 ' + (aktif ? 30 : 34) + 'px ' + FONT; ctx.globalAlpha = aktif ? 1 : 0.5 + 0.5 * kedip;
+  var bp = bossPos(); teksGaris('Angin Kencang!', W / 2, bp.y + 92, 8);      // di bawah boss, di atas jalur teratas
+  ctx.restore(); ctx.textBaseline = 'alphabetic';
+}
 function drawBanner() {
   var T = G.bannerT, st = STAGES[G.stage - 1], cx = W / 2, cy = Math.round(H * 0.42);
   var a = Math.max(0, Math.min(1, T / 0.3, (2.2 - T) / 0.3));
@@ -2547,6 +2636,7 @@ function render() {
   ctx.clearRect(0, 0, W, H);
   if (bg) ctx.drawImage(bg, 0, 0, W, H); else { ctx.fillStyle = '#235a31'; ctx.fillRect(0, 0, W, H); }
   if (G.mode === 'splash' || G.mode === 'menu' || G.mode === 'story') return;
+  drawAngin(0);
   var i, ex = PX[PX.length - 1], ey = PY[PY.length - 1], st = STAGES[G.stage - 1];
   var near = G.balls.length && G.balls[0].vis > PL - 420;
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -2634,7 +2724,7 @@ function render() {
   }
   if (G.mode === 'intro') drawIntro();
   else if (G.mode === 'banner') drawBanner();
-  drawHUD();
+  drawAngin(1); drawHUD();
 }
 
 /* =====================================================================
