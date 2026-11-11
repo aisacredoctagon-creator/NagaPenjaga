@@ -146,41 +146,29 @@ h3{margin:16px 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercas
   #setbar{order:2;flex-direction:column;align-self:flex-start;margin:0 0 0 8px;width:72px}
   #setbar .tg{flex:none;min-width:0;width:100%}
 }
-/* ---- Layar sambutan: semua ukuran dan gerak diatur dari SPLASH di Bagian 1 ---- */
-#splash{padding:0;overflow:hidden;z-index:8;background:linear-gradient(180deg,#58b6ee 0%,#a4deff 57%,#7ccd58 57.1%,#3f9e3a 100%);touch-action:manipulation}
-.sp-hill{position:absolute;left:-15%;right:-15%;bottom:-6%;height:34%;border-radius:50% 50% 0 0 / 100% 100% 0 0;background:#58b843}
-.sp-cloud{position:absolute;height:26px;border-radius:26px;background:rgba(255,255,255,.92);animation:spDrift var(--t,70s) linear infinite}
-.sp-cloud::before,.sp-cloud::after{content:"";position:absolute;background:inherit;border-radius:50%}
-.sp-cloud::before{width:42px;height:42px;left:14px;top:-20px}
-.sp-cloud::after{width:30px;height:30px;right:16px;top:-12px}
-.sp-ball{position:absolute;z-index:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--ng-teks);background-size:100% 100%;background-repeat:no-repeat;filter:drop-shadow(0 4px 5px rgba(0,0,0,.25));animation:spFloat 6s ease-in-out infinite alternate}
-.sp-ball.orb::before{content:"";position:absolute;z-index:-1;width:62%;height:62%;border-radius:50%;background:#fff;box-shadow:inset 0 2px 3px rgba(0,0,0,.18)}
-.sp-col{--dr:min(64vw,40vh,280px);position:relative;z-index:2;width:100%;max-width:var(--sp-col,480px);height:100%;margin:0 auto;padding:max(14px,2.5vh) 16px max(18px,3vh);display:flex;flex-direction:column;align-items:center}
-.sp-title{margin:0;text-align:center;font-size:clamp(34px,min(11vw,8.5vh),64px);line-height:1.05;font-weight:900;color:#fff;text-shadow:0 3px 0 var(--ng-pil-biru),0 6px 0 #173d70,0 10px 16px rgba(0,0,0,.28)}
-.sp-art{position:relative;flex:1 1 auto;width:100%;min-height:0;display:flex;align-items:center;justify-content:center}
-.sp-scene{position:relative;width:var(--dr);height:calc(var(--dr)*1.12)}
-.sp-scene img{width:1em;height:1em;object-fit:contain;display:block;margin:0 auto;pointer-events:none}
-.sp-dragon{position:absolute;left:0;right:0;top:0;text-align:center;font-size:var(--dr);line-height:1;filter:drop-shadow(0 8px 6px rgba(0,0,0,.22));animation:spBob var(--sp-bob,3.6s) ease-in-out infinite}
-.sp-egg{position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:calc(var(--dr)*.42);line-height:1;filter:drop-shadow(0 4px 3px rgba(0,0,0,.25))}
-.sp-egg img{width:2.15em;max-width:none;height:auto;margin:0 auto}
-.sp-wiz{position:absolute;right:-16%;top:-10%;font-size:calc(var(--dr)*.34);line-height:1;transform:rotate(14deg)}
-.sp-wiz>span{display:block;animation:spWiz var(--sp-wiz,2.8s) ease-in-out infinite}
-.sp-spark{position:absolute;right:-20%;top:-14%;font-size:calc(var(--dr)*.2);line-height:1;animation:spTwinkle 1.4s ease-in-out infinite}
-.sp-btn{flex:none;width:min(100%,360px);min-height:max(60px,9vh);padding:8px 24px;font:inherit;font-weight:900;font-size:clamp(22px,6vw,30px);border-radius:999px;border:3px solid var(--ng-tombol-utama-tepi);color:#fff;background:linear-gradient(var(--ng-tombol-utama-atas),var(--ng-tombol-utama));text-shadow:0 2px 0 var(--ng-tombol-utama-tepi),0 0 8px var(--ng-teks-bayang);box-shadow:0 8px 16px rgba(0,0,0,.25);cursor:pointer;animation:spPulse var(--sp-pulse,1.6s) ease-in-out infinite}
-.sp-btn:active{transform:translateY(2px);box-shadow:0 4px 8px rgba(0,0,0,.25);animation:none}
-@keyframes spBob{0%,100%{transform:translateY(0)}50%{transform:translateY(calc(var(--dr)*-.035))}}
-@keyframes spWiz{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-6%) rotate(6deg)}}
-@keyframes spTwinkle{0%,100%{opacity:.35;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}
-@keyframes spPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-@keyframes spFloat{from{transform:translateY(calc(var(--amp,14px)*-1)) rotate(-6deg)}to{transform:translateY(var(--amp,14px)) rotate(6deg)}}
-@keyframes spDrift{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
-body.noefek #splash *{animation:none !important}
-@media (max-height:430px) and (min-width:600px){          /* HP mendatar pendek: judul dan tombol di kiri, gambar di kanan */
-  .sp-col{--dr:min(54vh,260px);max-width:760px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;grid-template-areas:"t a" "b a";column-gap:16px;align-items:center;padding:10px 20px}
-  .sp-title{grid-area:t;align-self:end;font-size:clamp(28px,11vh,48px)}
-  .sp-art{grid-area:a;height:100%}
-  .sp-btn{grid-area:b;align-self:start;margin:10px auto 0;min-height:56px}
-}
+/* ---- Layar judul: gambar utuh digerakkan lewat WebGL; kilau, bintang, dan tombol sungguhan di atasnya. Posisi dalam persen gambar ---- */
+#splash{padding:0;overflow:hidden;z-index:8;touch-action:manipulation;background:linear-gradient(180deg,#4f9fe9 0%,#86c9f4 55%,#9bd7f7 58%,#79c14b 80%,#4c9a3b 100%)}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.sp-papan.sp-fy{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 88%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 88%,transparent 100%)}
+.sp-papan.sp-fx{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%)}
+.sp-papan{position:absolute;left:0;top:0;width:100%;height:56.3%}
+.sp-gambar,.sp-kanvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+.sp-kanvas{visibility:hidden}
+#splash.gl .sp-kanvas{visibility:visible}
+.sp-cahaya{position:absolute;left:50%;top:34%;width:56%;height:62%;transform:translate(-50%,-50%);pointer-events:none;border-radius:50%;background:radial-gradient(circle,rgba(255,250,205,.55),rgba(255,250,205,0) 68%);mix-blend-mode:screen;opacity:.2;animation:spCahaya 5s ease-in-out infinite alternate}
+.sp-bintang{position:absolute;display:block;width:var(--s);aspect-ratio:1/1;transform:translate(-50%,-50%) scale(0);opacity:0;pointer-events:none;background:#fff;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);animation:spBintang 2.6s ease-in-out infinite;animation-delay:var(--d)}
+.sp-btn{position:absolute;left:50.5%;top:81.2%;width:30.7%;height:16.6%;min-width:44px;min-height:44px;transform:translate(-50%,-50%);padding:0;margin:0;border:0;border-radius:999px;background:transparent;font:inherit;color:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sp-btn:focus-visible{outline:4px solid #fff;outline-offset:4px}
+.sp-halo{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:999px;pointer-events:none;box-shadow:0 0 26px 8px rgba(255,196,70,.9);opacity:0;animation:spHalo 1.4s ease-in-out infinite alternate}
+.sp-kilap{position:absolute;left:4%;top:7%;right:4%;bottom:7%;border-radius:999px;overflow:hidden;pointer-events:none}
+.sp-kilap::after{content:"";position:absolute;top:-20%;bottom:-20%;left:0;width:34%;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.75) 50%,rgba(255,255,255,0));transform:translateX(-140%) skewX(-18deg);animation:spKilap 3.2s ease-in-out infinite}
+.sp-btn:active .sp-kilap,.sp-btn:active .sp-halo{opacity:.5}
+@keyframes spCahaya{from{opacity:.12}to{opacity:.5}}
+@keyframes spBintang{0%,100%{transform:translate(-50%,-50%) scale(0) rotate(0);opacity:0}45%,55%{transform:translate(-50%,-50%) scale(1) rotate(25deg);opacity:1}}
+@keyframes spHalo{from{opacity:.05}to{opacity:.55}}
+@keyframes spKilap{0%,45%{transform:translateX(-140%) skewX(-18deg)}85%,100%{transform:translateX(330%) skewX(-18deg)}}
+body.noefek #splash *,body.noefek #splash *::before,body.noefek #splash *::after{animation:none !important}
+@media (prefers-reduced-motion:reduce){#splash *,#splash *::before,#splash *::after{animation:none !important}}
 /* ---- Layar selesai (menang / kalah / tamat): medali, pita, bintang, pelat, tombol ---- */
 .ez{max-width:420px;padding:18px 18px 22px;position:relative}
 .ez::before{content:"";position:absolute;inset:7px;border-radius:15px;border:1.5px solid rgba(43,98,164,.18);pointer-events:none}
@@ -251,14 +239,6 @@ body.noefek .ez-bintang.pop .star{animation:none}
 .story-emoji .ex{display:flex;align-items:center;justify-content:center;gap:6px;font-size:36px;font-weight:900;color:var(--ng-teks);white-space:nowrap}
 .story-emoji .ex img{height:62px;width:auto;max-width:none;flex:none}
 .story-emoji .ex b{font-weight:900}
-.sp-hill{border-top:4px solid var(--ng-garis)}
-.sp-title{color:#fff;text-shadow:-3px -3px 0 #1D2B3A,3px -3px 0 #1D2B3A,-3px 3px 0 #1D2B3A,3px 3px 0 #1D2B3A,0 6px 0 #1D2B3A}
-.sp-btn{border:4px solid var(--ng-garis);text-shadow:-2px -2px 0 #1D2B3A,2px -2px 0 #1D2B3A,-2px 2px 0 #1D2B3A,2px 2px 0 #1D2B3A,0 3px 0 #1D2B3A;box-shadow:0 8px 16px rgba(0,0,0,.25)}
-.sp-btn:active{box-shadow:0 4px 8px rgba(0,0,0,.25)}
-.sp-ball.kartun{background-size:contain;color:transparent;filter:none}
-.sp-dragon,.sp-egg{filter:none}
-.kt .sp-egg{bottom:-6%}.kt .sp-egg img{width:1.55em}
-.kt .sp-dragon{top:-8%}.kt .sp-wiz{right:-12%}
 .ez::before,.ez-hero::before,.ez-pita .band::before{display:none}
 .ez-hero{border:4px solid #1D2B3A;background:#FFF8E7;box-shadow:0 5px 0 #1D2B3A}
 .ez-hero .len{filter:none}
@@ -299,19 +279,13 @@ body.noefek .ez-bintang.pop .star{animation:none}
 
 <!-- LAYAR SAMBUTAN (tampil pertama setiap halaman dibuka; isinya diisi dari SPLASH di Bagian 1) -->
 <div id="splash" class="overlay">
-  <div class="sp-hill"></div>
-  <div class="sp-cloud" style="top:7%;width:96px;--t:80s;animation-delay:-20s"></div>
-  <div class="sp-cloud" style="top:20%;width:70px;--t:110s;animation-delay:-70s"></div>
-  <div id="spBalls"></div>
-  <div class="sp-col">
-    <h1 class="sp-title" id="spTitle"></h1>
-    <div class="sp-art"><div class="sp-scene">
-      <div class="sp-dragon" id="spDragon"></div>
-      <div class="sp-egg" id="spEgg"></div>
-      <div class="sp-wiz"><span id="spWiz"></span></div>
-      <div class="sp-spark" id="spSpark"></div>
-    </div></div>
-    <button type="button" class="sp-btn" id="spGo"></button>
+  <div class="sp-papan" id="spPapan">
+    <img class="sp-gambar" id="spGambar" alt="" draggable="false">
+    <canvas class="sp-kanvas" id="spKanvas"></canvas>
+    <div class="sp-cahaya"></div>
+    <div id="spBintang"></div>
+    <h1 class="sr" id="spTitle"></h1>
+    <button type="button" class="sp-btn" id="spGo"><span class="sr"></span><span class="sp-halo"></span><span class="sp-kilap"></span></button>
   </div>
 </div>
 
@@ -489,24 +463,47 @@ var EGG_BONUS = 500;            // telur naga saat telur sudah 3/3: tambah skor 
 var EGG_AT = 0.5;               // bola telur naga muncul saat sekian bagian bola awal sudah habis (0,5 = pertengahan stage)
 var STEAL_T = 1.5, GAIN_T = 0.9; // lama animasi telur dicuri / telur bertambah (detik)
 
-/* ---- Layar sambutan: tulisan, ukuran, dan kecepatan gerak ---- */
+/* ---- Layar judul: tiga gambar utuh (lebar, sedang, tegak) dipilih menurut rasio layar, digerakkan lewat WebGL, ditambah kilau dan tombol sungguhan ---- */
 var SPLASH = {
-  judul: 'Naga Penjaga',        // judul besar
-  tombol: 'Mulai Main',         // tulisan tombol
-  kolom: 480,                   // lebar kolom isi (piksel) di layar lebar; latar tetap penuh layar
-  bola: 12,                     // jumlah bola angka yang melayang di tepi layar
-  ukuranBola: [34, 64],         // ukuran bola terkecil dan terbesar (piksel)
-  bolaMelayang: [4, 8],         // detik: sekali naik-turun, diacak antara dua angka ini
-  nagaGoyang: 3.6,              // detik: naga sekali naik-turun
-  penyihirGoyang: 2.8,          // detik: penyihir kecil sekali bergoyang
-  tombolDenyut: 1.6,            // detik: tombol sekali membesar-mengecil
-  warna: ['#ff6b6b', '#4dabf7', '#51cf66', '#ffd43b', '#b197fc', '#ff922b'],   // warna bola
-  angka: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]                                    // angka pada bola
+  judul: 'Naga Penjaga',        // dibaca pembaca layar (tulisannya sudah ada di gambar)
+  tombol: 'Mulai Main',         // dibaca pembaca layar dan nama tombol
+  batas: { tegak: 1, lebar: 2.1 },   // rasio lebar:tinggi layar di bawah 1 = tegak; 1 sampai 2,1 = sedang; 2,1 ke atas = lebar
+  fps: 30                       // batas gambar per detik untuk gerakan (hemat baterai)
 };
-/* Gambar layar sambutan. Untuk mengganti, ubah isi tiap baris di sini: boleh emoji/tulisan,
-   atau nama berkas gambar di folder yang sama (contoh: 'naga.png', 'telur.svg'). Hanya di sini. */
-var SPLASH_ART = { naga: 'aset/naga-bayunara.webp', telur: 'aset/sarang-3-telur.webp', penyihir: 'aset/morvax.webp', kilau: '✨' };
-var SPLASH_EMOJI = { naga: '🐲', telur: '🥚', penyihir: '🧙', kilau: '✨' };   // cadangan bila gambar gagal dimuat atau ASET_AKTIF = false
+/* Gerakan tiap bagian (sama untuk ketiga susunan). jarak = naik-turun dalam piksel pada gambar selebar 1672 (otomatis disesuaikan ke lebar gambar
+   tiap susunan dikali "skala" susunan); sudut = miring (derajat); skala = membesar-mengecil (0,03 = sampai 3%); waktu = detik untuk satu siklus. */
+var SPLASH_GERAK = {
+  naga: { jarak: 8, sudut: 1.5, waktu: 3.0 },
+  penyihir: { jarak: 8, waktu: 3.4 },
+  logo: { skala: 0.03, waktu: 3.2 },
+  tombol: { skala: 0.04, waktu: 1.4 },
+  sarang: { skala: 0.02, waktu: 3.6 },
+  pulau: { jarak: 5, waktu: 4.6 },
+  bola: { jarak: 10, waktu: [2.6, 3.0, 3.4] }
+};
+/* Tiap susunan: berkas gambar, ukuran gambar (piksel), batas terlihat (vx, vy = pecahan lebar/tinggi gambar yang minimal harus terlihat; sisanya boleh terpotong),
+   skala = pengali gerakan agar tetap terlihat di gambar kecil, lalu letak bagian-bagiannya pada gambar itu (pusat = titik tengah, radius = sebaran lembut gerakan, piksel gambar).
+   tombol = [x tengah, y tengah, lebar, tinggi] tombol di gambar; bintang = [x, y, ukuran] titik kilau; ukuranBintang = piksel pada gambar. */
+var SPLASH_SUSUNAN = {
+  lebar: { file: 'aset/judul-lebar.webp', w: 2027, h: 795, vx: 0.92, vy: 0.92, skala: 1, ukuranBintang: 50,
+    naga: { pusat: [715, 215], radius: [420, 230], poros: [715, 330] }, penyihir: { pusat: [1360, 235], radius: [260, 230] },
+    logo: { pusat: [1020, 425], radius: [440, 190] }, tombol: { pusat: [1040, 649], radius: [330, 110] }, sarang: { pusat: [385, 625], radius: [290, 140] },
+    pulau: { pusat: [1700, 200], radius: [210, 230] }, bola: [{ pusat: [260, 222], radius: 70 }, { pusat: [1805, 322], radius: 70 }, { pusat: [1680, 445], radius: 70 }],
+    kotakTombol: [1040, 649, 456, 132],
+    bintang: [[1015, 270, 1.3], [1557, 548, 1], [1642, 668, 1.2], [1520, 95, 1.2], [285, 545, 0.9], [395, 530, 1], [500, 550, 0.9], [235, 198, 0.9], [1782, 300, 0.9], [1655, 423, 0.9], [330, 420, 0.9]] },
+  sedang: { file: 'aset/judul-sedang.webp', w: 1089, h: 638, vx: 0.92, vy: 0.92, skala: 1.3, ukuranBintang: 36,
+    naga: { pusat: [340, 170], radius: [240, 190], poros: [340, 260] }, penyihir: { pusat: [740, 185], radius: [190, 180] },
+    logo: { pusat: [540, 308], radius: [340, 170] }, tombol: { pusat: [560, 493], radius: [230, 80] }, sarang: { pusat: [190, 470], radius: [200, 110] },
+    pulau: { pusat: [990, 150], radius: [120, 160] }, bola: [{ pusat: [111, 105], radius: 60 }, { pusat: [985, 280], radius: 60 }, { pusat: [912, 375], radius: 60 }],
+    kotakTombol: [560, 493, 317, 94],
+    bintang: [[550, 199, 1.3], [735, 535, 1], [882, 548, 1.1], [912, 525, 1], [873, 77, 1.2], [105, 427, 0.9], [184, 412, 1], [266, 430, 0.9], [92, 88, 0.9], [965, 258, 0.9], [895, 352, 0.9]] },
+  tegak: { file: 'aset/judul-tegak.webp', w: 489, h: 708, vx: 0.9, vy: 0.9, skala: 2.2, ukuranBintang: 28,
+    naga: { pusat: [140, 225], radius: [190, 150], poros: [140, 300] }, penyihir: { pusat: [364, 212], radius: [140, 150] },
+    logo: { pusat: [242, 372], radius: [260, 125] }, tombol: { pusat: [244, 517], radius: [210, 70] }, sarang: { pusat: [250, 633], radius: [190, 100] },
+    pulau: null, bola: [{ pusat: [62, 85], radius: 50 }, { pusat: [417, 73], radius: 50 }, { pusat: [441, 495], radius: 50 }],
+    kotakTombol: [244, 517, 282, 80],
+    bintang: [[241, 296, 1.3], [448, 162, 1.2], [190, 588, 1], [252, 580, 1], [312, 598, 1], [45, 66, 0.9], [400, 56, 0.9], [425, 478, 0.9]] }
+};
 
 /* ---- Suara ---- */
 var AUDIO_AKTIF = true;         // false = semua suara dimatikan (musik dan efek suara); tombol Musik dan Suara ikut disembunyikan
@@ -2963,39 +2960,101 @@ $('btnR').addEventListener('click', function () { rvShowAll = false; renderRevie
 $('rvAll').addEventListener('click', function () { rvShowAll = !rvShowAll; renderReview(); });
 $('rvBack').addEventListener('click', function () { $('review').classList.add('hidden'); $('end').classList.remove('hidden'); });
 
-function fillArt(el, v, cad) {              // isi gambar layar sambutan: nama berkas gambar atau emoji/tulisan (cadangan bila gambar gagal dimuat)
-  var isImg = /\.(png|jpe?g|svg|webp|gif)$/i.test(v) || /^data:image\//.test(v);
-  el.textContent = '';
-  if (isImg && ASET_AKTIF) { var im = new Image(); im.alt = ''; im.draggable = false; im.onerror = function () { el.textContent = cad || ''; }; im.src = v; el.appendChild(im); }
-  else el.textContent = isImg ? (cad || '') : v;
-}
-function buildSplash() {                    // layar sambutan dibangun dari SPLASH dan SPLASH_ART (Bagian 1)
-  var sp = $('splash'), box = $('spBalls'), n = SPLASH.bola, half = Math.ceil(n / 2), i;
-  sp.style.setProperty('--sp-col', SPLASH.kolom + 'px');
-  sp.style.setProperty('--sp-bob', SPLASH.nagaGoyang + 's');
-  sp.style.setProperty('--sp-wiz', SPLASH.penyihirGoyang + 's');
-  sp.style.setProperty('--sp-pulse', SPLASH.tombolDenyut + 's');
-  $('spTitle').textContent = SPLASH.judul; $('spGo').textContent = SPLASH.tombol;
-  if (gk()) { SPLASH_ART = { naga: seni('naga:bayunara', 320), telur: seni('sarang-3-telur', 320), penyihir: seni('morvax', 200), kilau: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.3 6.8.7-5.1 4.6 1.5 6.8L12 17.3l-6.1 3.6 1.5-6.8-5.1-4.6 6.8-.7z" fill="#FFD23F" stroke="#1D2B3A" stroke-width="2" stroke-linejoin="round"/></svg>') }; }
-  fillArt($('spDragon'), SPLASH_ART.naga, SPLASH_EMOJI.naga); fillArt($('spEgg'), SPLASH_ART.telur, SPLASH_EMOJI.telur);
-  fillArt($('spWiz'), SPLASH_ART.penyihir, SPLASH_EMOJI.penyihir); fillArt($('spSpark'), SPLASH_ART.kilau, SPLASH_EMOJI.kilau);
+function buildSplash() {                    // layar judul: gambar dipasang oleh layoutJudul; di sini tulisan pembaca layar saja
+  $('spTitle').textContent = SPLASH.judul; $('spGo').querySelector('.sr').textContent = SPLASH.tombol;
   if ($('menuNaga')) $('menuNaga').src = gk() ? seni('naga:bayunara', 64) : 'aset/naga-bayunara.webp';
-  box.textContent = '';
-  for (i = 0; i < n; i++) {                 // bola bergantian di tepi kiri dan kanan, tersebar dari atas ke bawah
-    var s = SPLASH.ukuranBola, sz = Math.round(s[0] + Math.random() * (s[1] - s[0])), dur = SPLASH.bolaMelayang, side = i % 2, row = Math.floor(i / 2);
-    var b = document.createElement('div'), c = SPLASH.warna[i % SPLASH.warna.length], d = dur[0] + Math.random() * (dur[1] - dur[0]);
-    b.className = 'sp-ball'; b.textContent = pick(SPLASH.angka);
-    b.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;font-size:' + Math.round(sz * 0.5) + 'px;' +
-      (side ? 'right:' : 'left:') + (1 + Math.random() * 9).toFixed(1) + '%;top:' + (12 + (row + Math.random() * 0.6) / half * 82).toFixed(1) + '%;' +
-      'background:radial-gradient(circle at 35% 30%,#fff9 0,' + c + ' 45%,' + c + ' 100%);background-color:' + c + ';' +
-      'animation-duration:' + d.toFixed(1) + 's;animation-delay:-' + (Math.random() * d).toFixed(1) + 's;--amp:' + Math.round(10 + Math.random() * 14) + 'px';
-    box.appendChild(b);
-    if (gk()) { var jn = ['n', 'i', 'd', 'f'][i % 4], tx2 = String(pick(SPLASH.angka)); b.textContent = ''; b.style.backgroundImage = 'url(' + seni('bola:' + jn + ':' + (jn === 'f' ? '1/2' : jn === 'd' ? '0,' + (1 + i % 9) : jn === 'i' ? '−' + (1 + i % 9) : tx2), 96) + ')'; b.style.backgroundColor = 'transparent'; b.style.filter = 'none'; b.classList.add('kartun'); }
-    else if (ASET_AKTIF) (function (el, q) { var wn = ORB_WARNA[['n', 'i', 'd', 'f'][q % 4]], url = ASET_FOLDER + 'orb-' + wn + '-' + (1 + q % 3) + '.webp', t = new Image(); t.onload = function () { el.style.backgroundImage = 'url(' + url + ')'; el.style.backgroundColor = 'transparent'; el.classList.add('orb'); }; t.src = url; })(b, i);   // gambar orb (cadangan: bola warna dari kode)
+}
+var spUkuran = '', spGL = { gl: null, ok: false, ult: 0, diam: false, ut: null, uon: null, nama: '', prog: {}, tex: {}, off: false };
+function namaSusunan(W, H) { var r = W / H; return r < SPLASH.batas.tegak ? 'tegak' : (r < SPLASH.batas.lebar ? 'sedang' : 'lebar'); }
+function pasangSusunan(nama) {              // ganti gambar, tombol, dan titik kilau sesuai susunan
+  var L = SPLASH_SUSUNAN[nama], im = $('spGambar'), sp = $('splash');
+  spGL.nama = nama; spGL.ok = false; sp.classList.remove('gl');
+  if (im.getAttribute('src') !== L.file) im.src = L.file;
+  var kt = L.kotakTombol, b = $('spGo');
+  b.style.left = (kt[0] / L.w * 100).toFixed(2) + '%'; b.style.top = (kt[1] / L.h * 100).toFixed(2) + '%'; b.style.width = (kt[2] / L.w * 100).toFixed(2) + '%'; b.style.height = (kt[3] / L.h * 100).toFixed(2) + '%';
+  var box = $('spBintang'); box.textContent = '';
+  L.bintang.forEach(function (s, i) {
+    var e = document.createElement('i'); e.className = 'sp-bintang';
+    e.style.cssText = 'left:' + (s[0] / L.w * 100).toFixed(2) + '%;top:' + (s[1] / L.h * 100).toFixed(2) + '%;--s:' + (L.ukuranBintang * s[2] / L.w * 100).toFixed(2) + '%;--d:' + ((i * 0.83) % 2.6).toFixed(2) + 's';
+    box.appendChild(e);
+  });
+  if (spGL.gl) siapkanTekstur(nama);
+}
+function layoutJudul() {                    // pilih gambar menurut rasio layar, letakkan di tengah: sebesar mungkin sampai bagian yang hilang tidak lebih dari batas vx, vy; sisanya gradasi langit dan rumput
+  var sp = $('splash'), W = sp.clientWidth, H = sp.clientHeight;
+  if (!W || !H || sp.classList.contains('hidden')) return;
+  var dpr = Math.min(window.devicePixelRatio || 1, 2), kunci = W + 'x' + H + 'x' + dpr;
+  if (spUkuran === kunci) return;
+  spUkuran = kunci;
+  var nama = namaSusunan(W, H), L = SPLASH_SUSUNAN[nama]; if (nama !== spGL.nama) pasangSusunan(nama);
+  var ar = L.w / L.h, w = Math.min(Math.max(W, H * ar), W / L.vx, H * ar / L.vy), h = w / ar, pp = $('spPapan');
+  pp.style.width = w.toFixed(1) + 'px'; pp.style.height = h.toFixed(1) + 'px'; pp.style.left = ((W - w) / 2).toFixed(1) + 'px'; pp.style.top = ((H - h) / 2).toFixed(1) + 'px';
+  pp.classList.toggle('sp-fx', w < W - 2); pp.classList.toggle('sp-fy', h < H - 2);       // tepi gambar yang tidak menyentuh tepi layar dipudarkan ke latar langit dan rumput
+  var cv = $('spKanvas'), cw = Math.min(Math.round(w * dpr), L.w), ch = Math.round(cw / ar);
+  if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; spGL.diam = false; spGL.ult = 0; }   // mengubah ukuran menghapus isi kanvas: gambar ulang di frame berikutnya
+}
+function glslJudul(L) {                     // teks GLSL gerakan untuk satu susunan, dibuat dari SPLASH_GERAK dan letak bagian di SPLASH_SUSUNAN
+  var G = SPLASH_GERAK, f = function (n) { return Number(n).toFixed(4); }, v2 = function (a) { return 'vec2(' + f(a[0]) + ',' + f(a[1]) + ')'; }, k = '', km = L.w / 1672 * L.skala;
+  var sn = function (w, ph) { return 'sin(t*TP/' + f(w) + (ph ? '+' + f(ph) : '') + ')'; };
+  var n = G.naga, pn = G.penyihir, pl = G.pulau;
+  k += 'o+=gg(p,' + v2(L.naga.pusat) + ',' + v2(L.naga.radius) + ')*(vec2(0.0,' + f(n.jarak * km) + '*' + sn(n.waktu) + ')+' + f(n.sudut * Math.PI / 180) + '*' + sn(n.waktu, 1) + '*vec2(-(p.y-' + f(L.naga.poros[1]) + '),p.x-' + f(L.naga.poros[0]) + '));\n';
+  k += 'o+=gg(p,' + v2(L.penyihir.pusat) + ',' + v2(L.penyihir.radius) + ')*vec2(0.0,' + f(pn.jarak * km) + '*' + sn(pn.waktu, 2) + ');\n';
+  if (L.pulau) k += 'o+=gg(p,' + v2(L.pulau.pusat) + ',' + v2(L.pulau.radius) + ')*vec2(0.0,' + f(pl.jarak * km) + '*' + sn(pl.waktu, 3) + ');\n';
+  [['logo', 0], ['tombol', 1], ['sarang', 2]].forEach(function (a) { var e = L[a[0]], g = G[a[0]]; k += '{vec2 d=p-' + v2(e.pusat) + ';float q=' + f(g.skala) + '*(0.5+0.5*' + sn(g.waktu, a[1]) + ');o+=sg(p,' + v2(e.pusat) + ',' + v2(e.radius) + ')*d*q/(1.0+q);}\n'; });
+  L.bola.forEach(function (b, i) { k += '{float ph=t*TP/' + f(G.bola.waktu[i]) + '+' + f(i * 2.1) + ';o+=gg(p,' + v2(b.pusat) + ',vec2(' + f(b.radius * 1.35) + '))*' + f(G.bola.jarak * km) + '*vec2(cos(ph),sin(ph));}\n'; });
+  return '#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n' +
+    'uniform sampler2D tx;uniform float t;uniform float on;varying vec2 uv;const vec2 R=vec2(' + f(L.w) + ',' + f(L.h) + ');const float TP=6.2831853;\n' +
+    'float gg(vec2 p,vec2 c,vec2 s){vec2 d=(p-c)/s;return exp(-dot(d,d));}\n' +
+    'float sg(vec2 p,vec2 c,vec2 s){vec2 d=(p-c)/s;float q=dot(d,d);return exp(-q*q);}\n' +
+    'void main(){vec2 p=uv*R;vec2 o=vec2(0.0);\n' + k + 'gl_FragColor=vec4(texture2D(tx,(p-o*on)/R).rgb,1.0);}';
+}
+function siapkanKanvasJudul() {             // WebGL: gambar utuh digambar ke kanvas dengan pergeseran lembut per bagian; bila gagal, gambar diam di bawahnya tetap tampil
+  var cv = $('spKanvas'), gl = null;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;     // perangkat meminta gerak dikurangi: tetap gambar diam
+  try { gl = cv.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false }) || cv.getContext('experimental-webgl'); } catch (e) { gl = null; }
+  if (!gl) return;
+  var bf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, bf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  spGL.gl = gl;
+  $('spGambar').addEventListener('load', function () { siapkanTekstur(spGL.nama); });
+  cv.addEventListener('webglcontextlost', function (e) { e.preventDefault(); spGL.ok = false; spGL.off = true; $('splash').classList.remove('gl'); });
+  if (spGL.nama) siapkanTekstur(spGL.nama);
+}
+function siapkanTekstur(nama) {             // program dan tekstur untuk satu susunan dibuat sekali, saat gambarnya sudah termuat
+  var gl = spGL.gl, im = $('spGambar'), L = SPLASH_SUSUNAN[nama]; if (!gl || spGL.off || nama !== spGL.nama) return;
+  if (!(im.complete && im.naturalWidth === L.w && im.getAttribute('src') === L.file)) return;     // gambar susunan ini belum selesai dimuat
+  if (!spGL.prog[nama]) {
+    var sh = function (tp, src) { var s = gl.createShader(tp); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; };
+    var vs = sh(gl.VERTEX_SHADER, 'attribute vec2 a;varying vec2 uv;void main(){uv=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}'), fs = sh(gl.FRAGMENT_SHADER, glslJudul(L));
+    var pr = gl.createProgram(); if (!vs || !fs) { spGL.prog[nama] = null; return; }
+    gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
+    spGL.prog[nama] = gl.getProgramParameter(pr, gl.LINK_STATUS) ? pr : null;
   }
+  var pr2 = spGL.prog[nama]; if (!pr2) return;
+  if (!spGL.tex[nama]) {
+    var tx = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tx);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, im); } catch (e) { return; }
+    spGL.tex[nama] = tx;
+  }
+  gl.useProgram(pr2); gl.bindTexture(gl.TEXTURE_2D, spGL.tex[nama]);
+  var la = gl.getAttribLocation(pr2, 'a'); gl.enableVertexAttribArray(la); gl.vertexAttribPointer(la, 2, gl.FLOAT, false, 0, 0);
+  spGL.ut = gl.getUniformLocation(pr2, 't'); spGL.uon = gl.getUniformLocation(pr2, 'on');
+  spGL.ok = true; spGL.ult = 0; spGL.diam = false; renderJudul(0, 0); $('splash').classList.add('gl');
+}
+function renderJudul(t, on) {               // on = 1: gerakan penuh pada waktu t (detik); on = 0: gambar asli tanpa pergeseran
+  var gl = spGL.gl, cv = $('spKanvas'); if (!gl || !spGL.ok) return;
+  gl.viewport(0, 0, cv.width, cv.height); gl.uniform1f(spGL.ut, t); gl.uniform1f(spGL.uon, on); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+}
+function jalankanJudul(ts) {                // dipanggil tiap frame selama layar judul tampil; dibatasi SPLASH.fps; berhenti bila tab tidak terlihat atau Efek gambar mati
+  if (!spGL.ok) return;
+  if (document.hidden || document.body.classList.contains('noefek')) { if (!spGL.diam) { renderJudul(0, 0); spGL.diam = true; } return; }
+  spGL.diam = false;
+  if (ts - spGL.ult < 1000 / SPLASH.fps - 2) return;
+  spGL.ult = ts; renderJudul(ts / 1000, 1);
 }
 if (gk()) document.body.classList.add('kt');
-muatAset(); buildSplash(); buildToggles($('setbar')); buildToggles($('pauseSet')); applyPrefs();
+muatAset(); buildSplash(); layoutJudul(); siapkanKanvasJudul(); buildToggles($('setbar')); buildToggles($('pauseSet')); applyPrefs();
 
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', function () { setTimeout(resize, 150); });
@@ -3007,6 +3066,7 @@ function frame(ts) {
   if (sizeFallback && window.innerWidth > 0 && window.innerHeight > 0) resize();   // ukuran asli sudah ada: pasang ulang
   var dt =Math.min(0.05, ((ts - last) / 1000) || 0); last = ts;
   audioSync();
+  if (G.mode === 'splash') { layoutJudul(); jalankanJudul(ts); }     // layar judul: susunan mengikuti ukuran jendela, gambar digerakkan
   if (G.paused || ROT || LPAUSE) { /* menu Jeda terbuka, atau layout layar berganti saat bermain: semuanya berhenti */ }
   else if (G.mode === 'play') update(dt);
   else if (G.mode === 'intro') updateIntro(dt);
