@@ -2406,11 +2406,9 @@ function drawHUD() {
   }
   ctx.textAlign = 'right'; ctx.fillStyle = htc;
   ctx.font = (hk ? '900 ' : 'bold ') + (G.timed ? 20 : fsz(15)) + 'px ' + FONT;
-  var yw = hk ? 84 : 90;                                              // baris waktu dan laju sedikit naik di panel satu blok
+  var yw = hk ? 84 : 90;                                              // baris waktu sedikit naik di panel satu blok (teks "Laju" dihapus atas permintaan pemilik; kecepatan di dalam game tidak berubah)
   if (hk && G.timed) { var tt = fmtTime(TIME_LIMIT - G.time); ctx.fillText(tt, W - 20, yw); ktJam(ctx, W - 20 - ctx.measureText(tt).width - 16, yw - 7, 8, KT.garis); }
   else ctx.fillText(G.timed ? '⏱ ' + fmtTime(TIME_LIMIT - G.time) : '∞ Tanpa waktu', W - 20, yw);
-  ctx.font = (hk ? '800 ' : '') + fsz(13) + 'px ' + FONT; ctx.globalAlpha = hk ? 1 : 0.8;
-  ctx.fillText('Laju ×' + G.speedMul.toFixed(2), W - 20, (hk ? 103 : 110) + (fsz(13) - 13) * 0.6); ctx.globalAlpha = 1;
   var cr = Math.max(22, 17 / SCALE), bw = cr * 0.26, bh = cr * 0.86;     // tombol jeda (⏸) di tempat tombol ✕ dulu; di layar kecil ikut membesar
   if (hk) { ctx.beginPath(); ctx.arc(CLOSE.x, CLOSE.y + 4, cr, 0, 6.2832); ctx.fillStyle = KT.garis; ctx.fill(); }
   ctx.beginPath(); ctx.arc(CLOSE.x, CLOSE.y, cr, 0, 6.2832); ctx.fillStyle = hk ? KT.krem : 'rgba(0,0,0,.35)'; ctx.fill();
