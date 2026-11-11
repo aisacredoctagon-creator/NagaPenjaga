@@ -533,11 +533,11 @@ var STAGES = [                   // tiap stage punya 3 jalur; satu dipilih acak 
     { dragon: { x: 300, y: 520, free: true }, path: [[660, 175], [70, 235], [70, 330], [540, 390], [540, 700], [110, 700], [110, 560]] },
     { dragon: { x: 300, bottom: true }, path: [[-60, 175], [520, 230], [520, 340], [70, 395], [70, 500], [530, 555], [530, 700], [330, 700]] } ] },
   { name: 'Gunung Berapi', story: 'Kalahkan Penyihir Jahat!', naga: { nama: 'Baranji', jenis: 'Naga Api', berkas: 'naga-baranji', warna: '#e65328' }, nMul: STAGE3_N, vMul: STAGE3_V, rad: 65, boss: true,
-    wide: { dragon: { x: 470, y: 520, abs: true }, boss: { x: 950, y: 155 }, path: [[1060, 190], [60, 190], [60, 295], [940, 295], [940, 400], [300, 400]] },
+    wide: { dragon: { x: 470, y: 520, abs: true }, boss: { x: 950, y: 155 }, path: [[1060, 190], [660, 190], [660, 315], [60, 315], [60, 415], [930, 415], [930, 540], [650, 540]] },   // stage 3: jalur menghindari boss di tengah (boss di x=W/2, y 140–270), jadi baris atas hanya di sisi kiri atau kanan
     routes: [
-    { dragon: { x: 300, bottom: true }, boss: { x: 50, y: 120 }, path: [[-60, 170], [540, 170], [540, 300], [60, 300], [60, 430], [540, 430], [540, 560], [60, 560], [60, 690], [300, 690]] },
-    { dragon: { x: 300, y: 490, free: true }, boss: { x: 50, y: 120 }, path: [[-60, 190], [520, 190], [520, 740], [80, 740], [80, 340], [440, 340], [440, 640], [240, 640]] },
-    { dragon: { x: 300, bottom: true }, boss: { x: 550, y: 135 }, path: [[620, 170], [60, 170], [60, 300], [540, 300], [540, 430], [60, 430], [60, 560], [540, 560], [540, 690], [150, 690]] } ] }
+    { dragon: { x: 300, bottom: true }, boss: { x: 50, y: 120 }, path: [[-60, 170], [170, 170], [170, 275], [40, 275], [40, 380], [560, 380], [560, 488], [40, 488], [40, 596], [560, 596], [560, 704], [300, 704]] },   // stage 3 (tiga jalur): tidak melewati area boss di tengah atas
+    { dragon: { x: 300, y: 490, free: true }, boss: { x: 50, y: 120 }, path: [[-60, 170], [50, 170], [50, 745], [550, 745], [550, 335], [170, 335], [170, 625], [440, 625], [440, 455]] },
+    { dragon: { x: 300, bottom: true }, boss: { x: 550, y: 135 }, path: [[660, 170], [430, 170], [430, 275], [560, 275], [560, 380], [40, 380], [40, 488], [560, 488], [560, 596], [40, 596], [40, 704], [300, 704]] } ] }
 ];
 /* Warna dan hiasan tiap latar */
 var THEMES = [
