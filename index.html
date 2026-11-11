@@ -318,6 +318,26 @@ body.noefek .ez-bintang.pop .star{animation:none}
 .fn .link{color:#F2C14E}
 #story .story-emoji{font-size:112px;min-height:130px}
 @media (max-height:780px) and (min-width:600px){#story .story-emoji{font-size:84px;min-height:96px}.fn h1{font-size:26px}}
+/* ---- Gaya fantasi: layar menang / kalah / tamat dan tinjauan jawaban ---- */
+#end,#review{background:rgba(14,10,36,.8)}
+.ez.fn::before{display:none}
+.fn .ez-hero{border:4px solid #F2C14E;background:radial-gradient(circle at 50% 30%,#4F489B,#1C1645);box-shadow:0 0 0 3px #150F33,0 6px 12px rgba(0,0,0,.4)}
+.fn .ez-hero .len{filter:drop-shadow(0 2px 0 #150F33)}
+.fn .ez-pita{--c-hi:#5C8EF0;--c:#2F63D6;--c-lo:#244FB0;--c-tail-hi:#244FB0;--c-tail-lo:#1A3A86;--c-edge:#150F33}
+.fn .ez-pita.kalah{--c-hi:#F0786E;--c:#D0394A;--c-lo:#A52A3A;--c-tail-hi:#A52A3A;--c-tail-lo:#701B28;--c-edge:#150F33}
+.fn .ez-pita .band{border:4px solid #F2C14E;box-shadow:inset 0 3px 0 rgba(255,255,255,.35),0 0 0 3px #150F33,0 8px 12px rgba(0,0,0,.4)}
+.fn .ez-pita .band b{text-shadow:-2px -2px 0 #150F33,2px -2px 0 #150F33,-2px 2px 0 #150F33,2px 2px 0 #150F33,0 3px 0 #150F33}
+.fn .ez-bintang .star i{background:#150F33}.fn .ez-bintang .star u{background:linear-gradient(180deg,#FFE680,#FFC21F)}
+.fn .ez-bintang .star.off u{background:#5A5890}
+.fn .ez-rule{background:#F2C14E;height:2px}
+.fn .ez-pesan{color:#FFF4D8;text-shadow:0 2px 0 #150F33}
+.fn .ez-plat,.fn .ez-stat{background:linear-gradient(180deg,#2D2766,#1A1442);border:2px solid rgba(242,193,78,.7);box-shadow:inset 0 2px 6px rgba(0,0,0,.35);color:#CBD2F2}
+.fn .ez-plat small{color:#CBD2F2}.fn .ez-plat strong,.fn .ez-stat b{color:#fff}
+.fn .ez-slot{background:#150F33;border:2px solid #F2C14E;box-shadow:none}
+.fn .rv{background:#2D2766;border:2px solid #150F33;border-left:8px solid #FF8A5B;color:#FFF4D8}
+.fn .rv.ok{border-left-color:#5BE39C}
+.fn .rv small{color:#CBD2F2}.fn .rv b{color:#fff}
+.fn .stats div{background:#2D2766;border-color:#150F33;color:#CBD2F2}.fn .stats b{color:#fff}
 </style>
 </head>
 <body>
@@ -389,7 +409,7 @@ body.noefek .ez-bintang.pop .star{animation:none}
 
 <!-- SELESAI / KALAH / MENANG -->
 <div id="end" class="overlay hidden">
-  <div class="panel ez">
+  <div class="panel ez fn">
     <div class="ez-kiri">
       <div class="ez-hero" id="ezHero"></div>
       <div class="ez-pita" id="ezPita"><div class="tail l"></div><div class="tail r"></div><div class="fold l"></div><div class="fold r"></div><div class="band"><b id="endTitle"></b></div></div>
@@ -410,7 +430,7 @@ body.noefek .ez-bintang.pop .star{animation:none}
 
 <!-- TINJAUAN JAWABAN -->
 <div id="review" class="overlay hidden">
-  <div class="panel">
+  <div class="panel fn">
     <h2 id="rvTitle">Tinjauan jawaban</h2>
     <p class="sub" id="rvMsg"></p>
     <div id="rvList"></div>
@@ -698,7 +718,7 @@ function fnBolaKosong(c, x, y, r, dasar, peluru) {              // bola sederhan
 }
 function fnBola(c, x, y, r, text, dom, peluru) {                // bola angka: warna menurut jenis bilangan; peluru = kuning dengan angka gelap
   var d = r * 2, dasar = peluru ? PELURU_WARNA : BOLA_WARNA[dom || 'n'];
-  fnBolaKosong(c, x, y, r, dasar, peluru);
+  libGambar(c, 'bola-' + (peluru ? 'peluru' : (dom || 'n')), x, y, 192 * r / 60, 0);       // badan bola dari gambar yang sudah disimpan (cepat); angka digambar di atasnya
   c.save(); c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineJoin = 'round'; c.miterLimit = 2;
   var isi = peluru ? '#2B1800' : '#fff', tepi = peluru ? 'rgba(255,244,200,.95)' : FN.tepi;
   var tulis = function (t, tx, ty, px) {
@@ -980,6 +1000,8 @@ libDaftar('morvax', 384, 512, 0.5, 0.5, function (c, w, h) { c.scale(w / 150, h 
 libDaftar('sarang-belakang', 320, 200, 0.5, 0.25, function (c, w, h) { fnSarang(c, w / 2, h * 0.25, 300, false); });
 libDaftar('sarang-depan', 320, 200, 0.5, 0.25, function (c, w, h) { fnSarang(c, w / 2, h * 0.25, 300, true); });
 libDaftar('bayangan-naga', 256, 256, 0.5, 0.5, function (c, w, h) { var g = c.createRadialGradient(w / 2, h / 2, 6, w / 2, h / 2, w * 0.48); g.addColorStop(0, 'rgba(6,14,6,.55)'); g.addColorStop(0.6, 'rgba(6,14,6,.25)'); g.addColorStop(1, 'rgba(6,14,6,0)'); c.fillStyle = g; c.fillRect(0, 0, w, h); });
+['n', 'i', 'd', 'f'].forEach(function (d) { libDaftar('bola-' + d, 192, 192, 0.5, 0.5, function (c) { fnBolaKosong(c, 96, 96, 60, BOLA_WARNA[d], false); }); });
+libDaftar('bola-peluru', 192, 192, 0.5, 0.5, function (c) { fnBolaKosong(c, 96, 96, 60, PELURU_WARNA, true); });
 function lib(nama) {                                           // gambar siap pakai (kanvas atau gambar akhir) untuk drawImage
   var d = LIB[nama]; if (!d) return null;
   if (ASET_JADI[nama]) {
@@ -2324,8 +2346,8 @@ function fnLandasanNaga(g, x, y, glow) {                        // lingkaran bat
   g.strokeStyle = glow + 'CC'; g.lineWidth = 2.4; g.beginPath(); g.arc(x, y, R - 22, 0, 6.2832); g.stroke(); g.lineWidth = 1.4; g.beginPath(); g.arc(x, y, R - 14, 0, 6.2832); g.stroke();
   for (i = 0; i < 8; i++) { var b = i / 8 * 6.2832 + 0.2; g.beginPath(); g.moveTo(x + Math.cos(b) * (R - 22), y + Math.sin(b) * (R - 22)); g.lineTo(x + Math.cos(b) * (R - 14), y + Math.sin(b) * (R - 14)); g.stroke(); }
 }
-function fnLandasanSarang(g, x, y, rnd) {                       // tanah terbuka dan batu kecil di sekeliling sarang
-  var i, R = 80, gg = g.createRadialGradient(x, y + 6, 10, x, y + 6, R); gg.addColorStop(0, 'rgba(108,80,48,.95)'); gg.addColorStop(0.7, 'rgba(116,100,62,.8)'); gg.addColorStop(1, 'rgba(120,130,70,0)');
+function fnLandasanSarang(g, x, y, rnd, tanah) {                       // tanah terbuka dan batu kecil di sekeliling sarang
+  var i, R = 80, gg = g.createRadialGradient(x, y + 6, 10, x, y + 6, R); tanah = tanah || ['rgba(108,80,48,.95)', 'rgba(116,100,62,.8)', 'rgba(120,130,70,0)']; gg.addColorStop(0, tanah[0]); gg.addColorStop(0.7, tanah[1]); gg.addColorStop(1, tanah[2]);
   g.fillStyle = gg; g.beginPath(); g.ellipse(x, y + 6, R, R * 0.82, 0, 0, 6.2832); g.fill();
   for (i = 0; i < 18; i++) {
     var a = i / 18 * 6.2832 + rnd() * 0.2, bx = x + Math.cos(a) * (R - 6) , by = y + 6 + Math.sin(a) * (R - 6) * 0.8, s = 6 + rnd() * 4;
@@ -2367,11 +2389,81 @@ function buildBgFantasiHutan(g) {                               // Hutan Misteri
   var pbg = (LAYOUT === 'lebar') ? 'linear-gradient(180deg,#82BE58 0%,#69A84B 50%,#55953F 100%)' : '';
   document.documentElement.style.background = pbg; document.body.style.background = pbg;
 }
+/* ---- Latar fantasi: Gunung Bersalju (stage 2, Esvara) dan Gunung Berapi (stage 3, Baranji) ---- */
+function fnCemara(g, px, py, s, rnd) {                          // cemara bersalju dilihat dari atas: lapisan bintang hijau gelap dengan salju
+  g.fillStyle = 'rgba(30,50,90,.26)'; g.beginPath(); g.ellipse(px + s * 0.25, py + s * 0.3, s * 1.0, s * 0.85, 0, 0, 6.2832); g.fill();
+  [[1, '#2A5D5A', '#3F7F76'], [0.72, '#2F6A62', '#4B8E80'], [0.44, '#37776C', '#5AA090']].forEach(function (L, q) {
+    var r = s * L[0], n = 9, i, pts = [];
+    for (i = 0; i < n * 2; i++) { var a = i / (n * 2) * 6.2832 + q * 0.3, rr0 = i % 2 ? r * 0.62 : r; pts.push([px + Math.cos(a) * rr0, py + Math.sin(a) * rr0]); }
+    fnPoli(g, pts); var gg = g.createRadialGradient(px - r * 0.3, py - r * 0.3, r * 0.1, px, py, r); gg.addColorStop(0, L[2]); gg.addColorStop(1, L[1]); g.fillStyle = gg; g.fill();
+  });
+  for (var i = 0; i < 9; i++) { var a2 = rnd() * 6.2832, d = rnd() * s * 0.8; g.fillStyle = 'rgba(255,255,255,' + (0.55 + rnd() * 0.35) + ')'; g.beginPath(); g.ellipse(px + Math.cos(a2) * d - s * 0.1, py + Math.sin(a2) * d - s * 0.1, s * 0.16, s * 0.1, a2, 0, 6.2832); g.fill(); }
+  g.fillStyle = 'rgba(255,255,255,.9)'; g.beginPath(); g.arc(px, py, s * 0.16, 0, 6.2832); g.fill();
+}
+function fnBatuSalju(g, px, py, s) {
+  g.fillStyle = 'rgba(30,50,90,.26)'; g.beginPath(); g.ellipse(px + s * 0.25, py + s * 0.55, s * 1.25, s * 0.5, 0, 0, 6.2832); g.fill();
+  var gg = g.createRadialGradient(px - s * 0.4, py - s * 0.5, s * 0.1, px, py, s * 1.3); gg.addColorStop(0, '#A9B4C4'); gg.addColorStop(1, '#6A768A'); g.fillStyle = gg; g.beginPath(); g.ellipse(px, py, s * 1.2, s * 0.9, 0.2, 0, 6.2832); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.92)'; g.beginPath(); g.ellipse(px - s * 0.1, py - s * 0.3, s * 0.9, s * 0.5, 0.1, 0, 6.2832); g.fill();
+}
+function buildBgFantasiSalju(g) {
+  var A = bgAlat(g, 137), rnd = A.rnd, dekat = A.dekat, gw = A.gw, i, x, y, r;
+  var grd = g.createLinearGradient(0, 0, 0, H); grd.addColorStop(0, '#E6F0F8'); grd.addColorStop(0.5, '#CADCEC'); grd.addColorStop(1, '#B4CBE0'); g.fillStyle = grd; g.fillRect(0, 0, W, H);
+  for (i = 0; i < 110; i++) { x = rnd() * W; y = rnd() * H; r = 26 + rnd() * 60; g.fillStyle = rnd() < 0.55 ? 'rgba(255,255,255,' + (0.18 + rnd() * 0.2) + ')' : 'rgba(110,150,200,' + (0.05 + rnd() * 0.07) + ')'; g.beginPath(); g.ellipse(x, y, r * 1.3, r * 0.7, rnd() * 3, 0, 6.2832); g.fill(); }
+  for (i = 0; i < 260; i++) { x = rnd() * W; y = rnd() * H; g.fillStyle = 'rgba(255,255,255,' + (0.4 + rnd() * 0.4) + ')'; g.beginPath(); g.arc(x, y, 1 + rnd() * 1.6, 0, 6.2832); g.fill(); }
+  var ex = PX[PX.length - 1], ey = PY[PY.length - 1];
+  fnLandasanSarang(g, ex, ey, rnd, ['rgba(244,248,253,.98)', 'rgba(222,234,246,.85)', 'rgba(210,225,240,0)']);
+  fnJalanBatu(g, A, { bayang: 'rgba(40,70,115,.26)', tepi: '#6F86A3', tepi2: '#8EA6C0', dasar: '#C6D4E4', batuA: '#EDF2F8', batuB: '#D4DEEA', batuC: '#B4C3D6', celah: 'rgba(80,100,135,.4)', lumut: 'rgba(255,255,255,.75)', rumput: 'rgba(130,160,195,.7)' });
+  fnLandasanNaga(g, DRAGON.x, DRAGON.y, '#9ADCFF');
+  var es = { glow: 'rgba(225,240,250,.4)', hi: '#F0F8FC', mid: '#BBD2DE', lo: '#8099AA' };
+  titikKristal(A, dekat).forEach(function (p, q) { if (Math.hypot(p[0] - DRAGON.x, p[1] - DRAGON.y) < 80) return; if (q % 2) fnBatuSalju(g, p[0], p[1], 9 + p[2] * 0.2); else fnKristal(g, p[0], p[1], p[2] * 0.85, es); });
+  for (i = 0; i < 16; i++) { x = rnd() * W; y = rnd() * H; if (!dekat(x, y, gw / 2 + 28) && Math.hypot(x - DRAGON.x, y - DRAGON.y) > 76) fnBatuSalju(g, x, y, 6 + rnd() * 7); }
+  for (i = 0; i < 8; i++) { x = 30 + rnd() * (W - 60); y = 70 + rnd() * (H - 140); if (!dekat(x, y, gw / 2 + 40) && Math.hypot(x - DRAGON.x, y - DRAGON.y) > 88 && !(LAYOUT === 'lebar' && y > H - 80 && x < 420)) fnCemara(g, x, y, 15 + rnd() * 6, rnd); }
+  for (i = 0; i < 18; i++) { var kiri = rnd() < 0.5; x = kiri ? -4 + rnd() * 30 : W - 26 + rnd() * 30; y = 40 + rnd() * (H - 40); r = 34 + rnd() * 18; if (dekat(x, y, gw / 2 + r * 0.85 + 8)) continue; fnCemara(g, x, y, r, rnd); }
+  if (LAYOUT === 'lebar') for (i = 0; i < 8; i++) { x = 40 + rnd() * (W - 80); y = H - 6 + rnd() * 10; r = 32 + rnd() * 16; if (!dekat(x, y, gw / 2 + r * 0.85 + 8) && Math.hypot(x - DRAGON.x, y - DRAGON.y) > 100) fnCemara(g, x, y, r, rnd); }
+  var vg = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.34, W / 2, H / 2, Math.hypot(W, H) / 2); vg.addColorStop(0, 'rgba(30,60,110,0)'); vg.addColorStop(1, 'rgba(30,60,110,.26)'); g.fillStyle = vg; g.fillRect(0, 0, W, H);
+  var pbg = (LAYOUT === 'lebar') ? 'linear-gradient(180deg,#E6F0F8 0%,#CADCEC 50%,#B4CBE0 100%)' : '';
+  document.documentElement.style.background = pbg; document.body.style.background = pbg;
+}
+function fnBatuApi(g, px, py, s) {                              // batu gunung berapi: gelap, hanya tepinya sedikit membara
+  g.fillStyle = 'rgba(0,0,0,.34)'; g.beginPath(); g.ellipse(px + s * 0.3, py + s * 0.55, s * 1.2, s * 0.5, 0, 0, 6.2832); g.fill();
+  fnPoli(g, [[px - s, py + s * 0.35], [px - s * 0.7, py - s * 0.5], [px - s * 0.1, py - s * 0.85], [px + s * 0.6, py - s * 0.45], [px + s, py + s * 0.35]]);
+  var gg = g.createLinearGradient(px - s, py - s, px + s, py + s * 0.4); gg.addColorStop(0, '#5E4A55'); gg.addColorStop(1, '#2C1D26'); g.fillStyle = gg; g.fill();
+  g.strokeStyle = 'rgba(210,100,40,.5)'; g.lineWidth = 1.6; g.lineCap = 'round'; g.beginPath(); g.moveTo(px + s * 0.6, py - s * 0.42); g.lineTo(px + s * 0.95, py + s * 0.3); g.stroke();
+}
+function buildBgFantasiApi(g) {
+  var A = bgAlat(g, 211), rnd = A.rnd, dekat = A.dekat, gw = A.gw, i, k, x, y, r;
+  var grd = g.createLinearGradient(0, 0, 0, H); grd.addColorStop(0, '#54394A'); grd.addColorStop(0.5, '#41293A'); grd.addColorStop(1, '#31202C'); g.fillStyle = grd; g.fillRect(0, 0, W, H);
+  for (i = 0; i < 110; i++) { x = rnd() * W; y = rnd() * H; r = 26 + rnd() * 60; g.fillStyle = rnd() < 0.5 ? 'rgba(170,130,150,' + (0.04 + rnd() * 0.05) + ')' : 'rgba(0,0,0,' + (0.08 + rnd() * 0.1) + ')'; g.beginPath(); g.ellipse(x, y, r * 1.3, r * 0.8, rnd() * 3, 0, 6.2832); g.fill(); }
+  for (i = 0; i < 20; i++) {                                    // retakan membara redup
+    x = rnd() * W; y = rnd() * H; if (dekat(x, y, gw / 2 + 26)) continue;
+    var px = x, py = y, ang = rnd() * 6.2832, pts = [[px, py]]; for (k = 0; k < 4; k++) { ang += rnd() * 1.6 - 0.8; px += Math.cos(ang) * (12 + rnd() * 16); py += Math.sin(ang) * (12 + rnd() * 16); pts.push([px, py]); }
+    [[6, 'rgba(200,80,30,.10)'], [1.8, 'rgba(230,120,50,.5)']].forEach(function (L) { g.lineCap = 'round'; g.strokeStyle = L[1]; g.lineWidth = L[0]; g.beginPath(); pts.forEach(function (p, q) { if (q) g.lineTo(p[0], p[1]); else g.moveTo(p[0], p[1]); }); g.stroke(); });
+  }
+  for (i = 0; i < 10; i++) {                                    // kolam lava jauh dari jalur, warnanya diredam
+    x = rnd() * W; y = rnd() * H; if (dekat(x, y, gw / 2 + 46) || Math.hypot(x - DRAGON.x, y - DRAGON.y) < 90) continue; r = 14 + rnd() * 14;
+    var lg = g.createRadialGradient(x, y, 2, x, y, r * 2.2); lg.addColorStop(0, 'rgba(210,90,30,.3)'); lg.addColorStop(1, 'rgba(210,90,30,0)'); g.fillStyle = lg; g.beginPath(); g.arc(x, y, r * 2.2, 0, 6.2832); g.fill();
+    g.fillStyle = '#1D1017'; g.beginPath(); g.ellipse(x, y, r * 1.12, r * 0.7, 0, 0, 6.2832); g.fill();
+    var lf = g.createRadialGradient(x - r * 0.2, y - r * 0.1, 1, x, y, r); lf.addColorStop(0, '#E8822E'); lf.addColorStop(1, '#A33C16'); g.fillStyle = lf; g.beginPath(); g.ellipse(x, y, r * 0.92, r * 0.55, 0, 0, 6.2832); g.fill();
+  }
+  var ex = PX[PX.length - 1], ey = PY[PY.length - 1];
+  fnLandasanSarang(g, ex, ey, rnd, ['rgba(88,52,44,.98)', 'rgba(74,48,48,.85)', 'rgba(60,40,48,0)']);
+  fnJalanBatu(g, A, { bayang: 'rgba(0,0,0,.36)', tepi: '#1E1218', tepi2: '#3A2A32', dasar: '#6A5560', batuA: '#8A7580', batuB: '#75636D', batuC: '#5E4D57', celah: 'rgba(15,8,12,.55)', lumut: 'rgba(130,55,30,.4)', rumput: 'rgba(170,80,35,.5)' });
+  fnLandasanNaga(g, DRAGON.x, DRAGON.y, '#FFB45A');
+  for (i = 0; i < 60; i++) { x = rnd() * W; y = rnd() * H; if (dekat(x, y, gw / 2 + 8)) continue; var er = 1 + rnd() * 1.8, eg = g.createRadialGradient(x, y, 0, x, y, er * 4); eg.addColorStop(0, 'rgba(255,170,80,.55)'); eg.addColorStop(1, 'rgba(255,110,40,0)'); g.fillStyle = eg; g.beginPath(); g.arc(x, y, er * 4, 0, 6.2832); g.fill(); }
+  var api = { glow: 'rgba(230,120,60,.3)', hi: '#E8B28A', mid: '#B8582A', lo: '#6E2A14' };
+  titikKristal(A, dekat).forEach(function (p, q) { if (Math.hypot(p[0] - DRAGON.x, p[1] - DRAGON.y) < 80) return; if (q % 2) fnBatuApi(g, p[0], p[1], 11); else fnKristal(g, p[0], p[1], p[2] * 0.85, api); });
+  for (i = 0; i < 14; i++) { x = rnd() * W; y = rnd() * H; if (!dekat(x, y, gw / 2 + 28) && Math.hypot(x - DRAGON.x, y - DRAGON.y) > 76) fnBatuApi(g, x, y, 7 + rnd() * 7); }
+  for (i = 0; i < 18; i++) { var kiri = rnd() < 0.5; x = kiri ? -4 + rnd() * 28 : W - 24 + rnd() * 28; y = 40 + rnd() * (H - 40); r = 28 + rnd() * 20; if (dekat(x, y, gw / 2 + r + 6)) continue; fnBatuApi(g, x, y, r); }
+  if (LAYOUT === 'lebar') for (i = 0; i < 8; i++) { x = 40 + rnd() * (W - 80); y = H - 6 + rnd() * 10; r = 26 + rnd() * 14; if (!dekat(x, y, gw / 2 + r + 6) && Math.hypot(x - DRAGON.x, y - DRAGON.y) > 100) fnBatuApi(g, x, y, r); }
+  var vg = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.34, W / 2, H / 2, Math.hypot(W, H) / 2); vg.addColorStop(0, 'rgba(10,0,6,0)'); vg.addColorStop(1, 'rgba(10,0,6,.42)'); g.fillStyle = vg; g.fillRect(0, 0, W, H);
+  var pbg = (LAYOUT === 'lebar') ? 'linear-gradient(180deg,#54394A 0%,#41293A 50%,#31202C 100%)' : '';
+  document.documentElement.style.background = pbg; document.body.style.background = pbg;
+}
 function buildBg() {
   var T = THEMES[CUR - 1];
   bg = document.createElement('canvas'); bg.width = W * 2; bg.height = H * 2;
   var g = bg.getContext('2d'); g.scale(2, 2);
-  if (gk()) { [buildBgFantasiHutan, buildBgKartunSalju, buildBgKartunApi][CUR - 1](g); return; }   // gaya kartun garis tebal: Hutan, Salju, Berapi
+  if (gk()) { [buildBgFantasiHutan, buildBgFantasiSalju, buildBgFantasiApi][CUR - 1](g); return; }   // gaya kartun garis tebal: Hutan, Salju, Berapi
   if (ASET_AKTIF && GAYA_PETA[CUR - 1]) { [buildBgHutan, buildBgSalju, buildBgApi][CUR - 1](g); return; }   // gaya baru: Hutan Misterius, Gunung Bersalju, Gunung Berapi
   var grd = g.createLinearGradient(0, 0, 0, H);
   grd.addColorStop(0, T.top); grd.addColorStop(0.6, T.mid); grd.addColorStop(1, T.bot);
@@ -3388,7 +3480,14 @@ function layoutJudul() {                    // pilih susunan menurut rasio layar
   });
 }
 if (gk()) document.body.classList.add('kt');
+function siapkanAset() {                    // menggambar aset berat sedikit demi sedikit selagi layar judul tampil, supaya cerita dan stage pertama tidak tersendat
+  var kerja = [function () { lib('naga-bayunara-depan'); }, function () { seni('naga-bayunara', 200); }, function () { lib('morvax'); }, function () { seni('morvax', 200); },
+    function () { seni('sarang', 200); }, function () { lib('naga-bayunara-atas'); }, function () { lib('sarang-belakang'); lib('sarang-depan'); }, function () { lib('telur-biru'); lib('telur-hijau'); lib('telur-jingga'); },
+    function () { lib('bayangan-naga'); }, function () { lib('naga-esvara-atas'); }, function () { lib('naga-baranji-atas'); }, function () { ['n', 'i', 'd', 'f'].forEach(function (d) { seni('bola:' + d + ':3', 120); }); }];
+  kerja.forEach(function (f, i) { setTimeout(function () { try { f(); } catch (e) { } }, 120 + i * 90); });
+}
 muatAset(); buildSplash(); layoutJudul(); buildToggles($('setbar')); buildToggles($('pauseSet')); applyPrefs();
+if (gk()) siapkanAset();
 
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', function () { setTimeout(resize, 150); });
