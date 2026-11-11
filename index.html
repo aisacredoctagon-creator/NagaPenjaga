@@ -440,7 +440,7 @@ var TEGAK_W = 600;              // lebar dunia layout tegak
 var WIDE = { W: 1000, H: 600, masuk: 1.05, keluar: 0.95 };   // dunia layout lebar; lebar >= 1,05 x tinggi layar: masuk lebar; <= 0,95 x tinggi: kembali tegak
 var TIME_LIMIT = 300;           // detik per stage, jika memilih "Dengan waktu"
 var CFG = {
-  R: 26, D: 54, shotR: 26, groove: 68, s0: 420,   // ukuran bola, jarak antar bola, lebar jalur
+  R: 26, D: 54, shotR: 26, groove: 68, s0: 204,   // ukuran bola, jarak antar bola, lebar jalur; s0 = jarak bola terdepan dari awal jalur saat stage mulai (dulu 420, dimundurkan 4 bola = 216 px)
   N: { mudah: 22, menantang: 26 },                // jumlah bola dasar per stage
   v: { mudah: 8,  menantang: 9  }                 // laju jalur dasar (piksel/detik)
 };
@@ -632,7 +632,7 @@ function ktBola(c, x, y, r, text, dom, peluru) {              // bola angka kart
     if (!peluru) { c.lineWidth = d * 0.09; c.strokeStyle = KT.garis; c.strokeText(text, x, y + d * 0.02); }
     c.fillStyle = warnaAngka; c.fillText(text, x, y + d * 0.02);
   }
-  ktPenanda(c, x + r * 0.72, y + r * 0.72, Math.max(7, d * 0.27), J.m, Math.max(1.6, sw * 0.8));
+  /* penanda bentuk jenis bilangan (● ◆ ▲ ■) dihapus atas permintaan pemilik: jenis bilangan kini dibedakan lewat warna; fungsi ktPenanda dibiarkan untuk dipakai lagi */
   c.restore();
 }
 function ktTelur(c, x, y, h, warna) {                         // telur bergaris: warna = nama di KT.telur
@@ -1471,7 +1471,7 @@ function updateFx(dt) {
     }
   }
 }
-function bossPos() { var b = curRoute(3).boss; return { x: b.x, y: b.y + PATH_DY }; }
+function bossPos() { return { x: W / 2, y: 205 }; }   // boss di tengah layar, tepat di bawah bar darah (bar di y 121–135; boss tinggi 130 jadi bagian atasnya di y 140); tidak lagi mengikuti posisi di data jalur
 function bossCast() {                      // mantra penyihir: angka panel berganti, bola bertambah
   var bp = bossPos();
   G.bossPulse = 0.8;
@@ -2040,10 +2040,12 @@ function drawEggMark(x, y) {                // tanda telur naga: cincin emas + l
   ctx.beginPath(); ctx.arc(x, y, CFG.R + 5 + pulse, 0, 6.2832); ctx.lineWidth = 5; ctx.strokeStyle = kk ? KT.kuning : '#ffd54a'; ctx.stroke();
   ctx.beginPath(); ctx.arc(x, y, CFG.R + 11 + pulse, 0, 6.2832); ctx.lineWidth = 2; ctx.strokeStyle = kk ? KT.garis : 'rgba(255,229,138,.6)'; ctx.stroke();
   var bw = full ? 72 : 54, by = y - CFG.R - 22;
+  var ga0 = ctx.globalAlpha; ctx.globalAlpha = ga0 * 0.5;           // label "+1 telur" separuh transparan: bola di bawahnya tetap terbaca (posisi label tidak berubah)
   rr(x - bw / 2, by - 12, bw, 24, 12); ctx.fillStyle = kk ? KT.krem : '#fff4c2'; ctx.fill(); ctx.lineWidth = kk ? 3 : 2; ctx.strokeStyle = kk ? KT.garis : '#b8801a'; ctx.stroke();
   ctx.fillStyle = kk ? KT.garis : '#4a2b00'; ctx.font = (kk ? '900 ' : 'bold ') + '16px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   if (kk) { ktTelur(ctx, x - bw / 2 + 13, by, 18, 'jingga'); ctx.fillText(label, x + 8, by + 1); }
   else ctx.fillText('🥚' + label, x, by + 1);
+  ctx.globalAlpha = ga0;
 }
 function drawSwapMark() {                    // tanda dua bola akan bertukar: cincin mengecil + garis putus + panah ⇄
   var s = G.swap, ax = s.a.x + s.a.ox, ay = s.a.y + s.a.oy, bx = s.b.x + s.b.ox, by = s.b.y + s.b.oy;
